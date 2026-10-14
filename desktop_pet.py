@@ -11,6 +11,8 @@ import sys
 import time
 from dataclasses import dataclass
 
+from edge_path import EdgeRoute
+
 from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QSignalBlocker, QStandardPaths, Qt, QTimer
 from PySide6.QtGui import QActionGroup, QCursor, QIcon, QImage, QPainter, QPixmap, QRegion, QTransform
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QDialogButtonBox,
@@ -57,17 +59,18 @@ class Character:
     walk_ground: int = 0
     # Standing-equivalent anatomical scale; bent airborne poses are shorter.
     motion_body_height: int | None = None
+    corner_sheet: str = ""
 
 
 CHARACTERS = {
     "zenith": Character("제니스 (Zenith)", "assets/zenith-spritesheet-v2.png", CROP_X, CROP_W, BODY_HEIGHT,
                         "assets/zenith-motion-v4.png", (3, 2), tuple(range(6)), MOTION_ANGLES,
-                        motion_body_height=462),
+                        motion_body_height=462, corner_sheet="assets/zenith-corner-jump.png"),
     "liberta": Character("리베르타 (Liberta)", "assets/liberta-spritesheet.png", 16, 160, 167,
                          "assets/liberta-motion.png", (4, 6), (16, 18, 19, 20, 21, 22),
                          (0.0, 135.0, 90.0, 180.0), 23,
                          walk_indices=tuple(range(8, 16)), walk_crop=(96, 0, 384, 512),
-                         walk_ground=497),
+                         walk_ground=497, corner_sheet="assets/liberta-corner-jump.png"),
 }
 DEFAULT_CHARACTER = "liberta"
 HEIGHT_PRESETS = ((80, "아주 작게"), (120, "작게"), (160, "기본"),
@@ -105,6 +108,18 @@ class DesktopPet(QWidget):
         self.paused = bool(self.settings.get("paused", False))
         self.stationary = bool(self.settings.get("stationary", False))
         self.click_through = bool(self.settings.get("click_through", False))
+        self.roam_mode = self.settings.get("roam_mode", "free")
+        if self.roam_mode not in ("free", "edge"):
+            self.roam_mode = "free"
+        self.edge_direction = self.settings.get("edge_direction", "clockwise")
+        if self.edge_direction not in ("clockwise", "counterclockwise"):
+            self.edge_direction = "clockwise"
+        self.edge_phase = float(self.settings.get("edge_phase", 0.0)) % 1.0
+        self.edge_route = None
+        self.edge_progress = 0.0
+        self.edge_angle = 0.0
+        self.edge_rest_pending = False
+        self.corner_duration = 0.6
         self.dragging = False
         self.drag_time = 0.0
         self.drag_angle = 0.0
@@ -159,7 +174,8 @@ class DesktopPet(QWidget):
         self.x = self.anchor_x
         self.y = self.anchor_y
         self.set_size(self.body_height, save=False)
-        self.anchor_x, self.anchor_y = self.x, self.y
+        self.anchor_x = self.x
+        self.anchor_y = self.y - self.height()/2 if self.roam_mode == "edge" else self.y
 
         icon = QIcon(self.originals["idle"][0])
         self.setWindowIcon(icon)
@@ -181,6 +197,9 @@ class DesktopPet(QWidget):
         for screen in QApplication.screens():
             screen.availableGeometryChanged.connect(self.refresh_screens)
         self.apply_click_through()
+        if (self.roam_mode == "edge" and not self.paused and not self.stationary
+                and self.edge_route.at(self.edge_progress, self.edge_sign).corner):
+            self.start_walk()
         self.update_frame()
 
     def load_character_art(self):
@@ -245,6 +264,14 @@ class DesktopPet(QWidget):
                     if pixels[offset] < 32:
                         pixels[offset] = 0
                 self.walk_originals[index] = QPixmap.fromImage(image)
+        corner_sheet = QPixmap(str(resource_path(character.corner_sheet)))
+        if corner_sheet.isNull() or corner_sheet.width() % 2 or corner_sheet.height() % 2:
+            raise ValueError("코너 점프 이미지를 불러올 수 없습니다.")
+        # Reuse the same alpha-aware content crop for the new four-pose sheet.
+        drag_sheet = corner_sheet
+        columns, rows = 2, 2
+        cell_w, cell_h = corner_sheet.width() // 2, corner_sheet.height() // 2
+        self.corner_originals = [crop_motion(index) for index in range(4)]
 
     def update_character_identity(self):
         icon = QIcon(self.originals["idle"][0])
@@ -279,7 +306,7 @@ class DesktopPet(QWidget):
             data = json.loads(self.settings_path.read_text(encoding="utf-8"))
             if not isinstance(data, dict):
                 return {}
-            for key in ("height", "radius", "speed"):
+            for key in ("height", "radius", "speed", "edge_phase"):
                 if key in data and (not isinstance(data[key], (int, float))
                                     or not math.isfinite(data[key])):
                     data.pop(key)
@@ -292,6 +319,8 @@ class DesktopPet(QWidget):
                 "speed": self.speed, "paused": self.paused,
                 "stationary": self.stationary,
                 "click_through": self.click_through,
+                "roam_mode": self.roam_mode, "edge_direction": self.edge_direction,
+                "edge_phase": self.edge_phase,
                 "anchor": [round(self.anchor_x), round(self.anchor_y)]}
         try:
             self.settings_path.parent.mkdir(parents=True, exist_ok=True)
@@ -332,12 +361,22 @@ class DesktopPet(QWidget):
             round(p.height() * self.body_height / reference_height),
             Qt.TransformationMode.SmoothTransformation)
             for index, p in enumerate(self.motion_originals)]
+        self.corner_frames = [p.scaledToHeight(
+            max(1, round(p.height() * self.body_height / self.corner_originals[3].height())),
+            Qt.TransformationMode.SmoothTransformation) for p in self.corner_originals]
         # A square canvas holds the rotated sprite without clipping limbs.
         largest_diagonal = max(math.hypot(p.width(), p.height()) for p in
                                self.motion_frames + [p for frames in self.frames.values() for p in frames])
         side = math.ceil(largest_diagonal) + 16
+        if self.roam_mode == "edge":
+            # Rotation is around the feet, so the canvas needs a full body
+            # radius on each side of that pivot rather than a center pivot.
+            sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames
+            side = math.ceil(2 * max(math.hypot(p.width(), p.height()) for p in sprites)) + 16
         self.setFixedSize(side, side)
         self.frame_key = None
+        if self.roam_mode == "edge":
+            self.rebuild_edge_route()
         self.confine()
         self.target = None
         self.update_frame()
@@ -358,6 +397,9 @@ class DesktopPet(QWidget):
                 max(screen_t, ay - 38), min(screen_b, ay + 38))
 
     def confine(self):
+        if self.roam_mode == "edge" and not self.dragging and self.state not in ("flip", "land"):
+            self.place_edge()
+            return
         left, right, top, bottom = self.bounds()
         self.x = clamp(self.x, left, right)
         self.y = clamp(self.y, top, bottom)
@@ -373,9 +415,108 @@ class DesktopPet(QWidget):
             self.anchor_x = area.center().x()
             self.anchor_y = area.bottom() - 12
         self.screen_area = screen.availableGeometry()
+        if self.roam_mode == "edge":
+            self.rebuild_edge_route()
         self.confine()
         self.target = None
         self.position_window()
+
+    @property
+    def edge_sign(self):
+        return 1 if self.edge_direction == "clockwise" else -1
+
+    def rebuild_edge_route(self):
+        area = self.screen_area
+        sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames
+        radius = max(self.body_height * 0.45, max(p.width() for p in sprites) / 2 + 12)
+        self.edge_route = EdgeRoute(area.left(), area.top(), area.width(), area.height(), radius)
+        self.edge_progress = self.edge_phase * self.edge_route.length
+        self.place_edge()
+
+    def place_edge(self):
+        if self.edge_route is None:
+            return
+        pose = self.edge_route.at(self.edge_progress, self.edge_sign)
+        self.edge_angle = pose.angle
+        radians = math.radians(pose.angle)
+        lift = (self.body_height * 0.12 * math.sin(math.pi * pose.fraction)
+                if pose.corner and self.state in ("left", "right") else 0.0)
+        self.x = pose.x + math.sin(radians) * lift
+        foot_y = pose.y - math.cos(radians) * lift
+        self.y = foot_y + self.height() / 2
+        self.anchor_x, self.anchor_y = self.x, foot_y
+        self.edge_phase = (self.edge_progress % self.edge_route.length) / self.edge_route.length
+        self.position_window()
+
+    def attach_to_edge(self, x, y):
+        self.rebuild_edge_route()
+        self.edge_progress = self.edge_route.project(x, y)
+        pose = self.edge_route.at(self.edge_progress)
+        if pose.corner:
+            # A dropped character rests on a real straight edge, never halfway
+            # through the airborne path connecting two neighboring edges.
+            candidates = (self.edge_route.starts[pose.segment],
+                          self.edge_route.starts[pose.segment] + self.edge_route.lengths[pose.segment])
+            self.edge_progress = min(candidates, key=lambda distance:
+                (self.edge_route.at(distance).x-x)**2 + (self.edge_route.at(distance).y-y)**2)
+        self.edge_rest_pending = False
+        self.target = None
+        self.near_cursor = False
+        self.enter_state("idle", 0.8)
+        self.place_edge()
+        self.update_frame()
+
+    def set_roaming(self, mode, direction, *, save=True):
+        if mode not in ("free", "edge") or direction not in ("clockwise", "counterclockwise"):
+            raise ValueError("Invalid roaming mode or direction")
+        if mode == self.roam_mode and direction == self.edge_direction:
+            return
+        old_mode = self.roam_mode
+        old_x = self.x
+        old_y = self.y - self.height()/2 if old_mode == "edge" else self.y
+        self.roam_mode, self.edge_direction = mode, direction
+        self.edge_rest_pending = False
+        self.target = None
+        self.near_cursor = False
+        self.state = "idle"
+        self.state_time = 0.0
+        self.state_duration = 0.8
+        if old_mode != mode:
+            self.x, self.y = old_x, old_y
+            self.anchor_x, self.anchor_y = old_x, old_y
+            self.set_size(self.body_height, save=False)
+            if mode == "edge":
+                self.attach_to_edge(old_x, old_y)
+            else:
+                self.anchor_x, self.anchor_y = self.x, self.y
+        elif mode == "edge":
+            self.place_edge()
+        self.frame_key = None
+        self.update_frame()
+        if save:
+            self.save_settings()
+
+    def advance_edge(self, dt):
+        # Straight walking uses the selected speed. Each corner is a short
+        # jump with its own timing, so low walking speeds do not cause hovering.
+        while dt > 1e-9:
+            pose = self.edge_route.at(self.edge_progress, self.edge_sign)
+            remaining = self.edge_route.remaining(self.edge_progress, self.edge_sign)
+            if remaining < 1e-7:
+                self.edge_progress += self.edge_sign * 1e-6
+                continue
+            speed = (self.edge_route.lengths[pose.segment] / self.corner_duration
+                     if pose.corner else self.speed)
+            elapsed = min(dt, remaining / speed)
+            distance = speed * elapsed
+            self.edge_progress += self.edge_sign * distance
+            self.walk_distance += distance
+            dt -= elapsed
+        self.place_edge()
+
+    def edge_jumping(self):
+        return (self.roam_mode == "edge" and self.state in ("left", "right")
+                and self.edge_route.at(self.edge_progress, self.edge_sign).corner)
 
     def enter_state(self, state: str, duration: float | None = None):
         self.state = state
@@ -394,6 +535,10 @@ class DesktopPet(QWidget):
             self.target = None
             self.enter_state("idle", 0.8)
             return
+        if self.roam_mode == "edge":
+            self.target = None
+            self.enter_state("left" if self.edge_sign > 0 else "right", self.rng.uniform(6, 11))
+            return
         left, right, top, bottom = self.bounds()
         choices = [self.rng.uniform(left, right) for _ in range(5)]
         tx = max(choices, key=lambda candidate: abs(candidate - self.x))
@@ -404,6 +549,16 @@ class DesktopPet(QWidget):
 
     def choose_action(self):
         self.target = None
+        if self.roam_mode == "edge" and not self.stationary:
+            if self.state in ("left", "right"):
+                self.edge_rest_pending = True
+                self.enter_state(self.rng.choice(["wave", "bow", "shy", "think", "tilt", "jump"]))
+            elif self.edge_rest_pending:
+                self.edge_rest_pending = False
+                self.enter_state("idle", self.rng.uniform(0.7, 1.3))
+            else:
+                self.start_walk()
+            return
         if not self.stationary and self.rng.random() < 0.62:
             self.start_walk()
         else:
@@ -414,10 +569,13 @@ class DesktopPet(QWidget):
 
     def cursor_is_near(self, cursor: QPoint) -> bool:
         # Measure distance from the visible body, excluding rotation padding.
-        sprite = self.frames["idle"][0]
-        body = QRegion(sprite.mask()).boundingRect()
-        body.translate(round((self.width() - sprite.width()) / 2),
-                       self.height() - sprite.height())
+        if self.roam_mode == "edge":
+            body = QRegion(self.pixmap.mask()).boundingRect()
+        else:
+            sprite = self.frames["idle"][0]
+            body = QRegion(sprite.mask()).boundingRect()
+            body.translate(round((self.width() - sprite.width()) / 2),
+                           self.height() - sprite.height())
         body.translate(self.pos())
         dx = max(body.left() - cursor.x(), 0, cursor.x() - body.right())
         dy = max(body.top() - cursor.y(), 0, cursor.y() - body.bottom())
@@ -467,6 +625,16 @@ class DesktopPet(QWidget):
             return
         if self.press_global is not None:
             return
+        if self.edge_jumping():
+            # Finish a 90-degree jump before cursor gaze or a scheduled rest
+            # can interrupt it; an explicit pause still freezes the jump.
+            if not self.paused:
+                self.state_time += dt
+                self.advance_edge(dt)
+                if (self.state_time >= self.state_duration or self.stationary) and not self.edge_jumping():
+                    self.choose_action()
+            self.update_frame(cursor)
+            return
         cursor = cursor if cursor is not None else QCursor.pos()
         if self.cursor_is_near(cursor):
             if not self.near_cursor or self.state != "gaze":
@@ -489,7 +657,9 @@ class DesktopPet(QWidget):
             self.enter_state("gaze", self.rng.uniform(1.4, 2.8))
             self.gaze_elapsed = 0
             self.next_gaze = self.rng.uniform(6, 12)
-        if self.state in ("left", "right") and self.target is not None:
+        if self.roam_mode == "edge" and self.state in ("left", "right"):
+            self.advance_edge(dt)
+        elif self.state in ("left", "right") and self.target is not None:
             dx, dy = self.target[0] - self.x, self.target[1] - self.y
             distance = math.hypot(dx, dy)
             step = self.speed * dt
@@ -503,7 +673,8 @@ class DesktopPet(QWidget):
                 self.y += dy / distance * step
             self.confine()
             self.position_window()
-        if self.state_time >= self.state_duration:
+        if (self.state_time >= self.state_duration or
+                (self.roam_mode == "edge" and self.stationary and self.state in ("left", "right"))) and not self.edge_jumping():
             self.choose_action()
         self.update_frame(cursor)
 
@@ -516,6 +687,9 @@ class DesktopPet(QWidget):
     def update_frame(self, cursor: QPoint | None = None):
         if self.dragging or self.state in ("flip", "land"):
             self.render_motion()
+            return
+        if self.roam_mode == "edge":
+            self.render_edge(cursor)
             return
         state = self.state
         if state == "gaze":
@@ -545,6 +719,63 @@ class DesktopPet(QWidget):
             # clicks on windows/icons underneath the pet.
             self.setMask(QRegion(self.pixmap.mask()))
             self.update()
+
+    def render_edge(self, cursor=None):
+        state = self.state
+        pose = self.edge_route.at(self.edge_progress, self.edge_sign)
+        pivot_x, pivot_y = self.width()/2, self.height()/2
+        corner = pose.corner and state in ("left", "right")
+        if corner:
+            fraction = pose.fraction if self.edge_sign > 0 else 1-pose.fraction
+            index = min(3, int(fraction * 4))
+            sprite = self.corner_frames[index]
+            # Generated jump poses face right in local space. Clockwise travel
+            # uses a left-facing local sprite, with the same inward body angle.
+            if self.edge_sign > 0:
+                sprite = sprite.transformed(QTransform().scale(-1, 1))
+            ground = sprite.height()
+            foot_x = self.corner_foot_x(sprite)
+        else:
+            if state == "gaze":
+                cursor = cursor or QCursor.pos()
+                radians = math.radians(self.edge_angle)
+                c, s = math.cos(radians), math.sin(radians)
+                head_height = self.frames["idle"][0].height() * 0.57
+                head_x = self.x + s*head_height
+                head_y = self.y - self.height()/2 - c*head_height
+                dx, dy = cursor.x()-head_x, cursor.y()-head_y
+                index = gaze_index(dx*c+dy*s, -dx*s+dy*c)
+            elif state in ("left", "right"):
+                index = int(self.walk_distance/(self.body_height*0.4)*len(self.frames[state])) % len(self.frames[state])
+            else:
+                _, count, interval = CLIPS[state]
+                index = int(self.state_time/interval) % count
+            sprite = self.frames[state][index]
+            foot_x = sprite.width()/2
+            ground = QRegion(self.frames["idle"][0].mask()).boundingRect().bottom()+1
+        key = ("edge", state, index, corner, round(self.edge_angle, 4), self.edge_direction)
+        if key == self.frame_key:
+            return
+        self.frame_key = key
+        self.pixmap = QPixmap(self.size())
+        self.pixmap.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(self.pixmap)
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        painter.translate(pivot_x, pivot_y)
+        painter.rotate(self.edge_angle)
+        painter.drawPixmap(QPointF(-foot_x, -ground), sprite)
+        painter.end()
+        self.setMask(QRegion(self.pixmap.mask()))
+        self.update()
+
+    @staticmethod
+    def corner_foot_x(sprite):
+        image = sprite.toImage().convertToFormat(QImage.Format.Format_RGBA8888)
+        pixels = memoryview(image.constBits())
+        stride = image.bytesPerLine()
+        xs = [x for y in range(max(0, image.height()-max(2, image.height()//20)), image.height())
+              for x in range(image.width()) if pixels[y*stride+x*4+3] >= 32]
+        return (min(xs)+max(xs)+1)/2 if xs else sprite.width()/2
 
     def render_motion(self):
         self.frame_key = None
@@ -613,11 +844,19 @@ class DesktopPet(QWidget):
         pivot_y = (self.height() - self.motion_frames[0].height()) / 2
         self.y = cursor.y() + self.height() - pivot_y
         self.anchor_x, self.anchor_y = self.x, self.y
-        self.confine()
+        if self.roam_mode != "edge":
+            self.confine()
         self.position_window()
         self.update_frame()
 
     def finish_drag(self):
+        if self.roam_mode == "edge":
+            cursor = self.drag_cursor or QCursor.pos()
+            self.dragging = False
+            self.drag_cursor = None
+            self.attach_to_edge(cursor.x(), cursor.y())
+            self.save_settings()
+            return
         self.flip_angle = self.drag_angle
         hanging = self.motion_frames[0]
         angle = math.radians(self.drag_angle)
@@ -676,7 +915,7 @@ class DesktopPet(QWidget):
         self.target = None
         if was_dragging:
             self.finish_drag()
-        else:
+        elif not self.edge_jumping():
             self.enter_state(self.rng.choice(["wave", "jump"]))
         event.accept()
 
@@ -753,16 +992,17 @@ class DesktopPet(QWidget):
     def set_paused(self, value: bool):
         self.paused = value
         self.target = None
-        self.enter_state("idle", 1)
+        if not self.edge_jumping():
+            self.enter_state("idle", 1)
         self.save_settings()
 
     def set_stationary(self, value: bool):
         self.stationary = value
         self.target = None
-        if self.state in ("left", "right"):
+        if self.state in ("left", "right") and not self.edge_jumping():
             self.enter_state("idle", 0.6)
         # A running pickup/landing or gesture finishes normally.
-        if not self.dragging and self.state not in ("flip", "land"):
+        if self.roam_mode != "edge" and not self.dragging and self.state not in ("flip", "land"):
             self.anchor_x, self.anchor_y = self.x, self.y
         self.save_settings()
 
@@ -779,6 +1019,10 @@ class DesktopPet(QWidget):
             self.show()
 
     def recenter(self):
+        if self.roam_mode == "edge":
+            self.attach_to_edge(self.x, self.y-self.height()/2)
+            self.save_settings()
+            return
         self.anchor_x, self.anchor_y = self.x, self.y
         self.target = None
         self.confine()
@@ -789,6 +1033,11 @@ class DesktopPet(QWidget):
     def reset_position(self):
         screen = QApplication.screenAt(QCursor.pos()) or QApplication.primaryScreen()
         self.screen_area = screen.availableGeometry()
+        if self.roam_mode == "edge":
+            self.attach_to_edge(self.screen_area.center().x(), self.screen_area.bottom()-8)
+            self.save_settings()
+            self.show()
+            return
         self.x = self.screen_area.center().x()
         self.y = self.screen_area.bottom() - 12
         self.recenter()
@@ -837,10 +1086,23 @@ class BehaviorSettingsDialog(QDialog):
         self.height_preset = self.make_preset_combo(HEIGHT_PRESETS, self.height_input)
         self.radius_preset = self.make_preset_combo(RADIUS_PRESETS, self.radius)
         self.speed_preset = self.make_preset_combo(SPEED_PRESETS, self.speed)
+        self.roam_mode = QComboBox()
+        self.roam_mode.addItem("일반 산책", "free")
+        self.roam_mode.addItem("모니터 테두리 산책", "edge")
+        self.roam_mode.setCurrentIndex(self.roam_mode.findData(pet.roam_mode))
+        self.edge_direction = QComboBox()
+        self.edge_direction.addItem("시계 방향", "clockwise")
+        self.edge_direction.addItem("반시계 방향", "counterclockwise")
+        self.edge_direction.setCurrentIndex(self.edge_direction.findData(pet.edge_direction))
+        form.addRow("산책 방식", self.roam_mode)
+        form.addRow("테두리를 도는 방향", self.edge_direction)
         form.addRow("캐릭터 크기", self.height_preset)
         form.addRow("산책 범위 (중심에서 좌우)", self.radius_preset)
         form.addRow("걷는 속도", self.speed_preset)
         layout.addLayout(form)
+        edge_hint = QLabel("테두리 산책은 벽·천장까지 한 방향으로 돌며 잠시 쉬었다가\n다시 걷습니다. 코너에서는 점프로 90도 회전합니다.")
+        edge_hint.setWordWrap(True)
+        layout.addWidget(edge_hint)
         self.stationary = QCheckBox("제자리 모드 (걷기만 멈추기)")
         self.stationary.setChecked(pet.stationary)
         self.paused = QCheckBox("잠시 멈추기")
@@ -880,6 +1142,15 @@ class BehaviorSettingsDialog(QDialog):
         self.buttons.accepted.connect(self.accept)
         self.buttons.rejected.connect(self.reject)
         layout.addWidget(self.buttons)
+        self.roam_mode.currentIndexChanged.connect(self.refresh_roaming_controls)
+        self.refresh_roaming_controls()
+
+    def refresh_roaming_controls(self):
+        edge = self.roam_mode.currentData() == "edge"
+        self.edge_direction.setEnabled(edge)
+        self.radius_preset.setEnabled(not edge)
+        self.radius.setEnabled(not edge)
+        self.recenter_button.setEnabled(not edge)
 
     def make_preset_combo(self, presets, editor):
         combo = QComboBox()
@@ -930,10 +1201,12 @@ class BehaviorSettingsDialog(QDialog):
                 pet.anchor_x, pet.anchor_y = pet.x, pet.y
                 pet.confine()
                 pet.position_window()
-            if radius_changed or height_changed or pause_changed or (pet.stationary and pet.state in ("left", "right")):
+            if (radius_changed or height_changed or pause_changed or
+                    (pet.stationary and pet.state in ("left", "right"))) and not pet.edge_jumping():
                 pet.target = None
                 pet.enter_state("idle", 0.7)
         pet.click_through = self.click_through.isChecked()
+        pet.set_roaming(self.roam_mode.currentData(), self.edge_direction.currentData(), save=False)
         pet.apply_click_through()
         pet.save_settings()
         super().accept()
