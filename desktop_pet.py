@@ -5,6 +5,7 @@ import argparse
 import json
 import logging
 import math
+import os
 from pathlib import Path
 import random
 import sys
@@ -77,6 +78,9 @@ HEIGHT_PRESETS = ((80, "아주 작게"), (120, "작게"), (160, "기본"),
                   (200, "크게"), (240, "아주 크게"), (320, "특대"))
 RADIUS_PRESETS = ((100, "좁게"), (220, "보통"), (420, "넓게"), (700, "아주 넓게"))
 SPEED_PRESETS = ((28, "느긋하게"), (46, "보통"), (75, "활발하게"))
+WINDOWS_TOOLS = {"notepad": ("메모장", "notepad.exe"),
+                 "paint": ("그림판", "mspaint.exe"),
+                 "calculator": ("계산기", "calc.exe")}
 
 
 def resource_path(name: str) -> Path:
@@ -108,6 +112,7 @@ class DesktopPet(QWidget):
         self.paused = bool(self.settings.get("paused", False))
         self.stationary = bool(self.settings.get("stationary", False))
         self.click_through = bool(self.settings.get("click_through", False))
+        self.show_windows_tools = bool(self.settings.get("show_windows_tools", False))
         self.roam_mode = self.settings.get("roam_mode", "free")
         if self.roam_mode not in ("free", "edge"):
             self.roam_mode = "free"
@@ -319,6 +324,7 @@ class DesktopPet(QWidget):
                 "speed": self.speed, "paused": self.paused,
                 "stationary": self.stationary,
                 "click_through": self.click_through,
+                "show_windows_tools": self.show_windows_tools,
                 "roam_mode": self.roam_mode, "edge_direction": self.edge_direction,
                 "edge_phase": self.edge_phase,
                 "anchor": [round(self.anchor_x), round(self.anchor_y)]}
@@ -931,6 +937,11 @@ class DesktopPet(QWidget):
             menu.deleteLater()
 
     def populate_menu(self, menu: QMenu):
+        if self.show_windows_tools:
+            for tool_id, (label, _) in WINDOWS_TOOLS.items():
+                action = menu.addAction(label)
+                action.triggered.connect(lambda checked=False, key=tool_id: self.launch_windows_tool(key))
+            menu.addSeparator()
         title = menu.addAction(f"{APP_NAME} · {self.character.name}")
         title.setEnabled(False)
         menu.addSeparator()
@@ -955,6 +966,24 @@ class DesktopPet(QWidget):
         menu.addAction("행동 설정…", self.open_behavior_settings)
         menu.addSeparator()
         menu.addAction("종료", self.quit_pet)
+
+    def launch_windows_tool(self, tool_id: str):
+        label, executable = WINDOWS_TOOLS[tool_id]
+        program = str(Path(os.environ.get("SystemRoot", r"C:\Windows")) / "System32" / executable)
+        try:
+            if tool_id == "paint":
+                # Store Paint may have no mspaint.exe on PATH; its registered
+                # protocol activates that version directly.
+                try:
+                    os.startfile("ms-paint:")
+                    return
+                except OSError:
+                    pass
+            os.startfile(program)
+        except OSError:
+            logging.exception("Could not launch Windows tool %s", tool_id)
+            self.tray.showMessage(APP_NAME, f"{label}를 실행할 수 없습니다. Windows에 설치되어 있는지 확인해 주세요.",
+                                  QSystemTrayIcon.MessageIcon.Warning, 4000)
 
     def open_behavior_settings(self):
         was_open = self.menu_open
@@ -1109,7 +1138,10 @@ class BehaviorSettingsDialog(QDialog):
         self.paused.setChecked(pet.paused)
         self.click_through = QCheckBox("마우스 통과")
         self.click_through.setChecked(pet.click_through)
-        for control in (self.stationary, self.paused, self.click_through):
+        self.show_windows_tools = QCheckBox("윈도우 기본 도구 표시")
+        self.show_windows_tools.setChecked(pet.show_windows_tools)
+        self.show_windows_tools.setToolTip("우클릭 메뉴 상단에 메모장·그림판·계산기를 표시합니다.")
+        for control in (self.stationary, self.paused, self.click_through, self.show_windows_tools):
             layout.addWidget(control)
         hint = QLabel("마우스 통과 중에는 작업 표시줄의 DeskMates 아이콘을\n우클릭하여 캐릭터와 설정을 바꿀 수 있습니다.")
         hint.setWordWrap(True)
@@ -1206,6 +1238,7 @@ class BehaviorSettingsDialog(QDialog):
                 pet.target = None
                 pet.enter_state("idle", 0.7)
         pet.click_through = self.click_through.isChecked()
+        pet.show_windows_tools = self.show_windows_tools.isChecked()
         pet.set_roaming(self.roam_mode.currentData(), self.edge_direction.currentData(), save=False)
         pet.apply_click_through()
         pet.save_settings()
