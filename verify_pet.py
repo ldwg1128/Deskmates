@@ -4,7 +4,7 @@ import json
 import tempfile
 
 from PySide6.QtCore import QCoreApplication, QEvent, QPoint, QPointF, QRect, Qt
-from PySide6.QtGui import QMouseEvent, QPainter, QPixmap
+from PySide6.QtGui import QMouseEvent, QPainter, QPixmap, QRegion, QTransform
 from PySide6.QtWidgets import QApplication, QDialogButtonBox, QMenu
 
 from desktop_pet import BehaviorSettingsDialog, CHARACTERS, DesktopPet, gaze_index
@@ -38,6 +38,46 @@ def run_character(character_id):
         pet.anchor_x, pet.anchor_y = -300, 720
         pet.x, pet.y = pet.anchor_x, pet.anchor_y
         pet.position_window()
+        if character_id == "liberta":
+            # A horizontal profile must follow a horizontal path, with leg
+            # cadence responding to actual travel rather than elapsed time.
+            for _ in range(10):
+                pet.start_walk()
+                assert pet.target[1] == pet.y
+            pet.next_gaze = float("inf")
+            for speed in (28, 75):
+                pet.x, pet.y = -300, 720
+                pet.speed = speed
+                pet.target = (-150, 720)
+                pet.enter_state("right", 15)
+                pet.advance(0.5, QPoint(-10000, -10000))
+                assert abs(pet.x - (-300 + speed * 0.5)) < 1e-6
+                assert pet.y == 720
+                assert pet.frame_key == ("right", int(speed * 0.5 / 64 * 8))
+            pet.target = (-500, 720)
+            pet.enter_state("left", 15)
+            old_x = pet.x
+            pet.advance(0.5, QPoint(-10000, -10000))
+            assert pet.x < old_x and pet.y == 720 and pet.frame_key[0] == "left"
+            for height in (64, 160, 400):
+                pet.set_size(height, save=False)
+                for right, left in zip(pet.frames["right"], pet.frames["left"]):
+                    assert left.toImage() == right.toImage().transformed(QTransform().scale(-1, 1))
+                    assert not right.mask().isNull()
+                    # Shoes, hair and arms retain transparent margins at every size.
+                    rectangle = QRegion(right.mask()).boundingRect()
+                    assert rectangle.left() > 0 and rectangle.top() > 0
+                    assert rectangle.right() < right.width() - 1
+                    assert rectangle.bottom() < right.height() - 1
+            pet.set_size(160, save=False)
+            pet.speed = 46
+            pet.x, pet.y = pet.anchor_x, pet.anchor_y
+            pet.next_gaze = 7
+            pet.gaze_elapsed = 0
+            pet.rng.seed(42)
+            pet.enter_state("idle", 1.5)
+            print("PASS: Liberta side profiles, horizontal left/right travel, speed-based leg cadence,")
+            print("      mirrored directions and unclipped frames at 64px, 160px and 400px.")
         visited = set()
         positions = []
         for _ in range(3600):
@@ -202,14 +242,31 @@ def run_character(character_id):
         assert any(action.text() == "종료" for action in menu.actions())
         # Cancel leaves settings unchanged; Save writes all behavior controls together.
         dialog = BehaviorSettingsDialog(pet)
+        assert dialog.advanced_panel.isHidden()
+        assert not dialog.radius_preset.isEditable() and not dialog.speed_preset.isEditable()
+        assert dialog.height_preset.currentData() == 400  # Existing custom size is retained.
+        for combo, editor, value in ((dialog.height_preset, dialog.height_input, 160),
+                                     (dialog.radius_preset, dialog.radius, 220),
+                                     (dialog.speed_preset, dialog.speed, 46)):
+            combo.setCurrentIndex(combo.findData(value))
+            assert editor.value() == value and combo.currentData() == value
+        dialog.advanced_toggle.click()
+        assert not dialog.advanced_panel.isHidden()
         dialog.radius.setValue(180)
         dialog.speed.setValue(30)
+        assert dialog.radius_preset.currentData() == 180
+        assert dialog.speed_preset.currentData() == 30
+        assert "사용자 지정" in dialog.radius_preset.currentText()
+        dialog.advanced_toggle.click()
+        assert dialog.advanced_panel.isHidden() and dialog.radius.value() == 180
         dialog.paused.setChecked(False)
         dialog.stationary.setChecked(True)
         dialog.click_through.setChecked(True)
         dialog.reject()
         assert (pet.radius, pet.speed, pet.paused, pet.stationary, pet.click_through) == (420, 75, True, False, False)
+        assert pet.body_height == 400
         dialog = BehaviorSettingsDialog(pet)
+        dialog.height_preset.setCurrentIndex(dialog.height_preset.findData(200))
         dialog.radius.setValue(180)
         dialog.speed.setValue(30)
         dialog.paused.setChecked(False)
@@ -217,11 +274,17 @@ def run_character(character_id):
         dialog.click_through.setChecked(True)
         dialog.buttons.button(QDialogButtonBox.StandardButton.Save).click()
         assert (pet.radius, pet.speed, pet.paused, pet.stationary, pet.click_through) == (180, 30, False, True, True)
+        assert pet.body_height == 200
         pet.set_click_through(False)
         dialog = BehaviorSettingsDialog(pet)
         dialog.show()
         app.processEvents()
         dialog.grab().save("artifacts/behavior-settings-preview.png")
+        assert dialog.radius_preset.currentData() == 180 and dialog.speed_preset.currentData() == 30
+        dialog.advanced_toggle.click()
+        app.processEvents()
+        assert dialog.radius.isVisible() and dialog.speed.isVisible() and dialog.height_input.isVisible()
+        dialog.grab().save("artifacts/behavior-settings-advanced-preview.png")
         dialog.reject()
         # Switch through the actual menu, including while a fall was in progress.
         pet.begin_drag(point)
@@ -236,6 +299,7 @@ def run_character(character_id):
         assert CHARACTERS[other_id].name in pet.tray.toolTip()
         restored = DesktopPet(settings, start_timer=False)
         assert restored.character_id == other_id and restored.stationary
+        assert (restored.body_height, restored.radius, restored.speed) == (200, 180, 30)
         restored.close()
         pet.set_character(character_id)
         assert pet.character_id == character_id
@@ -257,6 +321,8 @@ def run_character(character_id):
         print("      nearby gaze, setting restore and roaming resumes after unchecking.")
         print(f"PASS: {character_id}: shared behavior dialog Save/Cancel, menu character switching,")
         print("      tray identity, switch during falling, shared behavior and selected character restore.")
+        print("PASS: preset dropdowns, collapsed advanced controls, custom-value synchronization,")
+        print("      size selection, Cancel rollback and saved custom values restored.")
 
 
 def run():

@@ -11,11 +11,11 @@ import sys
 import time
 from dataclasses import dataclass
 
-from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QStandardPaths, Qt, QTimer
-from PySide6.QtGui import QActionGroup, QCursor, QIcon, QImage, QPainter, QPixmap, QRegion
-from PySide6.QtWidgets import (QApplication, QCheckBox, QDialog, QDialogButtonBox,
-                              QFormLayout, QInputDialog, QLabel, QMenu, QPushButton,
-                              QSpinBox, QSystemTrayIcon, QVBoxLayout, QWidget)
+from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QSignalBlocker, QStandardPaths, Qt, QTimer
+from PySide6.QtGui import QActionGroup, QCursor, QIcon, QImage, QPainter, QPixmap, QRegion, QTransform
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QDialogButtonBox,
+                              QDoubleSpinBox, QFormLayout, QLabel, QMenu, QPushButton,
+                              QSpinBox, QSystemTrayIcon, QToolButton, QVBoxLayout, QWidget)
 
 
 APP_NAME = "DeskMates"
@@ -52,16 +52,28 @@ class Character:
     motion_angles: tuple[float, ...]
     # Optional standing frame provides a consistent scale across both sheets.
     motion_reference: int | None = None
+    walk_indices: tuple[int, ...] = ()
+    walk_crop: tuple[int, int, int, int] | None = None
+    walk_ground: int = 0
+    # Standing-equivalent anatomical scale; bent airborne poses are shorter.
+    motion_body_height: int | None = None
 
 
 CHARACTERS = {
-    "zenith": Character("제니스 (Zenith)", "assets/spritesheet.png", CROP_X, CROP_W, BODY_HEIGHT,
-                        "assets/drag-landing-v3.png", (3, 2), tuple(range(6)), MOTION_ANGLES),
+    "zenith": Character("제니스 (Zenith)", "assets/zenith-spritesheet-v2.png", CROP_X, CROP_W, BODY_HEIGHT,
+                        "assets/zenith-motion-v4.png", (3, 2), tuple(range(6)), MOTION_ANGLES,
+                        motion_body_height=462),
     "liberta": Character("리베르타 (Liberta)", "assets/liberta-spritesheet.png", 16, 160, 167,
                          "assets/liberta-motion.png", (4, 6), (16, 18, 19, 20, 21, 22),
-                         (0.0, 135.0, 90.0, 180.0), 23),
+                         (0.0, 135.0, 90.0, 180.0), 23,
+                         walk_indices=tuple(range(8, 16)), walk_crop=(96, 0, 384, 512),
+                         walk_ground=497),
 }
 DEFAULT_CHARACTER = "liberta"
+HEIGHT_PRESETS = ((80, "아주 작게"), (120, "작게"), (160, "기본"),
+                  (200, "크게"), (240, "아주 크게"), (320, "특대"))
+RADIUS_PRESETS = ((100, "좁게"), (220, "보통"), (420, "넓게"), (700, "아주 넓게"))
+SPEED_PRESETS = ((28, "느긋하게"), (46, "보통"), (75, "활발하게"))
 
 
 def resource_path(name: str) -> Path:
@@ -118,6 +130,7 @@ class DesktopPet(QWidget):
         self.next_gaze = self.rng.uniform(5, 10)
         self.near_cursor = False
         self.target = None
+        self.walk_distance = 0.0
         self.frame_key = None
         self.last_tick = time.monotonic()
 
@@ -208,9 +221,30 @@ class DesktopPet(QWidget):
             bottom = max(y for x, y in opaque)
             return sprite.copy(left, top, right - left + 1, bottom - top + 1)
         self.motion_originals = [crop_motion(index) for index in character.motion_indices]
-        self.motion_reference_height = (crop_motion(character.motion_reference).height()
+        self.motion_reference_height = (character.motion_body_height
+                                        if character.motion_body_height is not None
+                                        else crop_motion(character.motion_reference).height()
                                         if character.motion_reference is not None
                                         else self.motion_originals[3].height())
+        self.walk_originals = []
+        if character.walk_indices:
+            # Keep a shared crop and scale: individual limb poses must not resize
+            # the character or move the body anchor from frame to frame.
+            x, y, width, height = character.walk_crop
+            self.walk_originals = [
+                drag_sheet.copy((index % columns) * cell_w + x,
+                                (index // columns) * cell_h + y, width, height)
+                for index in character.walk_indices
+            ]
+            # Almost invisible residue in the source must not create clickable
+            # margins or leak into the neighboring frame after scaling.
+            for index, sprite in enumerate(self.walk_originals):
+                image = sprite.toImage().convertToFormat(QImage.Format.Format_RGBA8888)
+                pixels = memoryview(image.bits())
+                for offset in range(3, image.sizeInBytes(), 4):
+                    if pixels[offset] < 32:
+                        pixels[offset] = 0
+                self.walk_originals[index] = QPixmap.fromImage(image)
 
     def update_character_identity(self):
         icon = QIcon(self.originals["idle"][0])
@@ -275,6 +309,25 @@ class DesktopPet(QWidget):
         self.frames = {name: [p.scaledToHeight(target_height, Qt.TransformationMode.SmoothTransformation)
                               for p in frames] for name, frames in self.originals.items()}
         reference_height = self.motion_reference_height
+        if self.walk_originals:
+            idle = self.frames["idle"][0]
+            floor = QRegion(idle.mask()).boundingRect().bottom() + 1
+            scale = self.body_height / reference_height
+            right_frames = []
+            for original in self.walk_originals:
+                sprite = original.scaledToHeight(round(original.height() * scale),
+                                                Qt.TransformationMode.SmoothTransformation)
+                frame = QPixmap(idle.size())
+                frame.fill(Qt.GlobalColor.transparent)
+                painter = QPainter(frame)
+                painter.drawPixmap(round((frame.width() - sprite.width()) / 2),
+                                   round(floor - (self.character.walk_ground
+                                                  - self.character.walk_crop[1]) * scale), sprite)
+                painter.end()
+                right_frames.append(frame)
+            self.frames["right"] = right_frames
+            self.frames["left"] = [frame.transformed(QTransform().scale(-1, 1))
+                                   for frame in right_frames]
         self.motion_frames = [p.scaledToHeight(
             round(p.height() * self.body_height / reference_height),
             Qt.TransformationMode.SmoothTransformation)
@@ -327,6 +380,8 @@ class DesktopPet(QWidget):
     def enter_state(self, state: str, duration: float | None = None):
         self.state = state
         self.state_time = 0
+        if state in ("left", "right"):
+            self.walk_distance = 0.0
         if duration is None:
             _, count, interval = CLIPS.get(state, (0, 1, 0.1))
             duration = count * interval
@@ -342,7 +397,8 @@ class DesktopPet(QWidget):
         left, right, top, bottom = self.bounds()
         choices = [self.rng.uniform(left, right) for _ in range(5)]
         tx = max(choices, key=lambda candidate: abs(candidate - self.x))
-        ty = self.rng.uniform(top, bottom)
+        ty = (clamp(self.y, top, bottom) if self.walk_originals
+              else self.rng.uniform(top, bottom))
         self.target = (tx, ty)
         self.enter_state("right" if tx >= self.x else "left", 15)
 
@@ -437,6 +493,7 @@ class DesktopPet(QWidget):
             dx, dy = self.target[0] - self.x, self.target[1] - self.y
             distance = math.hypot(dx, dy)
             step = self.speed * dt
+            self.walk_distance += min(distance, step)
             if distance <= step:
                 self.x, self.y = self.target
                 self.target = None
@@ -467,7 +524,13 @@ class DesktopPet(QWidget):
             index = gaze_index(cursor.x() - self.x, cursor.y() - head_y)
         else:
             _, count, interval = CLIPS[state]
-            index = int(self.state_time / interval) % count
+            if state in ("left", "right") and self.walk_originals:
+                # A cycle covers a fixed stride at the current body size, so
+                # slower travel also slows the legs instead of sliding the feet.
+                count = len(self.frames[state])
+                index = int(self.walk_distance / (self.body_height * 0.4) * count) % count
+            else:
+                index = int(self.state_time / interval) % count
         key = (state, index)
         if key != self.frame_key:
             self.frame_key = key
@@ -644,15 +707,12 @@ class DesktopPet(QWidget):
         sizes = menu.addMenu("캐릭터 크기")
         group = QActionGroup(sizes)
         group.setExclusive(True)
-        for height, label in [(80, "아주 작게"), (120, "작게"), (160, "기본"),
-                              (200, "크게"), (240, "아주 크게"), (320, "특대")]:
+        for height, label in HEIGHT_PRESETS:
             action = sizes.addAction(f"{label} · {height}px")
             action.setCheckable(True)
             action.setChecked(height == self.body_height)
             group.addAction(action)
             action.triggered.connect(lambda checked=False, h=height: self.set_size(h))
-        sizes.addSeparator()
-        sizes.addAction("직접 입력…", self.custom_size)
         menu.addAction("행동 설정…", self.open_behavior_settings)
         menu.addSeparator()
         menu.addAction("종료", self.quit_pet)
@@ -681,17 +741,6 @@ class DesktopPet(QWidget):
     def tray_activated(self, reason):
         if reason == QSystemTrayIcon.ActivationReason.DoubleClick:
             self.reset_position()
-
-    def custom_size(self):
-        self.menu_open = True
-        try:
-            value, accepted = QInputDialog.getInt(self, "캐릭터 크기", "캐릭터 높이 (px) · 원본 비율 유지",
-                                                 self.body_height, 64, 400, 8)
-            if accepted:
-                self.set_size(value)
-        finally:
-            self.menu_open = False
-            self.last_tick = time.monotonic()
 
     def set_radius(self, radius: int):
         self.radius = radius
@@ -768,20 +817,29 @@ class BehaviorSettingsDialog(QDialog):
         self.setWindowIcon(pet.windowIcon())
         self.setMinimumWidth(380)
         layout = QVBoxLayout(self)
-        description = QLabel("행동 설정은 모든 캐릭터에 공통으로 적용됩니다.")
+        description = QLabel("설정은 모든 캐릭터에 공통으로 적용됩니다.\n기본값을 선택하거나 고급 설정에서 직접 입력하세요.")
         description.setWordWrap(True)
         layout.addWidget(description)
         form = QFormLayout()
+        self.height_input = QSpinBox()
+        self.height_input.setRange(64, 400)
+        self.height_input.setSuffix(" px")
+        self.height_input.setValue(pet.body_height)
         self.radius = QSpinBox()
         self.radius.setRange(50, 800)
         self.radius.setSuffix(" px")
         self.radius.setValue(pet.radius)
-        form.addRow("산책 범위 (중심에서 좌우)", self.radius)
-        self.speed = QSpinBox()
+        self.speed = QDoubleSpinBox()
+        self.speed.setDecimals(2)
         self.speed.setRange(20, 100)
         self.speed.setSuffix(" px/초")
-        self.speed.setValue(round(pet.speed))
-        form.addRow("걷는 속도", self.speed)
+        self.speed.setValue(pet.speed)
+        self.height_preset = self.make_preset_combo(HEIGHT_PRESETS, self.height_input)
+        self.radius_preset = self.make_preset_combo(RADIUS_PRESETS, self.radius)
+        self.speed_preset = self.make_preset_combo(SPEED_PRESETS, self.speed)
+        form.addRow("캐릭터 크기", self.height_preset)
+        form.addRow("산책 범위 (중심에서 좌우)", self.radius_preset)
+        form.addRow("걷는 속도", self.speed_preset)
         layout.addLayout(form)
         self.stationary = QCheckBox("제자리 모드 (걷기만 멈추기)")
         self.stationary.setChecked(pet.stationary)
@@ -794,6 +852,21 @@ class BehaviorSettingsDialog(QDialog):
         hint = QLabel("마우스 통과 중에는 작업 표시줄의 DeskMates 아이콘을\n우클릭하여 캐릭터와 설정을 바꿀 수 있습니다.")
         hint.setWordWrap(True)
         layout.addWidget(hint)
+        self.advanced_toggle = QToolButton()
+        self.advanced_toggle.setText("고급 설정 · 직접 입력")
+        self.advanced_toggle.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.advanced_toggle.setArrowType(Qt.ArrowType.RightArrow)
+        self.advanced_toggle.setCheckable(True)
+        self.advanced_toggle.toggled.connect(self.toggle_advanced)
+        layout.addWidget(self.advanced_toggle)
+        self.advanced_panel = QWidget()
+        advanced_form = QFormLayout(self.advanced_panel)
+        advanced_form.setContentsMargins(0, 0, 0, 0)
+        advanced_form.addRow("캐릭터 높이 (64~400 px)", self.height_input)
+        advanced_form.addRow("산책 범위 (50~800 px)", self.radius)
+        advanced_form.addRow("걷는 속도 (20~100 px/초)", self.speed)
+        layout.addWidget(self.advanced_panel)
+        self.advanced_panel.hide()
         self.recenter_button = QPushButton("이 위치를 산책 중심으로")
         self.recenter_button.clicked.connect(pet.recenter)
         layout.addWidget(self.recenter_button)
@@ -808,10 +881,46 @@ class BehaviorSettingsDialog(QDialog):
         self.buttons.rejected.connect(self.reject)
         layout.addWidget(self.buttons)
 
+    def make_preset_combo(self, presets, editor):
+        combo = QComboBox()
+        combo.setEditable(False)
+
+        def refresh(value):
+            # Keep custom saved values visible without replacing them with the
+            # nearest preset; block callbacks while refreshing the item list.
+            blocker = QSignalBlocker(combo)
+            combo.clear()
+            for number, label in presets:
+                combo.addItem(f"{label} · {number:g}{editor.suffix()}", number)
+            selected = combo.findData(value)
+            if selected < 0:
+                combo.addItem(f"사용자 지정 · {value:g}{editor.suffix()}", value)
+                selected = combo.count() - 1
+            combo.setCurrentIndex(selected)
+            del blocker
+
+        def select(index):
+            if index >= 0:
+                editor.setValue(combo.itemData(index))
+
+        editor.valueChanged.connect(refresh)
+        combo.currentIndexChanged.connect(select)
+        refresh(editor.value())
+        return combo
+
+    def toggle_advanced(self, expanded):
+        self.advanced_toggle.setArrowType(Qt.ArrowType.DownArrow if expanded
+                                          else Qt.ArrowType.RightArrow)
+        self.advanced_panel.setVisible(expanded)
+        self.adjustSize()
+
     def accept(self):
         pet = self.pet
         pause_changed = pet.paused != self.paused.isChecked()
         radius_changed = pet.radius != self.radius.value()
+        height_changed = pet.body_height != self.height_input.value()
+        if height_changed:
+            pet.set_size(self.height_input.value(), save=False)
         pet.radius = self.radius.value()
         pet.speed = self.speed.value()
         pet.stationary = self.stationary.isChecked()
@@ -821,7 +930,7 @@ class BehaviorSettingsDialog(QDialog):
                 pet.anchor_x, pet.anchor_y = pet.x, pet.y
                 pet.confine()
                 pet.position_window()
-            if radius_changed or pause_changed or (pet.stationary and pet.state in ("left", "right")):
+            if radius_changed or height_changed or pause_changed or (pet.stationary and pet.state in ("left", "right")):
                 pet.target = None
                 pet.enter_state("idle", 0.7)
         pet.click_through = self.click_through.isChecked()
