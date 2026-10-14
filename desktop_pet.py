@@ -55,7 +55,7 @@ class Character:
 
 
 CHARACTERS = {
-    "zenith": Character("Zenith", "assets/spritesheet.png", CROP_X, CROP_W, BODY_HEIGHT,
+    "zenith": Character("제니스 (Zenith)", "assets/spritesheet.png", CROP_X, CROP_W, BODY_HEIGHT,
                         "assets/drag-landing-v3.png", (3, 2), tuple(range(6)), MOTION_ANGLES),
     "liberta": Character("리베르타 (Liberta)", "assets/liberta-spritesheet.png", 16, 160, 167,
                          "assets/liberta-motion.png", (4, 6), (16, 18, 19, 20, 21, 22),
