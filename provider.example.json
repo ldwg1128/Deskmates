@@ -1,0 +1,16 @@
+{
+  "provider": "image_providers:OpenAIProvider",
+  "api_key_env": "OPENAI_API_KEY",
+  "image_model": "SET_IMAGE_MODEL_AVAILABLE_IN_YOUR_ACCOUNT",
+  "vision_model": "SET_VISION_MODEL_AVAILABLE_IN_YOUR_ACCOUNT",
+  "image_size": "1536x1024",
+  "quality": "medium",
+  "timeout_seconds": 180,
+  "vision_output_tokens": 4096,
+  "identity_confidence": 0.9,
+  "allowance_usd": {
+    "analyze": "1.00",
+    "render": "1.00",
+    "inspect": "1.00"
+  }
+}

@@ -37,7 +37,7 @@ python desktop_pet.py
 
 실행 파일을 다시 빌드하려면 `python -m pip install pyinstaller` 후 `powershell -ExecutionPolicy Bypass -File .\build.ps1`을 실행하세요. 빌드 전에 실행 중인 DeskMates를 종료하세요.
 
-리베르타의 기본 동작·16방향 시선은 `assets\liberta-spritesheet.png`, 매달리기·회전·착지 포즈는 `assets\liberta-motion.png`에 포함된 제공 이미지에서 가져옵니다. 캐릭터별 고정 자르기와 동일한 배율을 사용해 비율을 유지합니다. 제니스 (Zenith)는 이동 시 머리 비율을 보정한 `assets\zenith-spritesheet-v2.png`와 대기 자세에 맞춰 색감·비율을 보정한 낙하 시트 `assets\zenith-motion-v4.png`를 사용합니다. 대기·인사·시선 프레임은 원본을 유지합니다. 캐릭터 구성은 `desktop_pet.py`의 `CHARACTERS`에서 관리합니다.
+리베르타의 기본 동작·16방향 시선은 `assets\liberta-spritesheet.png`, 매달리기·회전·착지 포즈는 `assets\liberta-motion.png`에 포함된 제공 이미지에서 가져옵니다. 캐릭터별 고정 자르기와 동일한 배율을 사용해 비율을 유지합니다. 제니스 (Zenith)는 이동 시 머리 비율을 보정한 `assets\zenith-spritesheet-v2.png`와 대기 자세에 맞춰 색감·비율을 보정한 낙하 시트 `assets\zenith-motion-v4.png`를 사용합니다. 대기·인사·시선 프레임은 원본을 유지합니다. 캐릭터 구성은 `characters/{id}/character.json`, 공통 행동 규격은 `animation_catalog.json`에서 관리하며 신규 캐릭터 추가에 게임 핵심 코드 수정이 필요 없습니다.
 
 리베르타는 `assets\liberta-motion.png`의 옆모습 달리기 8프레임으로 수평 산책합니다. 왼쪽 이동은 좌우 반전한 프레임을 사용하며, 이동 거리와 캐릭터 크기에 맞춰 발 동작을 진행합니다. 공통 배율과 기준선을 사용해 이동 중 크기와 위치가 불필요하게 흔들리지 않도록 합니다.
 
@@ -54,5 +54,19 @@ python desktop_pet.py
 테두리 회전 시 이전 프레임이 겹쳐 남지 않도록 프레임별 창 마스크를 사용하지 않고, [Qt의 `CompositionMode_Source`](https://doc.qt.io/qt-6/qpainter.html#CompositionMode-enum)로 투명 픽셀까지 교체합니다. 투명 영역의 클릭 통과는 [Windows 레이어 창의 알파 판정](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#layered-windows)을 사용합니다. Windows에서 `python verify_rendering.py`를 실행하면 두 캐릭터의 160·320·400px, 양방향·네 코너를 포함한 1,152프레임을 실제 창 버퍼와 픽셀 단위로 비교하고 클릭 통과도 검증합니다.
 
 투명한 테두리 없는 창 구현은 [Qt 공식 QWidget 문서](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QWidget.html)를 따릅니다.
+
+## 새 캐릭터 제작과 자동 생성
+
+정면·측면·후면 참고 이미지에서 디자인 명세를 만들고 현재 전체 행동의 프롬프트·배치 가이드·투명 템플릿을 생성할 수 있습니다. 선택적 이미지/비전 API 연결 시 생성 → 프레임별 검사 → 실패 슬롯만 재생성 → 검토 → 등록을 수행합니다. API가 없으면 외부 이미지 가져오기로 같은 흐름을 사용합니다. 재시도 횟수와 비용 예약 한도는 재실행 후에도 유지합니다. 기존 두 캐릭터의 PNG와 재생 결과는 보존했습니다.
+
+```powershell
+python -m pip install -r requirements-tools.txt
+python character_tool.py create characters/my_pet --id my_pet --name "새 친구" --reference "front=C:/images/front.png" --reference "side=C:/images/side.png"
+python character_tool.py auto characters/my_pet
+# 실제 API: requirements-openai.txt 설치, provider.example.json 복사/설정 후
+python character_tool.py auto characters/my_pet --config provider.local.json --max-retries 2 --cost-limit 5
+```
+
+자세한 명령과 비용 한도의 의미는 [캐릭터 제작 안내](docs/character-authoring.md)를 참조하세요. [기존 행동 분석](docs/animation-behavior-analysis.md), [스킬 설계 조사와 단계별 계획](docs/character-system-plan.md), [검증 결과](docs/regression-results.md)도 제공합니다. `python examples/demo_autogen.py`로 유료 호출 없이 더미 전체 생성과 고장 프레임의 선택적 재생성을 재현합니다. 결과와 GIF는 `artifacts/autogen-demo`에 저장합니다.
 
 배고픔·포만감은 `appetite.py`에서 관리합니다. 배고픔 4포즈는 `assets\liberta-hungry.png`, `assets\zenith-hungry.png`, 빵을 받아들고 거절하는 4포즈는 `assets\liberta-refusal.png`, `assets\zenith-refusal.png`입니다. 내장 이미지 생성 도구로 제작했으며 프롬프트는 `assets\appetite-prompts.txt`에 기록했습니다. 기존 먹기 동작처럼 배율을 고정하고 대기 자세의 양발 중심·바닥선에 맞춥니다. `python verify_appetite.py`로 스택 단계, 5스택 거절, 소화·재급여, 캐릭터별 저장, 앱 종료 중 경과 시간, 벽·천장 동작과 말풍선 위치를 검증합니다.

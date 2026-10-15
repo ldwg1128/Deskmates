@@ -1,0 +1,2 @@
+-r requirements-tools.txt
+openai>=2,<3

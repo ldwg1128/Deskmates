@@ -10,7 +10,6 @@ from pathlib import Path
 import random
 import sys
 import time
-from dataclasses import dataclass
 
 from edge_path import EdgeRoute
 from appetite import Appetite, BREAD_LIMIT
@@ -30,50 +29,9 @@ CROP_X, CROP_W = 32, 128
 BODY_HEIGHT = 198
 # Artwork orientations, measured clockwise from the inverted hanging pose.
 MOTION_ANGLES = (0.0, 30.0, 140.0, 180.0)
-CLIPS = {
-    "idle": (0, 6, 0.18),
-    "right": (1, 8, 0.105),
-    "left": (2, 8, 0.105),
-    "wave": (3, 4, 0.18),
-    "jump": (4, 5, 0.15),
-    "bow": (5, 8, 0.17),
-    "shy": (6, 6, 0.19),
-    "think": (7, 6, 0.22),
-    "tilt": (8, 6, 0.19),
-}
-
-
-@dataclass(frozen=True)
-class Character:
-    name: str
-    sheet: str
-    crop_x: int
-    crop_width: int
-    body_height: int
-    motion_sheet: str
-    motion_grid: tuple[int, int]
-    motion_indices: tuple[int, ...]
-    motion_angles: tuple[float, ...]
-    # Optional standing frame provides a consistent scale across both sheets.
-    motion_reference: int | None = None
-    walk_indices: tuple[int, ...] = ()
-    walk_crop: tuple[int, int, int, int] | None = None
-    walk_ground: int = 0
-    # Standing-equivalent anatomical scale; bent airborne poses are shorter.
-    motion_body_height: int | None = None
-    corner_sheet: str = ""
-
-
-CHARACTERS = {
-    "zenith": Character("제니스 (Zenith)", "assets/zenith-spritesheet-v2.png", CROP_X, CROP_W, BODY_HEIGHT,
-                        "assets/zenith-motion-v4.png", (3, 2), tuple(range(6)), MOTION_ANGLES,
-                        motion_body_height=462, corner_sheet="assets/zenith-corner-jump.png"),
-    "liberta": Character("리베르타 (Liberta)", "assets/liberta-spritesheet.png", 16, 160, 167,
-                         "assets/liberta-motion.png", (4, 6), (16, 18, 19, 20, 21, 22),
-                         (0.0, 135.0, 90.0, 180.0), 23,
-                         walk_indices=tuple(range(8, 16)), walk_crop=(96, 0, 384, 512),
-                         walk_ground=497, corner_sheet="assets/liberta-corner-jump.png"),
-}
+from character_resources import (Character, CATALOG, CLIPS, discover_characters, load_art,
+                                 action_spec, playback_index, standing_feet, load_pose_sheet)
+CHARACTERS = discover_characters()
 DEFAULT_CHARACTER = "liberta"
 HEIGHT_PRESETS = ((80, "아주 작게"), (120, "작게"), (160, "기본"),
                   (200, "크게"), (240, "아주 크게"), (320, "특대"))
@@ -83,7 +41,8 @@ WINDOWS_TOOLS = {"notepad": ("메모장", "notepad.exe"),
                  "paint": ("그림판", "mspaint.exe"),
                  "calculator": ("계산기", "calc.exe")}
 FEED_STATES = ("feed_drop", "feed_eat", "feed_happy", "feed_refuse")
-ANIMATION_CLIPS = {**CLIPS, "hungry": (0, 4, 0.45)}
+ANIMATION_CLIPS = {**CLIPS, "hungry": (0, CATALOG['actions']['hungry']['frames'],
+                                     1/CATALOG['actions']['hungry']['fps'])}
 FULL_MESSAGES = ("너무 배불러…\n이제 못 먹겠어!", "내 배는 빵 보관함이 아니야…!",
                  "한 입도 못 먹겠어!\n조금만 쉬자…")
 
@@ -111,38 +70,6 @@ def load_feeding_art(name: str) -> QPixmap:
         if pixels[offset] < 32:
             pixels[offset] = 0
     return QPixmap.fromImage(image)
-
-
-def standing_feet(sprite: QPixmap) -> QPointF:
-    """Locate the midpoint of both shoes and the floor of a standing pose."""
-    image = sprite.toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-    pixels = memoryview(image.constBits())
-    stride = image.bytesPerLine()
-    for bottom in range(image.height(), 0, -1):
-        if any(pixels[(bottom-1)*stride+x*4+3] >= 128 for x in range(image.width())):
-            break
-    else:
-        raise ValueError("서 있는 캐릭터의 발 위치를 찾을 수 없습니다.")
-    top = next(y for y in range(bottom)
-               if any(pixels[y*stride+x*4+3] >= 128 for x in range(image.width())))
-    shoe_band = max(2, round((bottom-top)*0.08))
-    xs = [x for y in range(max(0, bottom-shoe_band), bottom) for x in range(image.width())
-          if pixels[y*stride+x*4+3] >= 128]
-    return QPointF((min(xs)+max(xs)+1)/2, bottom)
-
-
-def load_pose_sheet(name: str) -> list[QPixmap]:
-    sheet = load_feeding_art(name)
-    if sheet.width() < 2 or sheet.height() < 2:
-        raise ValueError(f"동작 시트는 2×2 격자여야 합니다: {name}")
-    cw, ch = sheet.width()//2, sheet.height()//2
-    cells = [sheet.copy(i % 2*cw, i//2*ch, cw, ch) for i in range(4)]
-    content = QRect()
-    for cell in cells:
-        content = content.united(QRegion(cell.mask()).boundingRect())
-    if content.isEmpty():
-        raise ValueError(f"동작 이미지가 비어 있습니다: {name}")
-    return [cell.copy(content) for cell in cells]
 
 
 class FallingBread(QWidget):
@@ -190,6 +117,7 @@ class DesktopPet(QWidget):
         saved_appetites = self.settings.get("appetites", {})
         if not isinstance(saved_appetites, dict):
             saved_appetites = {}
+        self.saved_appetites = saved_appetites.copy()
         now = time.time()
         self.appetites = {key: Appetite.restore(saved_appetites.get(key), now) for key in CHARACTERS}
         self.meal_pending = False
@@ -344,80 +272,16 @@ class DesktopPet(QWidget):
         self.update_frame()
 
     def load_character_art(self):
-        character = self.character
-        sheet = QPixmap(str(resource_path(character.sheet)))
-        if sheet.isNull() or sheet.width() != 1536 or sheet.height() != 2288:
-            raise ValueError("스프라이트 이미지(1536×2288)를 불러올 수 없습니다.")
-        self.originals = {
-            name: [sheet.copy(col * CELL_W + character.crop_x, row * CELL_H,
-                             character.crop_width, CELL_H)
-                   for col in range(count)]
-            for name, (row, count, _) in CLIPS.items()
-        }
-        self.originals["gaze"] = [
-            sheet.copy((i % 8) * CELL_W + character.crop_x, (9 + i // 8) * CELL_H,
-                       character.crop_width, CELL_H)
-            for i in range(16)
-        ]
-        drag_sheet = QPixmap(str(resource_path(character.motion_sheet)))
-        if drag_sheet.isNull():
-            raise ValueError("매달리기 / 착지 이미지를 불러올 수 없습니다.")
-        columns, rows = character.motion_grid
-        cell_w, cell_h = drag_sheet.width() // columns, drag_sheet.height() // rows
-        def crop_motion(index):
-            sprite = drag_sheet.copy((index % columns) * cell_w, (index // columns) * cell_h,
-                                     cell_w, cell_h)
-            image = sprite.toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-            pixels = memoryview(image.constBits())
-            stride = image.bytesPerLine()
-            # Ignore near-transparent stray pixels when finding the content.
-            opaque = [(x, y) for y in range(image.height()) for x in range(image.width())
-                      if pixels[y * stride + x * 4 + 3] >= 32]
-            if not opaque:
-                raise ValueError("동작 이미지에 캐릭터가 없습니다.")
-            left = min(x for x, y in opaque)
-            top = min(y for x, y in opaque)
-            right = max(x for x, y in opaque)
-            bottom = max(y for x, y in opaque)
-            return sprite.copy(left, top, right - left + 1, bottom - top + 1)
-        self.motion_originals = [crop_motion(index) for index in character.motion_indices]
-        self.motion_reference_height = (character.motion_body_height
-                                        if character.motion_body_height is not None
-                                        else crop_motion(character.motion_reference).height()
-                                        if character.motion_reference is not None
-                                        else self.motion_originals[3].height())
-        self.walk_originals = []
-        if character.walk_indices:
-            # Keep a shared crop and scale: individual limb poses must not resize
-            # the character or move the body anchor from frame to frame.
-            x, y, width, height = character.walk_crop
-            self.walk_originals = [
-                drag_sheet.copy((index % columns) * cell_w + x,
-                                (index // columns) * cell_h + y, width, height)
-                for index in character.walk_indices
-            ]
-            # Almost invisible residue in the source must not create clickable
-            # margins or leak into the neighboring frame after scaling.
-            for index, sprite in enumerate(self.walk_originals):
-                image = sprite.toImage().convertToFormat(QImage.Format.Format_RGBA8888)
-                pixels = memoryview(image.bits())
-                for offset in range(3, image.sizeInBytes(), 4):
-                    if pixels[offset] < 32:
-                        pixels[offset] = 0
-                self.walk_originals[index] = QPixmap.fromImage(image)
-        corner_sheet = QPixmap(str(resource_path(character.corner_sheet)))
-        if corner_sheet.isNull() or corner_sheet.width() % 2 or corner_sheet.height() % 2:
-            raise ValueError("코너 점프 이미지를 불러올 수 없습니다.")
-        # Reuse the same alpha-aware content crop for the new four-pose sheet.
-        drag_sheet = corner_sheet
-        columns, rows = 2, 2
-        cell_w, cell_h = corner_sheet.width() // 2, corner_sheet.height() // 2
-        self.corner_originals = [crop_motion(index) for index in range(4)]
-        # Keep one scale; generated cells have different horizontal offsets,
-        # so their shoes are aligned to the idle pose after scaling below.
-        self.feed_originals = load_pose_sheet(f"assets/{self.character_id}-feeding.png")
-        self.hunger_originals = load_pose_sheet(f"assets/{self.character_id}-hungry.png")
-        self.refusal_originals = load_pose_sheet(f"assets/{self.character_id}-refusal.png")
+        self.art = load_art(self.character)
+        for key in ("originals", "motion_originals", "motion_reference_height", "walk_originals",
+                    "corner_originals", "feed_originals", "hunger_originals", "refusal_originals"):
+            setattr(self, key, getattr(self.art, key))
+
+    def clip(self, state):
+        if state not in self.frames or state == 'gaze':
+            return 0, 1, .1  # Physics/food/gaze transitions retain their existing phase timers.
+        spec = action_spec(self.character, state)
+        return 0, len(self.frames[state]), 1/spec.get("fps", 10) if spec.get("fps",10) else .1
 
     def update_character_identity(self):
         icon = QIcon(self.originals["idle"][0])
@@ -470,7 +334,8 @@ class DesktopPet(QWidget):
                 "click_through": self.click_through,
                 "show_windows_tools": self.show_windows_tools,
                 "feeding_enabled": self.feeding_enabled,
-                "appetites": {key: value.as_dict() for key, value in self.appetites.items()},
+                "appetites": {**self.saved_appetites,
+                              **{key: value.as_dict() for key, value in self.appetites.items()}},
                 "roam_mode": self.roam_mode, "edge_direction": self.edge_direction,
                 "edge_phase": self.edge_phase,
                 "anchor": [round(self.anchor_x), round(self.anchor_y)]}
@@ -485,60 +350,9 @@ class DesktopPet(QWidget):
     def set_size(self, height: int, *, save: bool = True):
         self.cancel_feeding()
         self.body_height = int(clamp(height, 64, 400))
-        # Specify HEIGHT ONLY with scaledToHeight. Qt chooses the width from
-        # the original aspect ratio; no stretch or per-frame resizing occurs.
-        target_height = round(CELL_H * self.body_height / self.character.body_height)
-        self.frames = {name: [p.scaledToHeight(target_height, Qt.TransformationMode.SmoothTransformation)
-                              for p in frames] for name, frames in self.originals.items()}
-        reference_height = self.motion_reference_height
-        if self.walk_originals:
-            idle = self.frames["idle"][0]
-            floor = QRegion(idle.mask()).boundingRect().bottom() + 1
-            scale = self.body_height / reference_height
-            right_frames = []
-            for original in self.walk_originals:
-                sprite = original.scaledToHeight(round(original.height() * scale),
-                                                Qt.TransformationMode.SmoothTransformation)
-                frame = QPixmap(idle.size())
-                frame.fill(Qt.GlobalColor.transparent)
-                painter = QPainter(frame)
-                painter.drawPixmap(round((frame.width() - sprite.width()) / 2),
-                                   round(floor - (self.character.walk_ground
-                                                  - self.character.walk_crop[1]) * scale), sprite)
-                painter.end()
-                right_frames.append(frame)
-            self.frames["right"] = right_frames
-            self.frames["left"] = [frame.transformed(QTransform().scale(-1, 1))
-                                   for frame in right_frames]
-        self.motion_frames = [p.scaledToHeight(
-            round(p.height() * self.body_height / reference_height),
-            Qt.TransformationMode.SmoothTransformation)
-            for index, p in enumerate(self.motion_originals)]
-        self.corner_frames = [p.scaledToHeight(
-            max(1, round(p.height() * self.body_height / self.corner_originals[3].height())),
-            Qt.TransformationMode.SmoothTransformation) for p in self.corner_originals]
-        idle = self.frames["idle"][0]
-        idle_feet = standing_feet(idle)
-
-        def align_standing_pose(sprite):
-            offset = idle_feet - standing_feet(sprite)
-            frame = QPixmap(idle.size())
-            frame.fill(Qt.GlobalColor.transparent)
-            painter = QPainter(frame)
-            painter.drawPixmap(round(offset.x()), round(offset.y()), sprite)
-            painter.end()
-            return frame
-
-        self.feed_frames = [align_standing_pose(original.scaledToHeight(
-            self.body_height, Qt.TransformationMode.SmoothTransformation))
-            for original in self.feed_originals]
-        self.feed_look_frame = align_standing_pose(self.frames["gaze"][0])
-        self.frames["hungry"] = [align_standing_pose(original.scaledToHeight(
-            self.body_height, Qt.TransformationMode.SmoothTransformation))
-            for original in self.hunger_originals]
-        self.refusal_frames = [align_standing_pose(original.scaledToHeight(
-            self.body_height, Qt.TransformationMode.SmoothTransformation))
-            for original in self.refusal_originals]
+        self.art.resize(self.body_height)
+        for key in ("frames", "motion_frames", "corner_frames", "feed_frames", "feed_look_frame", "refusal_frames"):
+            setattr(self, key, getattr(self.art, key))
         # A square canvas holds the rotated sprite without clipping limbs.
         largest_diagonal = max(math.hypot(p.width(), p.height()) for p in
                                self.motion_frames + self.feed_frames + self.refusal_frames + [p for frames in self.frames.values() for p in frames])
@@ -710,7 +524,7 @@ class DesktopPet(QWidget):
         if state in ("left", "right"):
             self.walk_distance = 0.0
         if duration is None:
-            _, count, interval = ANIMATION_CLIPS.get(state, (0, 1, 0.1))
+            _, count, interval = self.clip(state)
             duration = count * interval
         self.state_duration = duration
         self.frame_key = None
@@ -1060,14 +874,14 @@ class DesktopPet(QWidget):
             head_y = self.y - self.frames["idle"][0].height() * 0.57
             index = gaze_index(cursor.x() - self.x, cursor.y() - head_y)
         else:
-            _, count, interval = ANIMATION_CLIPS[state]
+            _, count, interval = self.clip(state)
             if state in ("left", "right") and self.walk_originals:
                 # A cycle covers a fixed stride at the current body size, so
                 # slower travel also slows the legs instead of sliding the feet.
                 count = len(self.frames[state])
                 index = int(self.walk_distance / (self.body_height * 0.4) * count) % count
             else:
-                index = int(self.state_time / interval) % count
+                index = playback_index(self.character, state, self.state_time, count)
         key = (state, index)
         if key != self.frame_key:
             self.frame_key = key
@@ -1108,8 +922,8 @@ class DesktopPet(QWidget):
             elif state in ("left", "right"):
                 index = int(self.walk_distance/(self.body_height*0.4)*len(self.frames[state])) % len(self.frames[state])
             else:
-                _, count, interval = ANIMATION_CLIPS[state]
-                index = int(self.state_time/interval) % count
+                _, count, interval = self.clip(state)
+                index = playback_index(self.character, state, self.state_time, count)
             sprite = self.frames[state][index]
             foot_x = sprite.width()/2
             ground = QRegion(self.frames["idle"][0].mask()).boundingRect().bottom()+1
@@ -1652,19 +1466,21 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=APP_NAME)
     parser.add_argument("--smoke-seconds", type=float, help=argparse.SUPPRESS)
     parser.add_argument("--character", choices=CHARACTERS, help="시작 캐릭터 선택")
+    parser.add_argument("--settings-path", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
     app = QApplication(sys.argv[:1])
     app.setApplicationName(APP_NAME)
     app.setOrganizationName("DeskMates")
     app.setQuitOnLastWindowClosed(False)
-    data_dir = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation))
+    data_dir = (args.settings_path.resolve().parent if args.settings_path else
+                Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)))
     data_dir.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(filename=str(data_dir / "pet.log"), level=logging.WARNING,
                         format="%(asctime)s %(levelname)s %(message)s")
     lock = QLockFile(str(data_dir / "pet.lock"))
     if not lock.tryLock(100):
         return 0
-    pet = DesktopPet(data_dir / "settings.json")
+    pet = DesktopPet(args.settings_path.resolve() if args.settings_path else data_dir / "settings.json")
     if args.character:
         pet.set_character(args.character)
     pet.show()

@@ -1,0 +1,1013 @@
+{
+  "version": 1,
+  "id": "dummy",
+  "name": "더미 (Dummy)",
+  "renderer": "manifest-v1",
+  "enabled": true,
+  "body_height": 120,
+  "anchor": [
+    48,
+    124
+  ],
+  "canonical": {
+    "file": "canonical.png",
+    "sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+    "reviewed": true,
+    "identity": "Synthetic QA robot: blue rounded face, dark blue eyes and suit outline, gold antenna and chest. Fixed head/body ratio."
+  },
+  "animations": {
+    "idle": {
+      "frame_count": 7,
+      "fps": 7,
+      "loop": "pingpong",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/idle-0ba6f760926a.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ],
+        [
+          576,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        672,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "0ba6f760926a0adbb7cce6cbc252329ddc26666fcadbbb7c21d939fc0acbfd06",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "right": {
+      "frame_count": 10,
+      "fps": 12,
+      "loop": "loop",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/right-e471efbf7201.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ],
+        [
+          576,
+          0,
+          96,
+          128
+        ],
+        [
+          672,
+          0,
+          96,
+          128
+        ],
+        [
+          768,
+          0,
+          96,
+          128
+        ],
+        [
+          864,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        960,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "e471efbf7201dcff980f7b8621f5078d845a382a80dbbeeef759f6a94d223b61",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "left": {
+      "frame_count": 8,
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/left-0708bbbb3159.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ],
+        [
+          576,
+          0,
+          96,
+          128
+        ],
+        [
+          672,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        768,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "0708bbbb31591d364c36e825a4047156df233b9f3bce7bd5ba5a1e86130eb138",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "wave": {
+      "frame_count": 4,
+      "fps": 5.555555555555555,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/wave-bddc5fa20e4d.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        384,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "bddc5fa20e4d5da5f7871d810e0ea0b90e934ca20572aaf5a789b74c49095f80",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "jump": {
+      "frame_count": 5,
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/jump-8c984fbe73a9.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        480,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "8c984fbe73a97e949bbfe0c9f4a2b1ef0a01b5a1fb83ef3b56e45cdc33c7b627",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "bow": {
+      "frame_count": 8,
+      "fps": 5.88235294117647,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/bow-8b17e486a8bc.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ],
+        [
+          576,
+          0,
+          96,
+          128
+        ],
+        [
+          672,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        768,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "8b17e486a8bc8dff0abc5a9595ae151718e83341cfb31986ba680538d866c891",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "shy": {
+      "frame_count": 6,
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/shy-de57f07cfb3e.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        576,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "de57f07cfb3e5f445939cc22ca89b6dca1a58d07d9f1346623822d2a01c3ba1f",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "think": {
+      "frame_count": 6,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/think-de57f07cfb3e.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        576,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "de57f07cfb3e5f445939cc22ca89b6dca1a58d07d9f1346623822d2a01c3ba1f",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "tilt": {
+      "frame_count": 6,
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/tilt-de57f07cfb3e.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        576,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "de57f07cfb3e5f445939cc22ca89b6dca1a58d07d9f1346623822d2a01c3ba1f",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "hungry": {
+      "frame_count": 4,
+      "fps": 2.2222222222222223,
+      "loop": "loop",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/hungry-bddc5fa20e4d.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        384,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "bddc5fa20e4d5da5f7871d810e0ea0b90e934ca20572aaf5a789b74c49095f80",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "gaze": {
+      "frame_count": 16,
+      "fps": 0,
+      "loop": "loop",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/gaze-a95f626c33e5.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ],
+        [
+          576,
+          0,
+          96,
+          128
+        ],
+        [
+          672,
+          0,
+          96,
+          128
+        ],
+        [
+          768,
+          0,
+          96,
+          128
+        ],
+        [
+          864,
+          0,
+          96,
+          128
+        ],
+        [
+          960,
+          0,
+          96,
+          128
+        ],
+        [
+          1056,
+          0,
+          96,
+          128
+        ],
+        [
+          1152,
+          0,
+          96,
+          128
+        ],
+        [
+          1248,
+          0,
+          96,
+          128
+        ],
+        [
+          1344,
+          0,
+          96,
+          128
+        ],
+        [
+          1440,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        1536,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "a95f626c33e5b34d9550c034867f88f33b578cc1425771b7d3fd8175b0ce6a84",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "motion": {
+      "frame_count": 6,
+      "fps": 0,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/motion-de57f07cfb3e.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ],
+        [
+          384,
+          0,
+          96,
+          128
+        ],
+        [
+          480,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        576,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "de57f07cfb3e5f445939cc22ca89b6dca1a58d07d9f1346623822d2a01c3ba1f",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "corner": {
+      "frame_count": 4,
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/corner-ea931e95ac4c.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        384,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "ea931e95ac4cefc17f88809e51bba0d78353b74c4c89172b411cf985bc17a054",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "feeding": {
+      "frame_count": 4,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/feeding-bddc5fa20e4d.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        384,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "bddc5fa20e4d5da5f7871d810e0ea0b90e934ca20572aaf5a789b74c49095f80",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    },
+    "refusal": {
+      "frame_count": 4,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": [
+        48,
+        124
+      ],
+      "cell": [
+        96,
+        128
+      ],
+      "file": "animations/refusal-bddc5fa20e4d.png",
+      "rects": [
+        [
+          0,
+          0,
+          96,
+          128
+        ],
+        [
+          96,
+          0,
+          96,
+          128
+        ],
+        [
+          192,
+          0,
+          96,
+          128
+        ],
+        [
+          288,
+          0,
+          96,
+          128
+        ]
+      ],
+      "image_size": [
+        384,
+        128
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "bddc5fa20e4d5da5f7871d810e0ea0b90e934ca20572aaf5a789b74c49095f80",
+        "canonical_sha256": "70e648c43ca80113dc85079ebe8389576d5c3e4baaa64015ff81f3d512777618",
+        "note": "Deterministic geometric QA fixture: identical face and proportions by construction. Not production character art."
+      }
+    }
+  }
+}

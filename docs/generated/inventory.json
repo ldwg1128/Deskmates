@@ -1,0 +1,2039 @@
+{
+  "catalog_actions": 15,
+  "states": [
+    "bow",
+    "drag",
+    "edge_corner",
+    "feed_drop",
+    "feed_eat",
+    "feed_happy",
+    "feed_refuse",
+    "flip",
+    "gaze",
+    "hungry",
+    "idle",
+    "jump",
+    "land",
+    "left",
+    "right",
+    "shy",
+    "think",
+    "tilt",
+    "wave"
+  ],
+  "bindings": {
+    "idle": "idle",
+    "right": "right",
+    "left": "left",
+    "wave": "wave",
+    "jump": "jump",
+    "bow": "bow",
+    "shy": "shy",
+    "think": "think",
+    "tilt": "tilt",
+    "hungry": "hungry",
+    "gaze": "gaze",
+    "drag": "motion",
+    "flip": "motion",
+    "land": "motion",
+    "edge_corner": "corner",
+    "feed_drop": "feeding",
+    "feed_eat": "feeding",
+    "feed_happy": "feeding",
+    "feed_refuse": "refusal"
+  },
+  "unmapped_states": [],
+  "characters": {
+    "liberta": {
+      "name": "리베르타 (Liberta)",
+      "renderer": "legacy-v1",
+      "specs": [
+        {
+          "action_id": "idle",
+          "name": "대기",
+          "required": true,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              160,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "standing, breathing, blink",
+          "fps": 5.555555555555555,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/liberta-spritesheet.png",
+          "files": null,
+          "rects": [
+            [
+              16,
+              0,
+              160,
+              208
+            ],
+            [
+              208,
+              0,
+              160,
+              208
+            ],
+            [
+              400,
+              0,
+              160,
+              208
+            ],
+            [
+              592,
+              0,
+              160,
+              208
+            ],
+            [
+              784,
+              0,
+              160,
+              208
+            ],
+            [
+              976,
+              0,
+              160,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": null,
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "right",
+          "name": "오른쪽 걷기",
+          "required": false,
+          "frame_count": 8,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              512
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "side walk, contact / passing / opposite contact / passing",
+          "fps": 9.523809523809524,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/liberta-motion.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            6
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "left",
+          "name": "왼쪽 걷기",
+          "required": false,
+          "frame_count": 8,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              512
+            ]
+          ],
+          "direction": "left",
+          "frame_order": "side walk left",
+          "fps": 9.523809523809524,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/liberta-motion.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            6
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "wave",
+          "name": "인사",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              160,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "raise hand, wave, return",
+          "fps": 5.555555555555555,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-spritesheet.png",
+          "files": null,
+          "rects": [
+            [
+              16,
+              624,
+              160,
+              208
+            ],
+            [
+              208,
+              624,
+              160,
+              208
+            ],
+            [
+              400,
+              624,
+              160,
+              208
+            ],
+            [
+              592,
+              624,
+              160,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "jump",
+          "name": "제자리 점프",
+          "required": false,
+          "frame_count": 5,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              160,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "crouch, rise, apex, descend, stand",
+          "fps": 6.666666666666667,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-spritesheet.png",
+          "files": null,
+          "rects": [
+            [
+              16,
+              832,
+              160,
+              208
+            ],
+            [
+              208,
+              832,
+              160,
+              208
+            ],
+            [
+              400,
+              832,
+              160,
+              208
+            ],
+            [
+              592,
+              832,
+              160,
+              208
+            ],
+            [
+              784,
+              832,
+              160,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "bow",
+          "name": "고개 숙이기",
+          "required": false,
+          "frame_count": 8,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              160,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "stand, bow, hold, return",
+          "fps": 5.88235294117647,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-spritesheet.png",
+          "files": null,
+          "rects": [
+            [
+              16,
+              1040,
+              160,
+              208
+            ],
+            [
+              208,
+              1040,
+              160,
+              208
+            ],
+            [
+              400,
+              1040,
+              160,
+              208
+            ],
+            [
+              592,
+              1040,
+              160,
+              208
+            ],
+            [
+              784,
+              1040,
+              160,
+              208
+            ],
+            [
+              976,
+              1040,
+              160,
+              208
+            ],
+            [
+              1168,
+              1040,
+              160,
+              208
+            ],
+            [
+              1360,
+              1040,
+              160,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "shy",
+          "name": "수줍음",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              160,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hands near chest, shy expression",
+          "fps": 5.2631578947368425,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-spritesheet.png",
+          "files": null,
+          "rects": [
+            [
+              16,
+              1248,
+              160,
+              208
+            ],
+            [
+              208,
+              1248,
+              160,
+              208
+            ],
+            [
+              400,
+              1248,
+              160,
+              208
+            ],
+            [
+              592,
+              1248,
+              160,
+              208
+            ],
+            [
+              784,
+              1248,
+              160,
+              208
+            ],
+            [
+              976,
+              1248,
+              160,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "think",
+          "name": "생각하기",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              160,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hand near chin, thinking",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-spritesheet.png",
+          "files": null,
+          "rects": [
+            [
+              16,
+              1456,
+              160,
+              208
+            ],
+            [
+              208,
+              1456,
+              160,
+              208
+            ],
+            [
+              400,
+              1456,
+              160,
+              208
+            ],
+            [
+              592,
+              1456,
+              160,
+              208
+            ],
+            [
+              784,
+              1456,
+              160,
+              208
+            ],
+            [
+              976,
+              1456,
+              160,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "tilt",
+          "name": "고개 기울이기",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              160,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "head tilt, return",
+          "fps": 5.2631578947368425,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-spritesheet.png",
+          "files": null,
+          "rects": [
+            [
+              16,
+              1664,
+              160,
+              208
+            ],
+            [
+              208,
+              1664,
+              160,
+              208
+            ],
+            [
+              400,
+              1664,
+              160,
+              208
+            ],
+            [
+              592,
+              1664,
+              160,
+              208
+            ],
+            [
+              784,
+              1664,
+              160,
+              208
+            ],
+            [
+              976,
+              1664,
+              160,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "hungry",
+          "name": "배고픔",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              615,
+              639
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hold stomach, rub stomach, hungry expression, return",
+          "fps": 2.2222222222222223,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/liberta-hungry.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            2,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "4*.45s; initial hunger6..10s then12..20s, scheduled at action boundary."
+        },
+        {
+          "action_id": "gaze",
+          "name": "커서 바라보기",
+          "required": false,
+          "frame_count": 16,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              160,
+              208
+            ]
+          ],
+          "direction": "clockwise from up, 16 directions",
+          "frame_order": "up then clockwise, 16 evenly spaced directions",
+          "fps": 0,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/liberta-spritesheet.png",
+          "files": null,
+          "rects": [
+            [
+              16,
+              1872,
+              160,
+              208
+            ],
+            [
+              208,
+              1872,
+              160,
+              208
+            ],
+            [
+              400,
+              1872,
+              160,
+              208
+            ],
+            [
+              592,
+              1872,
+              160,
+              208
+            ],
+            [
+              784,
+              1872,
+              160,
+              208
+            ],
+            [
+              976,
+              1872,
+              160,
+              208
+            ],
+            [
+              1168,
+              1872,
+              160,
+              208
+            ],
+            [
+              1360,
+              1872,
+              160,
+              208
+            ],
+            [
+              16,
+              2080,
+              160,
+              208
+            ],
+            [
+              208,
+              2080,
+              160,
+              208
+            ],
+            [
+              400,
+              2080,
+              160,
+              208
+            ],
+            [
+              592,
+              2080,
+              160,
+              208
+            ],
+            [
+              784,
+              2080,
+              160,
+              208
+            ],
+            [
+              976,
+              2080,
+              160,
+              208
+            ],
+            [
+              1168,
+              2080,
+              160,
+              208
+            ],
+            [
+              1360,
+              2080,
+              160,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "16 directional slots clockwise from up; cursor selection, not time playback."
+        },
+        {
+          "action_id": "motion",
+          "name": "드래그·낙하·착지",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              512,
+              512
+            ]
+          ],
+          "direction": "inverted to upright",
+          "frame_order": "hanging inverted, tuck, extend, airborne upright, landing crouch, recover",
+          "fps": 0,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-motion.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            6
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Physics phases: drag; falling progress <.16, <.48, <.84, >=.84; landing .48s: airborne <.06, crouch <.28, recover."
+        },
+        {
+          "action_id": "corner",
+          "name": "테두리 코너 점프",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              627,
+              627
+            ]
+          ],
+          "direction": "right, rotated by game",
+          "frame_order": "takeoff, airborne, landing, recover",
+          "fps": 6.666666666666667,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-corner-jump.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            2,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Route corner .6s, four equally spaced phase slots; rotates inward 90 degrees."
+        },
+        {
+          "action_id": "feeding",
+          "name": "빵 받기·먹기·만족",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              627,
+              627
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "catch bread, bite, chew, satisfied",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-feeding.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            2,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "feed_drop .65s (look until .85 progress), catch frame0; eat1.6s alternating1/2 each.22s; happy frame3 .85s."
+        },
+        {
+          "action_id": "refusal",
+          "name": "빵 거절",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              615,
+              639
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "accept bread, shake head left, shake head right, offer bread back",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/liberta-refusal.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            2,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "2.8s: shake frames1/2 every.22s until1.3s; offer frame3 for remaining1.5s."
+        }
+      ],
+      "validation": {
+        "errors": [],
+        "warnings": [],
+        "missing": [],
+        "completion": 100.0
+      }
+    },
+    "zenith": {
+      "name": "제니스 (Zenith)",
+      "renderer": "legacy-v1",
+      "specs": [
+        {
+          "action_id": "idle",
+          "name": "대기",
+          "required": true,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "standing, breathing, blink",
+          "fps": 5.555555555555555,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              0,
+              128,
+              208
+            ],
+            [
+              224,
+              0,
+              128,
+              208
+            ],
+            [
+              416,
+              0,
+              128,
+              208
+            ],
+            [
+              608,
+              0,
+              128,
+              208
+            ],
+            [
+              800,
+              0,
+              128,
+              208
+            ],
+            [
+              992,
+              0,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": null,
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "right",
+          "name": "오른쪽 걷기",
+          "required": false,
+          "frame_count": 8,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "side walk, contact / passing / opposite contact / passing",
+          "fps": 9.523809523809524,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              208,
+              128,
+              208
+            ],
+            [
+              224,
+              208,
+              128,
+              208
+            ],
+            [
+              416,
+              208,
+              128,
+              208
+            ],
+            [
+              608,
+              208,
+              128,
+              208
+            ],
+            [
+              800,
+              208,
+              128,
+              208
+            ],
+            [
+              992,
+              208,
+              128,
+              208
+            ],
+            [
+              1184,
+              208,
+              128,
+              208
+            ],
+            [
+              1376,
+              208,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "left",
+          "name": "왼쪽 걷기",
+          "required": false,
+          "frame_count": 8,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "left",
+          "frame_order": "side walk left",
+          "fps": 9.523809523809524,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              416,
+              128,
+              208
+            ],
+            [
+              224,
+              416,
+              128,
+              208
+            ],
+            [
+              416,
+              416,
+              128,
+              208
+            ],
+            [
+              608,
+              416,
+              128,
+              208
+            ],
+            [
+              800,
+              416,
+              128,
+              208
+            ],
+            [
+              992,
+              416,
+              128,
+              208
+            ],
+            [
+              1184,
+              416,
+              128,
+              208
+            ],
+            [
+              1376,
+              416,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "wave",
+          "name": "인사",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "raise hand, wave, return",
+          "fps": 5.555555555555555,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              624,
+              128,
+              208
+            ],
+            [
+              224,
+              624,
+              128,
+              208
+            ],
+            [
+              416,
+              624,
+              128,
+              208
+            ],
+            [
+              608,
+              624,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "jump",
+          "name": "제자리 점프",
+          "required": false,
+          "frame_count": 5,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "crouch, rise, apex, descend, stand",
+          "fps": 6.666666666666667,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              832,
+              128,
+              208
+            ],
+            [
+              224,
+              832,
+              128,
+              208
+            ],
+            [
+              416,
+              832,
+              128,
+              208
+            ],
+            [
+              608,
+              832,
+              128,
+              208
+            ],
+            [
+              800,
+              832,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "bow",
+          "name": "고개 숙이기",
+          "required": false,
+          "frame_count": 8,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "stand, bow, hold, return",
+          "fps": 5.88235294117647,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              1040,
+              128,
+              208
+            ],
+            [
+              224,
+              1040,
+              128,
+              208
+            ],
+            [
+              416,
+              1040,
+              128,
+              208
+            ],
+            [
+              608,
+              1040,
+              128,
+              208
+            ],
+            [
+              800,
+              1040,
+              128,
+              208
+            ],
+            [
+              992,
+              1040,
+              128,
+              208
+            ],
+            [
+              1184,
+              1040,
+              128,
+              208
+            ],
+            [
+              1376,
+              1040,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "shy",
+          "name": "수줍음",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hands near chest, shy expression",
+          "fps": 5.2631578947368425,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              1248,
+              128,
+              208
+            ],
+            [
+              224,
+              1248,
+              128,
+              208
+            ],
+            [
+              416,
+              1248,
+              128,
+              208
+            ],
+            [
+              608,
+              1248,
+              128,
+              208
+            ],
+            [
+              800,
+              1248,
+              128,
+              208
+            ],
+            [
+              992,
+              1248,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "think",
+          "name": "생각하기",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hand near chin, thinking",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              1456,
+              128,
+              208
+            ],
+            [
+              224,
+              1456,
+              128,
+              208
+            ],
+            [
+              416,
+              1456,
+              128,
+              208
+            ],
+            [
+              608,
+              1456,
+              128,
+              208
+            ],
+            [
+              800,
+              1456,
+              128,
+              208
+            ],
+            [
+              992,
+              1456,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "tilt",
+          "name": "고개 기울이기",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "head tilt, return",
+          "fps": 5.2631578947368425,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              1664,
+              128,
+              208
+            ],
+            [
+              224,
+              1664,
+              128,
+              208
+            ],
+            [
+              416,
+              1664,
+              128,
+              208
+            ],
+            [
+              608,
+              1664,
+              128,
+              208
+            ],
+            [
+              800,
+              1664,
+              128,
+              208
+            ],
+            [
+              992,
+              1664,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "hungry",
+          "name": "배고픔",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              623,
+              631
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hold stomach, rub stomach, hungry expression, return",
+          "fps": 2.2222222222222223,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/zenith-hungry.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            2,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "4*.45s; initial hunger6..10s then12..20s, scheduled at action boundary."
+        },
+        {
+          "action_id": "gaze",
+          "name": "커서 바라보기",
+          "required": false,
+          "frame_count": 16,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              128,
+              208
+            ]
+          ],
+          "direction": "clockwise from up, 16 directions",
+          "frame_order": "up then clockwise, 16 evenly spaced directions",
+          "fps": 0,
+          "loop": "loop",
+          "anchor": "feet",
+          "file": "../../assets/zenith-spritesheet-v2.png",
+          "files": null,
+          "rects": [
+            [
+              32,
+              1872,
+              128,
+              208
+            ],
+            [
+              224,
+              1872,
+              128,
+              208
+            ],
+            [
+              416,
+              1872,
+              128,
+              208
+            ],
+            [
+              608,
+              1872,
+              128,
+              208
+            ],
+            [
+              800,
+              1872,
+              128,
+              208
+            ],
+            [
+              992,
+              1872,
+              128,
+              208
+            ],
+            [
+              1184,
+              1872,
+              128,
+              208
+            ],
+            [
+              1376,
+              1872,
+              128,
+              208
+            ],
+            [
+              32,
+              2080,
+              128,
+              208
+            ],
+            [
+              224,
+              2080,
+              128,
+              208
+            ],
+            [
+              416,
+              2080,
+              128,
+              208
+            ],
+            [
+              608,
+              2080,
+              128,
+              208
+            ],
+            [
+              800,
+              2080,
+              128,
+              208
+            ],
+            [
+              992,
+              2080,
+              128,
+              208
+            ],
+            [
+              1184,
+              2080,
+              128,
+              208
+            ],
+            [
+              1376,
+              2080,
+              128,
+              208
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "16 directional slots clockwise from up; cursor selection, not time playback."
+        },
+        {
+          "action_id": "motion",
+          "name": "드래그·낙하·착지",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              512,
+              512
+            ]
+          ],
+          "direction": "inverted to upright",
+          "frame_order": "hanging inverted, tuck, extend, airborne upright, landing crouch, recover",
+          "fps": 0,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-motion-v4.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            3,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Physics phases: drag; falling progress <.16, <.48, <.84, >=.84; landing .48s: airborne <.06, crouch <.28, recover."
+        },
+        {
+          "action_id": "corner",
+          "name": "테두리 코너 점프",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              627,
+              627
+            ]
+          ],
+          "direction": "right, rotated by game",
+          "frame_order": "takeoff, airborne, landing, recover",
+          "fps": 6.666666666666667,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-corner-jump.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            2,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Route corner .6s, four equally spaced phase slots; rotates inward 90 degrees."
+        },
+        {
+          "action_id": "feeding",
+          "name": "빵 받기·먹기·만족",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              627,
+              627
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "catch bread, bite, chew, satisfied",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-feeding.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            2,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "feed_drop .65s (look until .85 progress), catch frame0; eat1.6s alternating1/2 each.22s; happy frame3 .85s."
+        },
+        {
+          "action_id": "refusal",
+          "name": "빵 거절",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              615,
+              639
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "accept bread, shake head left, shake head right, offer bread back",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": "feet",
+          "file": "../../assets/zenith-refusal.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            2,
+            2
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "2.8s: shake frames1/2 every.22s until1.3s; offer frame3 for remaining1.5s."
+        }
+      ],
+      "validation": {
+        "errors": [],
+        "warnings": [],
+        "missing": [],
+        "completion": 100.0
+      }
+    }
+  },
+  "assets": [
+    {
+      "file": "assets/bread.png",
+      "size": [
+        1402,
+        1122
+      ],
+      "mode": "RGBA",
+      "sha256": "8771848fe1bdc72b1b52ceccc0a37c29247bec733ee390fbd470cce2f5ad65f6",
+      "used": true
+    },
+    {
+      "file": "assets/drag-landing-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "f2c2a9c136a3a3edcc1492e30458a74763ce9728bb8d108c2904af1124baae6d",
+      "used": false
+    },
+    {
+      "file": "assets/drag-landing-v3.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "5245137488dfcc87f250609e891ebf1356426831eb58ba9b43755fe5d88a3f1a",
+      "used": false
+    },
+    {
+      "file": "assets/drag-landing.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "ed2e23700be966872eae29efcec24d97f283165d1ad7088866e198d7dcab9a84",
+      "used": false
+    },
+    {
+      "file": "assets/liberta-corner-jump.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "20e3edacde25ca2636a6102f9fe24efd1144d55e1e5aaaf66933f3cf1d75783b",
+      "used": true
+    },
+    {
+      "file": "assets/liberta-feeding.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "e4a70cc4473b913e9fc479a7a3c5c62050f595c87f3ace59b156d6c959769e7e",
+      "used": true
+    },
+    {
+      "file": "assets/liberta-hungry.png",
+      "size": [
+        1230,
+        1278
+      ],
+      "mode": "RGBA",
+      "sha256": "e4b548af6662f9e94f08d9cb7b5fe25bbc7eb3d2482d225e9071d3922114c3f3",
+      "used": true
+    },
+    {
+      "file": "assets/liberta-motion.png",
+      "size": [
+        2048,
+        3072
+      ],
+      "mode": "RGBA",
+      "sha256": "d03f4956647ce3f91bb6b2461a969eb302760e99765983b2b1d149d9fc411655",
+      "used": true
+    },
+    {
+      "file": "assets/liberta-refusal.png",
+      "size": [
+        1230,
+        1278
+      ],
+      "mode": "RGBA",
+      "sha256": "6e11395e775a6713aee54720ae382a4a6e1ae023f5adf250c920a176e7e4b3f0",
+      "used": true
+    },
+    {
+      "file": "assets/liberta-spritesheet.png",
+      "size": [
+        1536,
+        2288
+      ],
+      "mode": "RGBA",
+      "sha256": "6102a6c15b97651aa601e51cc876182d771fb0edf571c278120155f40ff5eb98",
+      "used": true
+    },
+    {
+      "file": "assets/spritesheet.png",
+      "size": [
+        1536,
+        2288
+      ],
+      "mode": "RGBA",
+      "sha256": "a0752c7efb4c27d100fc48c1a7efce7afad6493385f2b23fb65a7d6cb837533f",
+      "used": false
+    },
+    {
+      "file": "assets/zenith-corner-jump.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "9492c782008e27931896dff8f37dc819585040cf1c4a2d56ce66cd5804d8ccb1",
+      "used": true
+    },
+    {
+      "file": "assets/zenith-feeding.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "4674f17a73d37847754f94fa0dc4532b6afebecebc0e8463d5f88705f971356c",
+      "used": true
+    },
+    {
+      "file": "assets/zenith-hungry.png",
+      "size": [
+        1246,
+        1263
+      ],
+      "mode": "RGBA",
+      "sha256": "57f0871f37cf6c4eb0de64bdcafcaea9dcea849568a441c00717a08db93213ca",
+      "used": true
+    },
+    {
+      "file": "assets/zenith-motion-v4.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "3c6fe2856c3d5c49fd19da70524f872949a83ccede7ff71ef4b6001eb146a08c",
+      "used": true
+    },
+    {
+      "file": "assets/zenith-refusal.png",
+      "size": [
+        1230,
+        1278
+      ],
+      "mode": "RGBA",
+      "sha256": "896e172f0de34ffe3e600cb243aca3d02c197cf7cf833b54ac769d748e8329b3",
+      "used": true
+    },
+    {
+      "file": "assets/zenith-spritesheet-v2.png",
+      "size": [
+        1536,
+        2288
+      ],
+      "mode": "RGBA",
+      "sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+      "used": true
+    }
+  ],
+  "dynamic_analysis_limit": "AST + declared runtime bindings; regression tests exercise actual execution"
+}

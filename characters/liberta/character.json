@@ -1,0 +1,1049 @@
+{
+  "version": 1,
+  "id": "liberta",
+  "name": "리베르타 (Liberta)",
+  "renderer": "legacy-v1",
+  "canonical": {
+    "file": "../../assets/liberta-spritesheet.png",
+    "rect": [
+      16,
+      0,
+      160,
+      208
+    ],
+    "sha256": "6102a6c15b97651aa601e51cc876182d771fb0edf571c278120155f40ff5eb98",
+    "identity": "Keep identical face, eye shape and color, hairstyle and hair color, outfit, accessories, body proportions. Do not redesign.",
+    "reviewed": true
+  },
+  "profile": {
+    "name": "리베르타 (Liberta)",
+    "sheet": "../../assets/liberta-spritesheet.png",
+    "crop_x": 16,
+    "crop_width": 160,
+    "body_height": 167,
+    "motion_sheet": "../../assets/liberta-motion.png",
+    "motion_grid": [
+      4,
+      6
+    ],
+    "motion_indices": [
+      16,
+      18,
+      19,
+      20,
+      21,
+      22
+    ],
+    "motion_angles": [
+      0.0,
+      135.0,
+      90.0,
+      180.0
+    ],
+    "motion_reference": 23,
+    "walk_indices": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "walk_crop": [
+      96,
+      0,
+      384,
+      512
+    ],
+    "walk_ground": 497,
+    "motion_body_height": null,
+    "corner_sheet": "../../assets/liberta-corner-jump.png",
+    "feeding_sheet": "../../assets/liberta-feeding.png",
+    "hungry_sheet": "../../assets/liberta-hungry.png",
+    "refusal_sheet": "../../assets/liberta-refusal.png",
+    "base_cell_height": 208
+  },
+  "animations": {
+    "idle": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          0,
+          160,
+          208
+        ],
+        [
+          208,
+          0,
+          160,
+          208
+        ],
+        [
+          400,
+          0,
+          160,
+          208
+        ],
+        [
+          592,
+          0,
+          160,
+          208
+        ],
+        [
+          784,
+          0,
+          160,
+          208
+        ],
+        [
+          976,
+          0,
+          160,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.555555555555555,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "right": {
+      "file": "../../assets/liberta-motion.png",
+      "grid": [
+        4,
+        6
+      ],
+      "indices": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "cell_crop": [
+        96,
+        0,
+        384,
+        512
+      ],
+      "crop": "none",
+      "clean_alpha": true,
+      "mirror": false,
+      "ground": 497,
+      "scale_reference": "motion",
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 8
+    },
+    "left": {
+      "file": "../../assets/liberta-motion.png",
+      "grid": [
+        4,
+        6
+      ],
+      "indices": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "cell_crop": [
+        96,
+        0,
+        384,
+        512
+      ],
+      "crop": "none",
+      "clean_alpha": true,
+      "mirror": true,
+      "ground": 497,
+      "scale_reference": "motion",
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 8
+    },
+    "wave": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          624,
+          160,
+          208
+        ],
+        [
+          208,
+          624,
+          160,
+          208
+        ],
+        [
+          400,
+          624,
+          160,
+          208
+        ],
+        [
+          592,
+          624,
+          160,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.555555555555555,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 4
+    },
+    "jump": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          832,
+          160,
+          208
+        ],
+        [
+          208,
+          832,
+          160,
+          208
+        ],
+        [
+          400,
+          832,
+          160,
+          208
+        ],
+        [
+          592,
+          832,
+          160,
+          208
+        ],
+        [
+          784,
+          832,
+          160,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 5
+    },
+    "bow": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1040,
+          160,
+          208
+        ],
+        [
+          208,
+          1040,
+          160,
+          208
+        ],
+        [
+          400,
+          1040,
+          160,
+          208
+        ],
+        [
+          592,
+          1040,
+          160,
+          208
+        ],
+        [
+          784,
+          1040,
+          160,
+          208
+        ],
+        [
+          976,
+          1040,
+          160,
+          208
+        ],
+        [
+          1168,
+          1040,
+          160,
+          208
+        ],
+        [
+          1360,
+          1040,
+          160,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.88235294117647,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 8
+    },
+    "shy": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1248,
+          160,
+          208
+        ],
+        [
+          208,
+          1248,
+          160,
+          208
+        ],
+        [
+          400,
+          1248,
+          160,
+          208
+        ],
+        [
+          592,
+          1248,
+          160,
+          208
+        ],
+        [
+          784,
+          1248,
+          160,
+          208
+        ],
+        [
+          976,
+          1248,
+          160,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "think": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1456,
+          160,
+          208
+        ],
+        [
+          208,
+          1456,
+          160,
+          208
+        ],
+        [
+          400,
+          1456,
+          160,
+          208
+        ],
+        [
+          592,
+          1456,
+          160,
+          208
+        ],
+        [
+          784,
+          1456,
+          160,
+          208
+        ],
+        [
+          976,
+          1456,
+          160,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "tilt": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1664,
+          160,
+          208
+        ],
+        [
+          208,
+          1664,
+          160,
+          208
+        ],
+        [
+          400,
+          1664,
+          160,
+          208
+        ],
+        [
+          592,
+          1664,
+          160,
+          208
+        ],
+        [
+          784,
+          1664,
+          160,
+          208
+        ],
+        [
+          976,
+          1664,
+          160,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "gaze": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1872,
+          160,
+          208
+        ],
+        [
+          208,
+          1872,
+          160,
+          208
+        ],
+        [
+          400,
+          1872,
+          160,
+          208
+        ],
+        [
+          592,
+          1872,
+          160,
+          208
+        ],
+        [
+          784,
+          1872,
+          160,
+          208
+        ],
+        [
+          976,
+          1872,
+          160,
+          208
+        ],
+        [
+          1168,
+          1872,
+          160,
+          208
+        ],
+        [
+          1360,
+          1872,
+          160,
+          208
+        ],
+        [
+          16,
+          2080,
+          160,
+          208
+        ],
+        [
+          208,
+          2080,
+          160,
+          208
+        ],
+        [
+          400,
+          2080,
+          160,
+          208
+        ],
+        [
+          592,
+          2080,
+          160,
+          208
+        ],
+        [
+          784,
+          2080,
+          160,
+          208
+        ],
+        [
+          976,
+          2080,
+          160,
+          208
+        ],
+        [
+          1168,
+          2080,
+          160,
+          208
+        ],
+        [
+          1360,
+          2080,
+          160,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 0,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 16
+    },
+    "motion": {
+      "file": "../../assets/liberta-motion.png",
+      "grid": [
+        4,
+        6
+      ],
+      "indices": [
+        16,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "crop": "alpha_bounds",
+      "scale_height": null,
+      "reference_index": 23,
+      "angles": [
+        0.0,
+        135.0,
+        90.0,
+        180.0
+      ],
+      "fps": 0,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "corner": {
+      "file": "../../assets/liberta-corner-jump.png",
+      "grid": [
+        2,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "crop": "alpha_bounds",
+      "clean_alpha": false,
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 4
+    },
+    "feeding": {
+      "file": "../../assets/liberta-feeding.png",
+      "grid": [
+        2,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "crop": "shared_mask",
+      "clean_alpha": true,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 4
+    },
+    "hungry": {
+      "file": "../../assets/liberta-hungry.png",
+      "grid": [
+        2,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "crop": "shared_mask",
+      "clean_alpha": true,
+      "fps": 2.2222222222222223,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 4
+    },
+    "refusal": {
+      "file": "../../assets/liberta-refusal.png",
+      "grid": [
+        2,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "crop": "shared_mask",
+      "clean_alpha": true,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 4
+    }
+  },
+  "legacy_originals": {
+    "idle": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          0,
+          160,
+          208
+        ],
+        [
+          208,
+          0,
+          160,
+          208
+        ],
+        [
+          400,
+          0,
+          160,
+          208
+        ],
+        [
+          592,
+          0,
+          160,
+          208
+        ],
+        [
+          784,
+          0,
+          160,
+          208
+        ],
+        [
+          976,
+          0,
+          160,
+          208
+        ]
+      ]
+    },
+    "right": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          208,
+          160,
+          208
+        ],
+        [
+          208,
+          208,
+          160,
+          208
+        ],
+        [
+          400,
+          208,
+          160,
+          208
+        ],
+        [
+          592,
+          208,
+          160,
+          208
+        ],
+        [
+          784,
+          208,
+          160,
+          208
+        ],
+        [
+          976,
+          208,
+          160,
+          208
+        ],
+        [
+          1168,
+          208,
+          160,
+          208
+        ],
+        [
+          1360,
+          208,
+          160,
+          208
+        ]
+      ]
+    },
+    "left": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          416,
+          160,
+          208
+        ],
+        [
+          208,
+          416,
+          160,
+          208
+        ],
+        [
+          400,
+          416,
+          160,
+          208
+        ],
+        [
+          592,
+          416,
+          160,
+          208
+        ],
+        [
+          784,
+          416,
+          160,
+          208
+        ],
+        [
+          976,
+          416,
+          160,
+          208
+        ],
+        [
+          1168,
+          416,
+          160,
+          208
+        ],
+        [
+          1360,
+          416,
+          160,
+          208
+        ]
+      ]
+    },
+    "wave": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          624,
+          160,
+          208
+        ],
+        [
+          208,
+          624,
+          160,
+          208
+        ],
+        [
+          400,
+          624,
+          160,
+          208
+        ],
+        [
+          592,
+          624,
+          160,
+          208
+        ]
+      ]
+    },
+    "jump": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          832,
+          160,
+          208
+        ],
+        [
+          208,
+          832,
+          160,
+          208
+        ],
+        [
+          400,
+          832,
+          160,
+          208
+        ],
+        [
+          592,
+          832,
+          160,
+          208
+        ],
+        [
+          784,
+          832,
+          160,
+          208
+        ]
+      ]
+    },
+    "bow": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1040,
+          160,
+          208
+        ],
+        [
+          208,
+          1040,
+          160,
+          208
+        ],
+        [
+          400,
+          1040,
+          160,
+          208
+        ],
+        [
+          592,
+          1040,
+          160,
+          208
+        ],
+        [
+          784,
+          1040,
+          160,
+          208
+        ],
+        [
+          976,
+          1040,
+          160,
+          208
+        ],
+        [
+          1168,
+          1040,
+          160,
+          208
+        ],
+        [
+          1360,
+          1040,
+          160,
+          208
+        ]
+      ]
+    },
+    "shy": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1248,
+          160,
+          208
+        ],
+        [
+          208,
+          1248,
+          160,
+          208
+        ],
+        [
+          400,
+          1248,
+          160,
+          208
+        ],
+        [
+          592,
+          1248,
+          160,
+          208
+        ],
+        [
+          784,
+          1248,
+          160,
+          208
+        ],
+        [
+          976,
+          1248,
+          160,
+          208
+        ]
+      ]
+    },
+    "think": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1456,
+          160,
+          208
+        ],
+        [
+          208,
+          1456,
+          160,
+          208
+        ],
+        [
+          400,
+          1456,
+          160,
+          208
+        ],
+        [
+          592,
+          1456,
+          160,
+          208
+        ],
+        [
+          784,
+          1456,
+          160,
+          208
+        ],
+        [
+          976,
+          1456,
+          160,
+          208
+        ]
+      ]
+    },
+    "tilt": {
+      "file": "../../assets/liberta-spritesheet.png",
+      "rects": [
+        [
+          16,
+          1664,
+          160,
+          208
+        ],
+        [
+          208,
+          1664,
+          160,
+          208
+        ],
+        [
+          400,
+          1664,
+          160,
+          208
+        ],
+        [
+          592,
+          1664,
+          160,
+          208
+        ],
+        [
+          784,
+          1664,
+          160,
+          208
+        ],
+        [
+          976,
+          1664,
+          160,
+          208
+        ]
+      ]
+    }
+  }
+}

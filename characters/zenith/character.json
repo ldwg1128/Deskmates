@@ -1,0 +1,1087 @@
+{
+  "version": 1,
+  "id": "zenith",
+  "name": "제니스 (Zenith)",
+  "renderer": "legacy-v1",
+  "canonical": {
+    "file": "../../assets/zenith-spritesheet-v2.png",
+    "rect": [
+      32,
+      0,
+      128,
+      208
+    ],
+    "sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+    "identity": "Keep identical face, eye shape and color, hairstyle and hair color, outfit, accessories, body proportions. Do not redesign.",
+    "reviewed": true
+  },
+  "profile": {
+    "name": "제니스 (Zenith)",
+    "sheet": "../../assets/zenith-spritesheet-v2.png",
+    "crop_x": 32,
+    "crop_width": 128,
+    "body_height": 198,
+    "motion_sheet": "../../assets/zenith-motion-v4.png",
+    "motion_grid": [
+      3,
+      2
+    ],
+    "motion_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "motion_angles": [
+      0.0,
+      30.0,
+      140.0,
+      180.0
+    ],
+    "motion_reference": null,
+    "walk_indices": [],
+    "walk_crop": null,
+    "walk_ground": 0,
+    "motion_body_height": 462,
+    "corner_sheet": "../../assets/zenith-corner-jump.png",
+    "feeding_sheet": "../../assets/zenith-feeding.png",
+    "hungry_sheet": "../../assets/zenith-hungry.png",
+    "refusal_sheet": "../../assets/zenith-refusal.png",
+    "base_cell_height": 208
+  },
+  "animations": {
+    "idle": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          0,
+          128,
+          208
+        ],
+        [
+          224,
+          0,
+          128,
+          208
+        ],
+        [
+          416,
+          0,
+          128,
+          208
+        ],
+        [
+          608,
+          0,
+          128,
+          208
+        ],
+        [
+          800,
+          0,
+          128,
+          208
+        ],
+        [
+          992,
+          0,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.555555555555555,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "right": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          208,
+          128,
+          208
+        ],
+        [
+          224,
+          208,
+          128,
+          208
+        ],
+        [
+          416,
+          208,
+          128,
+          208
+        ],
+        [
+          608,
+          208,
+          128,
+          208
+        ],
+        [
+          800,
+          208,
+          128,
+          208
+        ],
+        [
+          992,
+          208,
+          128,
+          208
+        ],
+        [
+          1184,
+          208,
+          128,
+          208
+        ],
+        [
+          1376,
+          208,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 8
+    },
+    "left": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          416,
+          128,
+          208
+        ],
+        [
+          224,
+          416,
+          128,
+          208
+        ],
+        [
+          416,
+          416,
+          128,
+          208
+        ],
+        [
+          608,
+          416,
+          128,
+          208
+        ],
+        [
+          800,
+          416,
+          128,
+          208
+        ],
+        [
+          992,
+          416,
+          128,
+          208
+        ],
+        [
+          1184,
+          416,
+          128,
+          208
+        ],
+        [
+          1376,
+          416,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 8
+    },
+    "wave": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          624,
+          128,
+          208
+        ],
+        [
+          224,
+          624,
+          128,
+          208
+        ],
+        [
+          416,
+          624,
+          128,
+          208
+        ],
+        [
+          608,
+          624,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.555555555555555,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 4
+    },
+    "jump": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          832,
+          128,
+          208
+        ],
+        [
+          224,
+          832,
+          128,
+          208
+        ],
+        [
+          416,
+          832,
+          128,
+          208
+        ],
+        [
+          608,
+          832,
+          128,
+          208
+        ],
+        [
+          800,
+          832,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 5
+    },
+    "bow": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1040,
+          128,
+          208
+        ],
+        [
+          224,
+          1040,
+          128,
+          208
+        ],
+        [
+          416,
+          1040,
+          128,
+          208
+        ],
+        [
+          608,
+          1040,
+          128,
+          208
+        ],
+        [
+          800,
+          1040,
+          128,
+          208
+        ],
+        [
+          992,
+          1040,
+          128,
+          208
+        ],
+        [
+          1184,
+          1040,
+          128,
+          208
+        ],
+        [
+          1376,
+          1040,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.88235294117647,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 8
+    },
+    "shy": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1248,
+          128,
+          208
+        ],
+        [
+          224,
+          1248,
+          128,
+          208
+        ],
+        [
+          416,
+          1248,
+          128,
+          208
+        ],
+        [
+          608,
+          1248,
+          128,
+          208
+        ],
+        [
+          800,
+          1248,
+          128,
+          208
+        ],
+        [
+          992,
+          1248,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "think": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1456,
+          128,
+          208
+        ],
+        [
+          224,
+          1456,
+          128,
+          208
+        ],
+        [
+          416,
+          1456,
+          128,
+          208
+        ],
+        [
+          608,
+          1456,
+          128,
+          208
+        ],
+        [
+          800,
+          1456,
+          128,
+          208
+        ],
+        [
+          992,
+          1456,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "tilt": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1664,
+          128,
+          208
+        ],
+        [
+          224,
+          1664,
+          128,
+          208
+        ],
+        [
+          416,
+          1664,
+          128,
+          208
+        ],
+        [
+          608,
+          1664,
+          128,
+          208
+        ],
+        [
+          800,
+          1664,
+          128,
+          208
+        ],
+        [
+          992,
+          1664,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "gaze": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1872,
+          128,
+          208
+        ],
+        [
+          224,
+          1872,
+          128,
+          208
+        ],
+        [
+          416,
+          1872,
+          128,
+          208
+        ],
+        [
+          608,
+          1872,
+          128,
+          208
+        ],
+        [
+          800,
+          1872,
+          128,
+          208
+        ],
+        [
+          992,
+          1872,
+          128,
+          208
+        ],
+        [
+          1184,
+          1872,
+          128,
+          208
+        ],
+        [
+          1376,
+          1872,
+          128,
+          208
+        ],
+        [
+          32,
+          2080,
+          128,
+          208
+        ],
+        [
+          224,
+          2080,
+          128,
+          208
+        ],
+        [
+          416,
+          2080,
+          128,
+          208
+        ],
+        [
+          608,
+          2080,
+          128,
+          208
+        ],
+        [
+          800,
+          2080,
+          128,
+          208
+        ],
+        [
+          992,
+          2080,
+          128,
+          208
+        ],
+        [
+          1184,
+          2080,
+          128,
+          208
+        ],
+        [
+          1376,
+          2080,
+          128,
+          208
+        ]
+      ],
+      "crop": "none",
+      "fps": 0,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 16
+    },
+    "motion": {
+      "file": "../../assets/zenith-motion-v4.png",
+      "grid": [
+        3,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "crop": "alpha_bounds",
+      "scale_height": 462,
+      "reference_index": null,
+      "angles": [
+        0.0,
+        30.0,
+        140.0,
+        180.0
+      ],
+      "fps": 0,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 6
+    },
+    "corner": {
+      "file": "../../assets/zenith-corner-jump.png",
+      "grid": [
+        2,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "crop": "alpha_bounds",
+      "clean_alpha": false,
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 4
+    },
+    "feeding": {
+      "file": "../../assets/zenith-feeding.png",
+      "grid": [
+        2,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "crop": "shared_mask",
+      "clean_alpha": true,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 4
+    },
+    "hungry": {
+      "file": "../../assets/zenith-hungry.png",
+      "grid": [
+        2,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "crop": "shared_mask",
+      "clean_alpha": true,
+      "fps": 2.2222222222222223,
+      "loop": "loop",
+      "anchor": "feet",
+      "frame_count": 4
+    },
+    "refusal": {
+      "file": "../../assets/zenith-refusal.png",
+      "grid": [
+        2,
+        2
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "crop": "shared_mask",
+      "clean_alpha": true,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": "feet",
+      "frame_count": 4
+    }
+  },
+  "legacy_originals": {
+    "idle": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          0,
+          128,
+          208
+        ],
+        [
+          224,
+          0,
+          128,
+          208
+        ],
+        [
+          416,
+          0,
+          128,
+          208
+        ],
+        [
+          608,
+          0,
+          128,
+          208
+        ],
+        [
+          800,
+          0,
+          128,
+          208
+        ],
+        [
+          992,
+          0,
+          128,
+          208
+        ]
+      ]
+    },
+    "right": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          208,
+          128,
+          208
+        ],
+        [
+          224,
+          208,
+          128,
+          208
+        ],
+        [
+          416,
+          208,
+          128,
+          208
+        ],
+        [
+          608,
+          208,
+          128,
+          208
+        ],
+        [
+          800,
+          208,
+          128,
+          208
+        ],
+        [
+          992,
+          208,
+          128,
+          208
+        ],
+        [
+          1184,
+          208,
+          128,
+          208
+        ],
+        [
+          1376,
+          208,
+          128,
+          208
+        ]
+      ]
+    },
+    "left": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          416,
+          128,
+          208
+        ],
+        [
+          224,
+          416,
+          128,
+          208
+        ],
+        [
+          416,
+          416,
+          128,
+          208
+        ],
+        [
+          608,
+          416,
+          128,
+          208
+        ],
+        [
+          800,
+          416,
+          128,
+          208
+        ],
+        [
+          992,
+          416,
+          128,
+          208
+        ],
+        [
+          1184,
+          416,
+          128,
+          208
+        ],
+        [
+          1376,
+          416,
+          128,
+          208
+        ]
+      ]
+    },
+    "wave": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          624,
+          128,
+          208
+        ],
+        [
+          224,
+          624,
+          128,
+          208
+        ],
+        [
+          416,
+          624,
+          128,
+          208
+        ],
+        [
+          608,
+          624,
+          128,
+          208
+        ]
+      ]
+    },
+    "jump": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          832,
+          128,
+          208
+        ],
+        [
+          224,
+          832,
+          128,
+          208
+        ],
+        [
+          416,
+          832,
+          128,
+          208
+        ],
+        [
+          608,
+          832,
+          128,
+          208
+        ],
+        [
+          800,
+          832,
+          128,
+          208
+        ]
+      ]
+    },
+    "bow": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1040,
+          128,
+          208
+        ],
+        [
+          224,
+          1040,
+          128,
+          208
+        ],
+        [
+          416,
+          1040,
+          128,
+          208
+        ],
+        [
+          608,
+          1040,
+          128,
+          208
+        ],
+        [
+          800,
+          1040,
+          128,
+          208
+        ],
+        [
+          992,
+          1040,
+          128,
+          208
+        ],
+        [
+          1184,
+          1040,
+          128,
+          208
+        ],
+        [
+          1376,
+          1040,
+          128,
+          208
+        ]
+      ]
+    },
+    "shy": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1248,
+          128,
+          208
+        ],
+        [
+          224,
+          1248,
+          128,
+          208
+        ],
+        [
+          416,
+          1248,
+          128,
+          208
+        ],
+        [
+          608,
+          1248,
+          128,
+          208
+        ],
+        [
+          800,
+          1248,
+          128,
+          208
+        ],
+        [
+          992,
+          1248,
+          128,
+          208
+        ]
+      ]
+    },
+    "think": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1456,
+          128,
+          208
+        ],
+        [
+          224,
+          1456,
+          128,
+          208
+        ],
+        [
+          416,
+          1456,
+          128,
+          208
+        ],
+        [
+          608,
+          1456,
+          128,
+          208
+        ],
+        [
+          800,
+          1456,
+          128,
+          208
+        ],
+        [
+          992,
+          1456,
+          128,
+          208
+        ]
+      ]
+    },
+    "tilt": {
+      "file": "../../assets/zenith-spritesheet-v2.png",
+      "rects": [
+        [
+          32,
+          1664,
+          128,
+          208
+        ],
+        [
+          224,
+          1664,
+          128,
+          208
+        ],
+        [
+          416,
+          1664,
+          128,
+          208
+        ],
+        [
+          608,
+          1664,
+          128,
+          208
+        ],
+        [
+          800,
+          1664,
+          128,
+          208
+        ],
+        [
+          992,
+          1664,
+          128,
+          208
+        ]
+      ]
+    }
+  }
+}

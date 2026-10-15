@@ -1,0 +1,360 @@
+{
+  "version": 1,
+  "actions": {
+    "idle": {
+      "name": "대기",
+      "frames": 6,
+      "fps": 5.555555555555555,
+      "loop": "loop",
+      "direction": "front",
+      "description": "standing, breathing, blink",
+      "required": true,
+      "fallback": null,
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "idle"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "right": {
+      "name": "오른쪽 걷기",
+      "frames": 8,
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "direction": "right",
+      "description": "side walk, contact / passing / opposite contact / passing",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "right"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "left": {
+      "name": "왼쪽 걷기",
+      "frames": 8,
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "direction": "left",
+      "description": "side walk left",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "left"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "wave": {
+      "name": "인사",
+      "frames": 4,
+      "fps": 5.555555555555555,
+      "loop": "once",
+      "direction": "front",
+      "description": "raise hand, wave, return",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "wave"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "jump": {
+      "name": "제자리 점프",
+      "frames": 5,
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "direction": "front",
+      "description": "crouch, rise, apex, descend, stand",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "jump"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "bow": {
+      "name": "고개 숙이기",
+      "frames": 8,
+      "fps": 5.88235294117647,
+      "loop": "once",
+      "direction": "front",
+      "description": "stand, bow, hold, return",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "bow"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "shy": {
+      "name": "수줍음",
+      "frames": 6,
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "direction": "front",
+      "description": "hands near chest, shy expression",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "shy"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "think": {
+      "name": "생각하기",
+      "frames": 6,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "direction": "front",
+      "description": "hand near chin, thinking",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "think"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "tilt": {
+      "name": "고개 기울이기",
+      "frames": 6,
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "direction": "front",
+      "description": "head tilt, return",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "tilt"
+      ],
+      "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+    },
+    "hungry": {
+      "name": "배고픔",
+      "frames": 4,
+      "fps": 2.2222222222222223,
+      "loop": "loop",
+      "direction": "front",
+      "description": "hold stomach, rub stomach, hungry expression, return",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "hungry"
+      ],
+      "timing": "4*.45s; initial hunger6..10s then12..20s, scheduled at action boundary."
+    },
+    "gaze": {
+      "name": "커서 바라보기",
+      "frames": 16,
+      "fps": 0,
+      "loop": "loop",
+      "direction": "clockwise from up, 16 directions",
+      "description": "up then clockwise, 16 evenly spaced directions",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "gaze"
+      ],
+      "timing": "16 directional slots clockwise from up; cursor selection, not time playback."
+    },
+    "motion": {
+      "name": "드래그·낙하·착지",
+      "frames": 6,
+      "fps": 0,
+      "loop": "once",
+      "direction": "inverted to upright",
+      "description": "hanging inverted, tuck, extend, airborne upright, landing crouch, recover",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "drag",
+        "flip",
+        "land"
+      ],
+      "timing": "Physics phases: drag; falling progress <.16, <.48, <.84, >=.84; landing .48s: airborne <.06, crouch <.28, recover."
+    },
+    "corner": {
+      "name": "테두리 코너 점프",
+      "frames": 4,
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "direction": "right, rotated by game",
+      "description": "takeoff, airborne, landing, recover",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "edge_corner"
+      ],
+      "timing": "Route corner .6s, four equally spaced phase slots; rotates inward 90 degrees."
+    },
+    "feeding": {
+      "name": "빵 받기·먹기·만족",
+      "frames": 4,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "direction": "front",
+      "description": "catch bread, bite, chew, satisfied",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "feed_drop",
+        "feed_eat",
+        "feed_happy"
+      ],
+      "timing": "feed_drop .65s (look until .85 progress), catch frame0; eat1.6s alternating1/2 each.22s; happy frame3 .85s."
+    },
+    "refusal": {
+      "name": "빵 거절",
+      "frames": 4,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "direction": "front",
+      "description": "accept bread, shake head left, shake head right, offer bread back",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        304
+      ],
+      "runtime_states": [
+        "feed_refuse"
+      ],
+      "timing": "2.8s: shake frames1/2 every.22s until1.3s; offer frame3 for remaining1.5s."
+    }
+  },
+  "bindings": {
+    "idle": "idle",
+    "right": "right",
+    "left": "left",
+    "wave": "wave",
+    "jump": "jump",
+    "bow": "bow",
+    "shy": "shy",
+    "think": "think",
+    "tilt": "tilt",
+    "hungry": "hungry",
+    "gaze": "gaze",
+    "drag": "motion",
+    "flip": "motion",
+    "land": "motion",
+    "edge_corner": "corner",
+    "feed_drop": "feeding",
+    "feed_eat": "feeding",
+    "feed_happy": "feeding",
+    "feed_refuse": "refusal"
+  }
+}
