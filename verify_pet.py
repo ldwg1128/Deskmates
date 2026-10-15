@@ -325,7 +325,9 @@ def run_character(character_id):
 
 
 def run():
-    for character_id in CHARACTERS:
+    # This suite asserts preserved legacy atlas geometry; manifest packs have their
+    # own geometry/behavior checks (verify_character_pipeline.py, verify_seir.py).
+    for character_id in (key for key,c in CHARACTERS.items() if c.data['renderer']=='legacy-v1'):
         run_character(character_id)
 
 

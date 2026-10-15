@@ -1,0 +1,1293 @@
+{
+  "version": 1,
+  "id": "seir",
+  "name": "세이르 (Seir)",
+  "renderer": "manifest-v1",
+  "enabled": true,
+  "body_height": 300,
+  "anchor": [
+    192,
+    376
+  ],
+  "canonical": {
+    "file": "canonical.png",
+    "sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+    "reviewed": true,
+    "identity": "Seir: long olive-gold hair, large purple bow with tails, magenta eyes, fair rosy skin, navy fitted blazer and pencil skirt, white ruffled blouse and dark neck bow, pink lanyard/ID, black satchel with pink-purple rabbit charm, dark tights and black heels. Faithful anime chibi identity, same head and body proportions across all actions."
+  },
+  "animations": {
+    "idle": {
+      "frame_count": 4,
+      "fps": 5.555555555555555,
+      "loop": "loop",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/idle-91214119d651.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "91214119d651b7016091e8ea6c8377cab6c398a372d47798eb43420c17408814",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "right": {
+      "frame_count": 8,
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/right-dbbe72c9f80b.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ],
+        [
+          1536,
+          0,
+          384,
+          384
+        ],
+        [
+          1920,
+          0,
+          384,
+          384
+        ],
+        [
+          2304,
+          0,
+          384,
+          384
+        ],
+        [
+          2688,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        3072,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "dbbe72c9f80b00742fd6008948a237d8099fa58ae9697f9cf9f52ae03803914d",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "left": {
+      "frame_count": 8,
+      "fps": 9.523809523809524,
+      "loop": "loop",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/right-dbbe72c9f80b.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ],
+        [
+          1536,
+          0,
+          384,
+          384
+        ],
+        [
+          1920,
+          0,
+          384,
+          384
+        ],
+        [
+          2304,
+          0,
+          384,
+          384
+        ],
+        [
+          2688,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        3072,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "dbbe72c9f80b00742fd6008948a237d8099fa58ae9697f9cf9f52ae03803914d",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      },
+      "mirror": true,
+      "direction": "left"
+    },
+    "wave": {
+      "frame_count": 4,
+      "fps": 5.555555555555555,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/wave-cf2b6a6ac121.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "cf2b6a6ac121f87b456327757d16e2547eb2495762f7d53648b55f07a7cd8b10",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "jump": {
+      "frame_count": 4,
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/jump-ca885ade363c.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "ca885ade363cf70ac60bc192d60bb5afbfbefe32fcc7ad7ad7e57747db4f6f8c",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "bow": {
+      "frame_count": 4,
+      "fps": 5.88235294117647,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/bow-953ecc6cfe1a.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "953ecc6cfe1aa7819fd1ca70e70d62cd528851cef03a21212bdd678a428837c3",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "shy": {
+      "frame_count": 4,
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/shy-61ffbd166989.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "61ffbd166989c55966ec2b726cabd6e702df366711b5584fb1101cbeb19bc2f4",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "think": {
+      "frame_count": 4,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/think-6d55f7430431.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "6d55f74304310c3aa16b97828634ce254644f70f2cc2254e01d4153f75ff0abd",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "tilt": {
+      "frame_count": 4,
+      "fps": 5.2631578947368425,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/tilt-ff519724abb9.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "ff519724abb95275d56b77c236d46a17df2cec926f4a86e8cfc5da0186fddc4d",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "hungry": {
+      "frame_count": 4,
+      "fps": 2.2222222222222223,
+      "loop": "loop",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/hungry-401b43a6fbce.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "401b43a6fbce62080cd4314fa23b0d0837153c94c8212959548afba00c2dbaf4",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "gaze": {
+      "frame_count": 16,
+      "fps": 0,
+      "loop": "loop",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/gaze-b28b96fedccb.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ],
+        [
+          1536,
+          0,
+          384,
+          384
+        ],
+        [
+          1920,
+          0,
+          384,
+          384
+        ],
+        [
+          2304,
+          0,
+          384,
+          384
+        ],
+        [
+          2688,
+          0,
+          384,
+          384
+        ],
+        [
+          3072,
+          0,
+          384,
+          384
+        ],
+        [
+          3456,
+          0,
+          384,
+          384
+        ],
+        [
+          3840,
+          0,
+          384,
+          384
+        ],
+        [
+          4224,
+          0,
+          384,
+          384
+        ],
+        [
+          4608,
+          0,
+          384,
+          384
+        ],
+        [
+          4992,
+          0,
+          384,
+          384
+        ],
+        [
+          5376,
+          0,
+          384,
+          384
+        ],
+        [
+          5760,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        6144,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "b28b96fedccbd6019c224d785cc920bb0ef990cdbff03fb7bb442d08f6a0bc61",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "motion": {
+      "frame_count": 6,
+      "fps": 0,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/motion-523ee26f7d34.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ],
+        [
+          1536,
+          0,
+          384,
+          384
+        ],
+        [
+          1920,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        2304,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "523ee26f7d34044a05d8a87d77ebab23e59b57a6c17247f35330a340ca20e6e1",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "corner": {
+      "frame_count": 4,
+      "fps": 6.666666666666667,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/corner-b4e84d1aef4d.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "b4e84d1aef4dcc3933fb1474d139d08d4a7309b3a506f1273dee149ead451c61",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "feeding": {
+      "frame_count": 4,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/feeding-a6d217664242.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "a6d2176642427af554a06bd8a534e56c650db88dd80e6795ae0bd66a788c1f1f",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "refusal": {
+      "frame_count": 4,
+      "fps": 4.545454545454546,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/refusal-71ba87972369.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "71ba87972369280ea635e87f8579cadfc4a65989266fc734d8332c55386a9f3a",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "window_sit": {
+      "frame_count": 4,
+      "fps": 5,
+      "loop": "loop",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/window_sit-41a1f1e37f2f.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "41a1f1e37f2f8dd5830b79f6392679ff6b24a19c5849b5bb8ae1540b4851d225",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      },
+      "support_anchor": [
+        192,
+        296
+      ]
+    },
+    "ledge_struggle": {
+      "frame_count": 4,
+      "fps": 8,
+      "loop": "loop",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/ledge_struggle-0d09f31dd96d.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "0d09f31dd96deba872937ddd4d4c07fed136cb3fb12751a004555d8ec632c319",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      },
+      "support_anchor": [
+        64,
+        164
+      ]
+    },
+    "sleep": {
+      "frame_count": 4,
+      "fps": 2,
+      "loop": "loop",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/sleep-290d7398ddba.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "290d7398ddba76076c31ec7849d962eff27e97f8e9f3cd19901b4aac3a5b37de",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "wake_annoyed": {
+      "frame_count": 4,
+      "fps": 4,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/wake_annoyed-b0d714c3d767.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "b0d714c3d7673188d993e162dc62964ecab4939ad60f2fdf1780e42180ced027",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "cursor_grab": {
+      "frame_count": 4,
+      "fps": 5,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/cursor_grab-66ca33d3478f.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "66ca33d3478f9bb3cc121fbe7820f9e0c4e876d75b1c03492a2c0a8031b28ab2",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "kick": {
+      "frame_count": 4,
+      "fps": 6,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/kick-b964b74184fe.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "b964b74184fe5ce5cc93e04bff5ac5576750e92c30ecdc5cf45d18cae3da0256",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "secret_snack": {
+      "frame_count": 4,
+      "fps": 4,
+      "loop": "once",
+      "anchor": [
+        192,
+        376
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "file": "animations/secret_snack-0764b859eb7c.png",
+      "rects": [
+        [
+          0,
+          0,
+          384,
+          384
+        ],
+        [
+          384,
+          0,
+          384,
+          384
+        ],
+        [
+          768,
+          0,
+          384,
+          384
+        ],
+        [
+          1152,
+          0,
+          384,
+          384
+        ]
+      ],
+      "image_size": [
+        1536,
+        384
+      ],
+      "crop": "none",
+      "review": {
+        "status": "approved",
+        "image_sha256": "0764b859eb7cd652a9875e1f728c17870ce3b9c4ec6a6aba90a87b92fef1f4ae",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    }
+  },
+  "profile": {
+    "motion_angles": [
+      0,
+      0,
+      180,
+      180
+    ],
+    "horizontal_walk": true
+  }
+}

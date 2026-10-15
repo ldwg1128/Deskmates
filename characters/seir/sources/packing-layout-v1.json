@@ -1,0 +1,2288 @@
+{
+  "idle": [
+    {
+      "source": "basic-raw-v1.png",
+      "component": 1,
+      "source_bbox": [
+        53,
+        1,
+        216,
+        240
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        81,
+        70
+      ],
+      "visible_bbox": [
+        85,
+        74,
+        288,
+        377
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 2,
+      "source_bbox": [
+        283,
+        2,
+        447,
+        240
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        81,
+        71
+      ],
+      "visible_bbox": [
+        85,
+        75,
+        291,
+        375
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 3,
+      "source_bbox": [
+        489,
+        3,
+        651,
+        240
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        80,
+        73
+      ],
+      "visible_bbox": [
+        84,
+        77,
+        287,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 4,
+      "source_bbox": [
+        715,
+        3,
+        877,
+        240
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        79,
+        73
+      ],
+      "visible_bbox": [
+        83,
+        77,
+        285,
+        377
+      ]
+    }
+  ],
+  "wave": [
+    {
+      "source": "basic-raw-v1.png",
+      "component": 41,
+      "source_bbox": [
+        46,
+        237,
+        218,
+        477
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        72,
+        69
+      ],
+      "visible_bbox": [
+        76,
+        73,
+        292,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 42,
+      "source_bbox": [
+        272,
+        237,
+        451,
+        475
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        71,
+        71
+      ],
+      "visible_bbox": [
+        74,
+        75,
+        300,
+        375
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 44,
+      "source_bbox": [
+        487,
+        238,
+        666,
+        469
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        82,
+        81
+      ],
+      "visible_bbox": [
+        86,
+        85,
+        310,
+        375
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 43,
+      "source_bbox": [
+        716,
+        237,
+        883,
+        477
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        77,
+        69
+      ],
+      "visible_bbox": [
+        80,
+        73,
+        289,
+        377
+      ]
+    }
+  ],
+  "jump": [
+    {
+      "source": "basic-raw-v1.png",
+      "component": 75,
+      "source_bbox": [
+        42,
+        484,
+        219,
+        707
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        70,
+        91
+      ],
+      "visible_bbox": [
+        74,
+        95,
+        296,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 73,
+      "source_bbox": [
+        273,
+        474,
+        460,
+        702
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        81,
+        64
+      ],
+      "visible_bbox": [
+        85,
+        67,
+        319,
+        355
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 72,
+      "source_bbox": [
+        478,
+        467,
+        685,
+        672
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        66,
+        70
+      ],
+      "visible_bbox": [
+        70,
+        74,
+        330,
+        333
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 74,
+      "source_bbox": [
+        704,
+        478,
+        904,
+        707
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        60,
+        65
+      ],
+      "visible_bbox": [
+        64,
+        69,
+        315,
+        359
+      ]
+    }
+  ],
+  "bow": [
+    {
+      "source": "basic-raw-v1.png",
+      "component": 133,
+      "source_bbox": [
+        51,
+        706,
+        218,
+        943
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        79,
+        73
+      ],
+      "visible_bbox": [
+        83,
+        76,
+        291,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 130,
+      "source_bbox": [
+        274,
+        704,
+        437,
+        942
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        81,
+        71
+      ],
+      "visible_bbox": [
+        85,
+        74,
+        288,
+        375
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 132,
+      "source_bbox": [
+        488,
+        705,
+        655,
+        942
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        81,
+        73
+      ],
+      "visible_bbox": [
+        84,
+        76,
+        294,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 131,
+      "source_bbox": [
+        720,
+        704,
+        888,
+        943
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        78,
+        70
+      ],
+      "visible_bbox": [
+        82,
+        74,
+        292,
+        377
+      ]
+    }
+  ],
+  "shy": [
+    {
+      "source": "basic-raw-v1.png",
+      "component": 165,
+      "source_bbox": [
+        50,
+        946,
+        220,
+        1179
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        77,
+        78
+      ],
+      "visible_bbox": [
+        81,
+        82,
+        293,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 163,
+      "source_bbox": [
+        272,
+        942,
+        450,
+        1179
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        73,
+        73
+      ],
+      "visible_bbox": [
+        77,
+        77,
+        300,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 164,
+      "source_bbox": [
+        488,
+        945,
+        661,
+        1179
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        73,
+        77
+      ],
+      "visible_bbox": [
+        77,
+        81,
+        294,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 166,
+      "source_bbox": [
+        723,
+        947,
+        892,
+        1179
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        81,
+        79
+      ],
+      "visible_bbox": [
+        85,
+        83,
+        296,
+        376
+      ]
+    }
+  ],
+  "think": [
+    {
+      "source": "basic-raw-v1.png",
+      "component": 198,
+      "source_bbox": [
+        48,
+        1179,
+        217,
+        1413
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        72,
+        77
+      ],
+      "visible_bbox": [
+        76,
+        81,
+        288,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 199,
+      "source_bbox": [
+        274,
+        1181,
+        456,
+        1412
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        73,
+        81
+      ],
+      "visible_bbox": [
+        77,
+        85,
+        305,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 196,
+      "source_bbox": [
+        486,
+        1178,
+        668,
+        1413
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        71,
+        75
+      ],
+      "visible_bbox": [
+        75,
+        79,
+        304,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 197,
+      "source_bbox": [
+        716,
+        1178,
+        887,
+        1413
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        74,
+        75
+      ],
+      "visible_bbox": [
+        77,
+        78,
+        292,
+        377
+      ]
+    }
+  ],
+  "tilt": [
+    {
+      "source": "basic-raw-v1.png",
+      "component": 228,
+      "source_bbox": [
+        46,
+        1409,
+        218,
+        1648
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        72,
+        70
+      ],
+      "visible_bbox": [
+        76,
+        74,
+        291,
+        377
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 227,
+      "source_bbox": [
+        267,
+        1408,
+        448,
+        1648
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        64,
+        69
+      ],
+      "visible_bbox": [
+        69,
+        73,
+        295,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 230,
+      "source_bbox": [
+        496,
+        1412,
+        680,
+        1648
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        81,
+        74
+      ],
+      "visible_bbox": [
+        84,
+        78,
+        315,
+        376
+      ]
+    },
+    {
+      "source": "basic-raw-v1.png",
+      "component": 229,
+      "source_bbox": [
+        717,
+        1409,
+        893,
+        1648
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2958963282937366,
+      "offset": [
+        76,
+        70
+      ],
+      "visible_bbox": [
+        80,
+        74,
+        300,
+        377
+      ]
+    }
+  ],
+  "right": [
+    {
+      "source": "walk-raw-v1.png",
+      "component": 1,
+      "source_bbox": [
+        56,
+        4,
+        368,
+        441
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6896551724137931,
+      "offset": [
+        38,
+        77
+      ],
+      "visible_bbox": [
+        40,
+        79,
+        251,
+        376
+      ]
+    },
+    {
+      "source": "walk-raw-v1.png",
+      "component": 3,
+      "source_bbox": [
+        500,
+        5,
+        801,
+        441
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6896551724137931,
+      "offset": [
+        42,
+        77
+      ],
+      "visible_bbox": [
+        44,
+        79,
+        248,
+        376
+      ]
+    },
+    {
+      "source": "walk-raw-v1.png",
+      "component": 2,
+      "source_bbox": [
+        943,
+        4,
+        1244,
+        442
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6896551724137931,
+      "offset": [
+        50,
+        76
+      ],
+      "visible_bbox": [
+        52,
+        78,
+        256,
+        376
+      ]
+    },
+    {
+      "source": "walk-raw-v1.png",
+      "component": 4,
+      "source_bbox": [
+        1390,
+        5,
+        1706,
+        444
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6896551724137931,
+      "offset": [
+        48,
+        75
+      ],
+      "visible_bbox": [
+        50,
+        77,
+        264,
+        376
+      ]
+    },
+    {
+      "source": "walk-raw-v1.png",
+      "component": 20,
+      "source_bbox": [
+        55,
+        449,
+        376,
+        882
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6896551724137931,
+      "offset": [
+        40,
+        79
+      ],
+      "visible_bbox": [
+        42,
+        81,
+        259,
+        376
+      ]
+    },
+    {
+      "source": "walk-raw-v1.png",
+      "component": 17,
+      "source_bbox": [
+        501,
+        447,
+        807,
+        882
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6896551724137931,
+      "offset": [
+        42,
+        78
+      ],
+      "visible_bbox": [
+        44,
+        80,
+        251,
+        376
+      ]
+    },
+    {
+      "source": "walk-raw-v1.png",
+      "component": 18,
+      "source_bbox": [
+        944,
+        447,
+        1244,
+        882
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6896551724137931,
+      "offset": [
+        44,
+        78
+      ],
+      "visible_bbox": [
+        46,
+        80,
+        249,
+        376
+      ]
+    },
+    {
+      "source": "walk-raw-v1.png",
+      "component": 19,
+      "source_bbox": [
+        1390,
+        448,
+        1701,
+        882
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6896551724137931,
+      "offset": [
+        50,
+        79
+      ],
+      "visible_bbox": [
+        52,
+        81,
+        262,
+        376
+      ]
+    }
+  ],
+  "gaze": [
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 2,
+      "source_bbox": [
+        52,
+        7,
+        276,
+        312
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        77,
+        73
+      ],
+      "visible_bbox": [
+        80,
+        76,
+        299,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 1,
+      "source_bbox": [
+        366,
+        6,
+        590,
+        312
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        78,
+        72
+      ],
+      "visible_bbox": [
+        81,
+        75,
+        300,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 3,
+      "source_bbox": [
+        680,
+        9,
+        903,
+        312
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        78,
+        75
+      ],
+      "visible_bbox": [
+        81,
+        78,
+        299,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 4,
+      "source_bbox": [
+        994,
+        10,
+        1216,
+        312
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        78,
+        76
+      ],
+      "visible_bbox": [
+        81,
+        79,
+        298,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 14,
+      "source_bbox": [
+        53,
+        321,
+        277,
+        625
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        77,
+        74
+      ],
+      "visible_bbox": [
+        80,
+        77,
+        299,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 11,
+      "source_bbox": [
+        366,
+        320,
+        589,
+        625
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        77,
+        73
+      ],
+      "visible_bbox": [
+        80,
+        76,
+        298,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 12,
+      "source_bbox": [
+        681,
+        320,
+        903,
+        625
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        79,
+        73
+      ],
+      "visible_bbox": [
+        82,
+        76,
+        299,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 13,
+      "source_bbox": [
+        994,
+        320,
+        1216,
+        625
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        78,
+        73
+      ],
+      "visible_bbox": [
+        81,
+        76,
+        298,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 20,
+      "source_bbox": [
+        53,
+        633,
+        280,
+        938
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        78,
+        73
+      ],
+      "visible_bbox": [
+        81,
+        76,
+        303,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 22,
+      "source_bbox": [
+        365,
+        634,
+        593,
+        938
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        80,
+        74
+      ],
+      "visible_bbox": [
+        84,
+        77,
+        306,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 23,
+      "source_bbox": [
+        679,
+        635,
+        906,
+        939
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        81,
+        74
+      ],
+      "visible_bbox": [
+        84,
+        77,
+        306,
+        375
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 21,
+      "source_bbox": [
+        994,
+        633,
+        1221,
+        938
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        82,
+        73
+      ],
+      "visible_bbox": [
+        85,
+        76,
+        307,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 36,
+      "source_bbox": [
+        53,
+        948,
+        280,
+        1251
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        80,
+        75
+      ],
+      "visible_bbox": [
+        83,
+        78,
+        305,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 34,
+      "source_bbox": [
+        366,
+        945,
+        594,
+        1251
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        81,
+        72
+      ],
+      "visible_bbox": [
+        84,
+        75,
+        307,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 35,
+      "source_bbox": [
+        680,
+        946,
+        906,
+        1251
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        82,
+        73
+      ],
+      "visible_bbox": [
+        85,
+        76,
+        306,
+        376
+      ]
+    },
+    {
+      "source": "gaze-raw-v2.png",
+      "component": 33,
+      "source_bbox": [
+        993,
+        944,
+        1220,
+        1251
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.0033444816053512,
+      "offset": [
+        81,
+        71
+      ],
+      "visible_bbox": [
+        84,
+        74,
+        306,
+        376
+      ]
+    }
+  ],
+  "motion": [
+    {
+      "source": "motion-clean-v2.png",
+      "component": 1,
+      "source_bbox": [
+        87,
+        1,
+        427,
+        508
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6012024048096193,
+      "offset": [
+        90,
+        73
+      ],
+      "visible_bbox": [
+        92,
+        75,
+        292,
+        376
+      ]
+    },
+    {
+      "source": "motion-clean-v2.png",
+      "component": 3,
+      "source_bbox": [
+        586,
+        16,
+        934,
+        469
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6012024048096193,
+      "offset": [
+        87,
+        105
+      ],
+      "visible_bbox": [
+        89,
+        107,
+        294,
+        375
+      ]
+    },
+    {
+      "source": "motion-clean-v2.png",
+      "component": 2,
+      "source_bbox": [
+        1058,
+        9,
+        1490,
+        511
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6012024048096193,
+      "offset": [
+        62,
+        76
+      ],
+      "visible_bbox": [
+        64,
+        78,
+        320,
+        376
+      ]
+    },
+    {
+      "source": "motion-clean-v2.png",
+      "component": 11,
+      "source_bbox": [
+        37,
+        510,
+        481,
+        990
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6012024048096193,
+      "offset": [
+        59,
+        89
+      ],
+      "visible_bbox": [
+        61,
+        91,
+        324,
+        376
+      ]
+    },
+    {
+      "source": "motion-clean-v2.png",
+      "component": 13,
+      "source_bbox": [
+        554,
+        582,
+        972,
+        988
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6012024048096193,
+      "offset": [
+        95,
+        134
+      ],
+      "visible_bbox": [
+        97,
+        136,
+        344,
+        376
+      ]
+    },
+    {
+      "source": "motion-clean-v2.png",
+      "component": 12,
+      "source_bbox": [
+        1107,
+        513,
+        1440,
+        1019
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.6012024048096193,
+      "offset": [
+        88,
+        74
+      ],
+      "visible_bbox": [
+        90,
+        76,
+        286,
+        376
+      ]
+    }
+  ],
+  "corner": [
+    {
+      "source": "corner-raw-v1.png",
+      "component": 4,
+      "source_bbox": [
+        14,
+        116,
+        529,
+        701
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.46511627906976744,
+      "offset": [
+        84,
+        105
+      ],
+      "visible_bbox": [
+        86,
+        107,
+        322,
+        376
+      ]
+    },
+    {
+      "source": "corner-raw-v1.png",
+      "component": 1,
+      "source_bbox": [
+        550,
+        12,
+        1064,
+        572
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.46511627906976744,
+      "offset": [
+        71,
+        82
+      ],
+      "visible_bbox": [
+        72,
+        83,
+        309,
+        341
+      ]
+    },
+    {
+      "source": "corner-raw-v1.png",
+      "component": 3,
+      "source_bbox": [
+        1118,
+        106,
+        1642,
+        700
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.46511627906976744,
+      "offset": [
+        51,
+        101
+      ],
+      "visible_bbox": [
+        52,
+        102,
+        294,
+        376
+      ]
+    },
+    {
+      "source": "corner-raw-v1.png",
+      "component": 2,
+      "source_bbox": [
+        1700,
+        45,
+        2155,
+        702
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.46511627906976744,
+      "offset": [
+        59,
+        72
+      ],
+      "visible_bbox": [
+        61,
+        73,
+        269,
+        376
+      ]
+    }
+  ],
+  "hungry": [
+    {
+      "source": "hungry-v3.png",
+      "component": 1,
+      "source_bbox": [
+        29,
+        58,
+        497,
+        727
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.45489006823351025,
+      "offset": [
+        80,
+        73
+      ],
+      "visible_bbox": [
+        81,
+        74,
+        292,
+        376
+      ]
+    },
+    {
+      "source": "hungry-v3.png",
+      "component": 2,
+      "source_bbox": [
+        539,
+        61,
+        1010,
+        727
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.45489006823351025,
+      "offset": [
+        80,
+        74
+      ],
+      "visible_bbox": [
+        81,
+        76,
+        293,
+        375
+      ]
+    },
+    {
+      "source": "hungry-v3.png",
+      "component": 4,
+      "source_bbox": [
+        1052,
+        92,
+        1518,
+        727
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.45489006823351025,
+      "offset": [
+        83,
+        89
+      ],
+      "visible_bbox": [
+        84,
+        90,
+        294,
+        377
+      ]
+    },
+    {
+      "source": "hungry-v3.png",
+      "component": 3,
+      "source_bbox": [
+        1559,
+        62,
+        2025,
+        727
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.45489006823351025,
+      "offset": [
+        80,
+        75
+      ],
+      "visible_bbox": [
+        81,
+        76,
+        290,
+        377
+      ]
+    }
+  ],
+  "feeding": [
+    {
+      "source": "feeding-v3.png",
+      "component": 1,
+      "source_bbox": [
+        58,
+        67,
+        505,
+        721
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.46439628482972134,
+      "offset": [
+        86,
+        74
+      ],
+      "visible_bbox": [
+        88,
+        76,
+        293,
+        376
+      ]
+    },
+    {
+      "source": "feeding-v3.png",
+      "component": 2,
+      "source_bbox": [
+        533,
+        68,
+        978,
+        720
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.46439628482972134,
+      "offset": [
+        86,
+        75
+      ],
+      "visible_bbox": [
+        88,
+        76,
+        292,
+        377
+      ]
+    },
+    {
+      "source": "feeding-v3.png",
+      "component": 3,
+      "source_bbox": [
+        1031,
+        70,
+        1479,
+        722
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.46439628482972134,
+      "offset": [
+        85,
+        75
+      ],
+      "visible_bbox": [
+        86,
+        76,
+        292,
+        377
+      ]
+    },
+    {
+      "source": "feeding-v3.png",
+      "component": 4,
+      "source_bbox": [
+        1529,
+        70,
+        1974,
+        722
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.46439628482972134,
+      "offset": [
+        86,
+        75
+      ],
+      "visible_bbox": [
+        88,
+        77,
+        291,
+        377
+      ]
+    }
+  ],
+  "refusal": [
+    {
+      "source": "refusal-v3.png",
+      "component": 1,
+      "source_bbox": [
+        36,
+        55,
+        497,
+        726
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.45112781954887216,
+      "offset": [
+        84,
+        75
+      ],
+      "visible_bbox": [
+        86,
+        76,
+        291,
+        377
+      ]
+    },
+    {
+      "source": "refusal-v3.png",
+      "component": 3,
+      "source_bbox": [
+        556,
+        56,
+        1016,
+        727
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.45112781954887216,
+      "offset": [
+        81,
+        75
+      ],
+      "visible_bbox": [
+        82,
+        76,
+        288,
+        376
+      ]
+    },
+    {
+      "source": "refusal-v3.png",
+      "component": 2,
+      "source_bbox": [
+        1037,
+        55,
+        1493,
+        727
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.45112781954887216,
+      "offset": [
+        98,
+        74
+      ],
+      "visible_bbox": [
+        99,
+        76,
+        303,
+        375
+      ]
+    },
+    {
+      "source": "refusal-v3.png",
+      "component": 4,
+      "source_bbox": [
+        1564,
+        65,
+        2020,
+        726
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 0.45112781954887216,
+      "offset": [
+        84,
+        79
+      ],
+      "visible_bbox": [
+        85,
+        80,
+        289,
+        376
+      ]
+    }
+  ],
+  "window_sit": [
+    {
+      "source": "extras-raw-v1.png",
+      "component": 1,
+      "source_bbox": [
+        34,
+        3,
+        217,
+        248
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        68,
+        67
+      ],
+      "visible_bbox": [
+        72,
+        71,
+        299,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 2,
+      "source_bbox": [
+        267,
+        4,
+        453,
+        248
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        53,
+        68
+      ],
+      "visible_bbox": [
+        57,
+        72,
+        286,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 3,
+      "source_bbox": [
+        491,
+        4,
+        672,
+        251
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        69,
+        65
+      ],
+      "visible_bbox": [
+        73,
+        69,
+        296,
+        377
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 4,
+      "source_bbox": [
+        714,
+        4,
+        901,
+        252
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        71,
+        63
+      ],
+      "visible_bbox": [
+        74,
+        67,
+        306,
+        376
+      ]
+    }
+  ],
+  "ledge_struggle": [
+    {
+      "source": "extras-raw-v1.png",
+      "component": 12,
+      "source_bbox": [
+        36,
+        264,
+        209,
+        505
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        59,
+        54
+      ],
+      "visible_bbox": [
+        63,
+        57,
+        276,
+        358
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 11,
+      "source_bbox": [
+        275,
+        263,
+        457,
+        481
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        59,
+        53
+      ],
+      "visible_bbox": [
+        63,
+        57,
+        287,
+        327
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 13,
+      "source_bbox": [
+        515,
+        264,
+        691,
+        516
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        60,
+        54
+      ],
+      "visible_bbox": [
+        64,
+        58,
+        282,
+        373
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 14,
+      "source_bbox": [
+        735,
+        264,
+        919,
+        517
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        59,
+        54
+      ],
+      "visible_bbox": [
+        62,
+        57,
+        290,
+        374
+      ]
+    }
+  ],
+  "sleep": [
+    {
+      "source": "extras-raw-v1.png",
+      "component": 31,
+      "source_bbox": [
+        8,
+        511,
+        234,
+        659
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        48,
+        191
+      ],
+      "visible_bbox": [
+        52,
+        195,
+        334,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 33,
+      "source_bbox": [
+        247,
+        513,
+        468,
+        659
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        51,
+        193
+      ],
+      "visible_bbox": [
+        55,
+        197,
+        330,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 32,
+      "source_bbox": [
+        480,
+        511,
+        701,
+        659
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        51,
+        191
+      ],
+      "visible_bbox": [
+        55,
+        195,
+        329,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 30,
+      "source_bbox": [
+        711,
+        510,
+        932,
+        659
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        51,
+        190
+      ],
+      "visible_bbox": [
+        55,
+        194,
+        329,
+        376
+      ]
+    }
+  ],
+  "wake_annoyed": [
+    {
+      "source": "extras-raw-v1.png",
+      "component": 42,
+      "source_bbox": [
+        20,
+        671,
+        208,
+        897
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        55,
+        91
+      ],
+      "visible_bbox": [
+        59,
+        95,
+        292,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 41,
+      "source_bbox": [
+        268,
+        669,
+        455,
+        895
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        52,
+        91
+      ],
+      "visible_bbox": [
+        55,
+        95,
+        287,
+        377
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 43,
+      "source_bbox": [
+        493,
+        672,
+        676,
+        897
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        47,
+        93
+      ],
+      "visible_bbox": [
+        50,
+        96,
+        277,
+        377
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 44,
+      "source_bbox": [
+        729,
+        672,
+        924,
+        897
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        73,
+        93
+      ],
+      "visible_bbox": [
+        76,
+        96,
+        318,
+        376
+      ]
+    }
+  ],
+  "cursor_grab": [
+    {
+      "source": "extras-raw-v1.png",
+      "component": 58,
+      "source_bbox": [
+        33,
+        902,
+        202,
+        1134
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        80,
+        84
+      ],
+      "visible_bbox": [
+        84,
+        88,
+        292,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 59,
+      "source_bbox": [
+        283,
+        903,
+        446,
+        1135
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        86,
+        84
+      ],
+      "visible_bbox": [
+        90,
+        88,
+        290,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 60,
+      "source_bbox": [
+        509,
+        903,
+        658,
+        1134
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        79,
+        85
+      ],
+      "visible_bbox": [
+        83,
+        89,
+        265,
+        377
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 57,
+      "source_bbox": [
+        749,
+        900,
+        897,
+        1134
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        73,
+        81
+      ],
+      "visible_bbox": [
+        76,
+        85,
+        258,
+        377
+      ]
+    }
+  ],
+  "kick": [
+    {
+      "source": "extras-raw-v1.png",
+      "component": 65,
+      "source_bbox": [
+        27,
+        1132,
+        174,
+        1367
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        68,
+        80
+      ],
+      "visible_bbox": [
+        71,
+        84,
+        252,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 68,
+      "source_bbox": [
+        261,
+        1133,
+        410,
+        1367
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        73,
+        81
+      ],
+      "visible_bbox": [
+        77,
+        85,
+        259,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 66,
+      "source_bbox": [
+        490,
+        1132,
+        693,
+        1366
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        70,
+        81
+      ],
+      "visible_bbox": [
+        73,
+        84,
+        325,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 67,
+      "source_bbox": [
+        737,
+        1132,
+        885,
+        1366
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.2765957446808511,
+      "offset": [
+        64,
+        81
+      ],
+      "visible_bbox": [
+        68,
+        84,
+        250,
+        377
+      ]
+    }
+  ],
+  "secret_snack": [
+    {
+      "source": "extras-raw-v1.png",
+      "component": 70,
+      "source_bbox": [
+        20,
+        1373,
+        210,
+        1643
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.1363636363636365,
+      "offset": [
+        81,
+        73
+      ],
+      "visible_bbox": [
+        84,
+        76,
+        293,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 71,
+      "source_bbox": [
+        258,
+        1375,
+        427,
+        1643
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.1363636363636365,
+      "offset": [
+        89,
+        75
+      ],
+      "visible_bbox": [
+        92,
+        79,
+        277,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 72,
+      "source_bbox": [
+        489,
+        1375,
+        672,
+        1643
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.1363636363636365,
+      "offset": [
+        80,
+        75
+      ],
+      "visible_bbox": [
+        84,
+        78,
+        285,
+        376
+      ]
+    },
+    {
+      "source": "extras-raw-v1.png",
+      "component": 73,
+      "source_bbox": [
+        734,
+        1377,
+        915,
+        1643
+      ],
+      "source_atlas_scale": 1,
+      "shared_scale": 1.1363636363636365,
+      "offset": [
+        86,
+        77
+      ],
+      "visible_bbox": [
+        90,
+        81,
+        289,
+        375
+      ]
+    }
+  ]
+}

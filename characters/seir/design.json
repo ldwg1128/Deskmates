@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "seir",
+  "name": "세이르 (Seir)",
+  "analysis_source": "User-provided front/side character illustrations, expression grid and in-game SD references; canonical adaptation generated with built-in image_gen.",
+  "appearance": "Fair-skinned adult anime woman adapted into a soft-shaded chibi desktop pet.",
+  "hair": {
+    "color": "olive-gold / muted khaki",
+    "length": "calf length",
+    "shape": "straight bangs, half-up with long flowing strands"
+  },
+  "eyes": {
+    "color": "magenta / rose",
+    "shape": "large round anime eyes with highlights"
+  },
+  "face": "Rosy cheeks; shy/pouty neutral, expressive smiling and embarrassed variants.",
+  "outfit": [
+    "deep navy blazer with gold buttons",
+    "white ruffled blouse with dark neck ribbon",
+    "matching knee-length pencil skirt with modest slit",
+    "dark sheer tights",
+    "black closed-toe heels"
+  ],
+  "accessories": [
+    "large deep-purple bow with ribbon tails",
+    "pink lanyard and ID card",
+    "small black shoulder satchel with purple/pink bunny charm"
+  ],
+  "body_proportions": "Approximately 2.7 heads tall; canonical anatomy locked across poses.",
+  "palette": {
+    "hair": "#929059",
+    "bow": "#593382",
+    "suit": "#242e67",
+    "lanyard": "#e7a9c9",
+    "eyes": "#bf4187",
+    "bag": "#24232d"
+  },
+  "adaptation": "Hands remain available for interaction; the source umbrella is stowed with the satchel. Drones are reference scenery and are not separate gameplay objects.",
+  "review": "Canonical image visually compared with user-provided references; no inferred lore or in-image text instructions."
+}

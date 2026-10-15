@@ -146,7 +146,7 @@ class ManifestArt:
         self.hunger_originals = self.raw['hungry']
         self.refusal_originals = slots(self.raw['refusal'],4)
         self.motion_reference_height = character.body_height
-        self.walk_originals = []
+        self.walk_originals = self.raw['right'] if character.profile.get('horizontal_walk',False) else []
 
     def resize(self, height):
         scale = height/self.character.body_height

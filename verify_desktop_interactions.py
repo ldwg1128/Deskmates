@@ -21,9 +21,9 @@ class FakeWindows:
     def get(self,handle): return self.surface if self.surface and self.surface.handle==handle else None
 
 
-def run():
+def run(characters=('zenith','liberta'), output=Path('artifacts/interactions')):
     app=QApplication.instance() or QApplication([]); app.setQuitOnLastWindowClosed(False)
-    output=Path('artifacts/interactions'); output.mkdir(parents=True,exist_ok=True)
+    output=Path(output); output.mkdir(parents=True,exist_ok=True)
     far=QPoint(-10000,-10000)
     snapshots=[]
     with tempfile.TemporaryDirectory() as folder:
@@ -31,7 +31,7 @@ def run():
         pet.show(); app.processEvents()
         ctrl=pet.interactions
         ctrl.sleep_enabled=ctrl.rare_enabled=False
-        for character in ('zenith','liberta'):
+        for character in characters:
             pet.set_character(character)
             pet.screen_area=QRect(0,0,1600,1000)
             pet.anchor_x,pet.anchor_y=800,950; pet.x,pet.y=800,950

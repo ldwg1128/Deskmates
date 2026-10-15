@@ -1227,6 +1227,1498 @@
         "completion": 100.0
       }
     },
+    "seir": {
+      "name": "세이르 (Seir)",
+      "renderer": "manifest-v1",
+      "specs": [
+        {
+          "action_id": "idle",
+          "name": "대기",
+          "required": true,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "standing, breathing, blink",
+          "fps": 5.555555555555555,
+          "loop": "loop",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/idle-91214119d651.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": null,
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "right",
+          "name": "오른쪽 걷기",
+          "required": false,
+          "frame_count": 8,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "side walk, contact / passing / opposite contact / passing",
+          "fps": 9.523809523809524,
+          "loop": "loop",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/right-dbbe72c9f80b.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ],
+            [
+              1536,
+              0,
+              384,
+              384
+            ],
+            [
+              1920,
+              0,
+              384,
+              384
+            ],
+            [
+              2304,
+              0,
+              384,
+              384
+            ],
+            [
+              2688,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "left",
+          "name": "왼쪽 걷기",
+          "required": false,
+          "frame_count": 8,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "left",
+          "frame_order": "side walk left",
+          "fps": 9.523809523809524,
+          "loop": "loop",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/right-dbbe72c9f80b.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ],
+            [
+              1536,
+              0,
+              384,
+              384
+            ],
+            [
+              1920,
+              0,
+              384,
+              384
+            ],
+            [
+              2304,
+              0,
+              384,
+              384
+            ],
+            [
+              2688,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "wave",
+          "name": "인사",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "raise hand, wave, return",
+          "fps": 5.555555555555555,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/wave-cf2b6a6ac121.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "jump",
+          "name": "제자리 점프",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "crouch, rise, apex, descend, stand",
+          "fps": 6.666666666666667,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/jump-ca885ade363c.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "bow",
+          "name": "고개 숙이기",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "stand, bow, hold, return",
+          "fps": 5.88235294117647,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/bow-953ecc6cfe1a.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "shy",
+          "name": "수줍음",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hands near chest, shy expression",
+          "fps": 5.2631578947368425,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/shy-61ffbd166989.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "think",
+          "name": "생각하기",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hand near chin, thinking",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/think-6d55f7430431.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "tilt",
+          "name": "고개 기울이기",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "head tilt, return",
+          "fps": 5.2631578947368425,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/tilt-ff519724abb9.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Existing state duration is retained. Walking on edges and Liberta walking use distance cadence, not time FPS."
+        },
+        {
+          "action_id": "hungry",
+          "name": "배고픔",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "hold stomach, rub stomach, hungry expression, return",
+          "fps": 2.2222222222222223,
+          "loop": "loop",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/hungry-401b43a6fbce.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "4*.45s; initial hunger6..10s then12..20s, scheduled at action boundary."
+        },
+        {
+          "action_id": "gaze",
+          "name": "커서 바라보기",
+          "required": false,
+          "frame_count": 16,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "clockwise from up, 16 directions",
+          "frame_order": "up then clockwise, 16 evenly spaced directions",
+          "fps": 0,
+          "loop": "loop",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/gaze-b28b96fedccb.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ],
+            [
+              1536,
+              0,
+              384,
+              384
+            ],
+            [
+              1920,
+              0,
+              384,
+              384
+            ],
+            [
+              2304,
+              0,
+              384,
+              384
+            ],
+            [
+              2688,
+              0,
+              384,
+              384
+            ],
+            [
+              3072,
+              0,
+              384,
+              384
+            ],
+            [
+              3456,
+              0,
+              384,
+              384
+            ],
+            [
+              3840,
+              0,
+              384,
+              384
+            ],
+            [
+              4224,
+              0,
+              384,
+              384
+            ],
+            [
+              4608,
+              0,
+              384,
+              384
+            ],
+            [
+              4992,
+              0,
+              384,
+              384
+            ],
+            [
+              5376,
+              0,
+              384,
+              384
+            ],
+            [
+              5760,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "16 directional slots clockwise from up; cursor selection, not time playback."
+        },
+        {
+          "action_id": "motion",
+          "name": "드래그·낙하·착지",
+          "required": false,
+          "frame_count": 6,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "inverted to upright",
+          "frame_order": "hanging inverted, tuck, extend, airborne upright, landing crouch, recover",
+          "fps": 0,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/motion-523ee26f7d34.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ],
+            [
+              1536,
+              0,
+              384,
+              384
+            ],
+            [
+              1920,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Physics phases: drag; falling progress <.16, <.48, <.84, >=.84; landing .48s: airborne <.06, crouch <.28, recover."
+        },
+        {
+          "action_id": "corner",
+          "name": "테두리 코너 점프",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "right, rotated by game",
+          "frame_order": "takeoff, airborne, landing, recover",
+          "fps": 6.666666666666667,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/corner-b4e84d1aef4d.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "Route corner .6s, four equally spaced phase slots; rotates inward 90 degrees."
+        },
+        {
+          "action_id": "feeding",
+          "name": "빵 받기·먹기·만족",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "catch bread, bite, chew, satisfied",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/feeding-a6d217664242.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "feed_drop .65s (look until .85 progress), catch frame0; eat1.6s alternating1/2 each.22s; happy frame3 .85s."
+        },
+        {
+          "action_id": "refusal",
+          "name": "빵 거절",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "accept bread, shake head left, shake head right, offer bread back",
+          "fps": 4.545454545454546,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/refusal-71ba87972369.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "2.8s: shake frames1/2 every.22s until1.3s; offer frame3 for remaining1.5s."
+        },
+        {
+          "action_id": "window_sit",
+          "name": "Sit on a window ledge",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "feet dangling, left leg swing, right leg swing, settle",
+          "fps": 5,
+          "loop": "loop",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": [
+            192,
+            296
+          ],
+          "file": "animations/window_sit-41a1f1e37f2f.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "ledge_struggle",
+          "name": "Hold window corner",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "left",
+          "frame_order": "left-facing side profile, hands fixed to vertical window edge at face height, body outside to the right; strained grip, bent legs kick backward, slip and tighten grip, flail; mirror for the left edge",
+          "fps": 8,
+          "loop": "loop",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": [
+            64,
+            164
+          ],
+          "file": "animations/ledge_struggle-0d09f31dd96d.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "sleep",
+          "name": "Sleep",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "curl up asleep, breathe in, breathe out, rest",
+          "fps": 2,
+          "loop": "loop",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/sleep-290d7398ddba.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "wake_annoyed",
+          "name": "Annoyed wake",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "rub eye, yawn, frown, wake",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/wake_annoyed-b0d714c3d767.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "shy",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "cursor_grab",
+          "name": "Catch the cursor",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "reach at waist height, close hands, grasp, hold",
+          "fps": 5,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/cursor_grab-66ca33d3478f.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "wave",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "kick",
+          "name": "Kick a ball",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "prepare, lift knee, extend kicking foot, recover",
+          "fps": 6,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/kick-b964b74184fe.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "jump",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "secret_snack",
+          "name": "Secret snack",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "take cookie from pocket, check nobody sees, bite, satisfied",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/secret_snack-0764b859eb7c.png",
+          "files": null,
+          "rects": [
+            [
+              0,
+              0,
+              384,
+              384
+            ],
+            [
+              384,
+              0,
+              384,
+              384
+            ],
+            [
+              768,
+              0,
+              384,
+              384
+            ],
+            [
+              1152,
+              0,
+              384,
+              384
+            ]
+          ],
+          "grid": null,
+          "fallback": "think",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        }
+      ],
+      "validation": {
+        "errors": [],
+        "warnings": [],
+        "missing": [],
+        "completion": 100.0
+      }
+    },
     "zenith": {
       "name": "제니스 (Zenith)",
       "renderer": "legacy-v1",

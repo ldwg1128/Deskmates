@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen",
+  "canonical": "exec-6531e21e-7efd-4551-b11a-dae88533c3e8.png",
+  "source_directory": "C:/Users/DongWoo Lee/.codex/generated_images/01a138f9-f2ec-7333-bf78-382ae9b75cff",
+  "atlases": {
+    "basic": "exec-ea541ba5-9497-4305-8b3b-42477f15c316.png",
+    "walk": "exec-977e5c04-46e3-4b43-a3c9-0f8094f589dc.png",
+    "food": "exec-fdb1e2cf-9e11-4785-bd5d-832a12587691.png",
+    "gaze": "exec-53c7873f-e7a0-4119-bf22-b6bcb9fa6ac1.png",
+    "motion": "exec-de0fe2ae-b171-47e1-a4ee-e265a3b1c19d.png",
+    "corner": "exec-fd5b8c70-efca-46ee-8f6c-0a15e93beb3a.png",
+    "extras": "exec-338ae3c8-1466-45a5-a00e-034a42aba910.png"
+  },
+  "repairs": {
+    "motion-clean-v2.png": "exec-45a12f57-ca25-48a8-b7a6-7e969043cf28.png",
+    "food-repairs-v2.png": "exec-f76ccfcb-3146-4dea-a3c9-8028daaeb89d.png",
+    "hungry-v3.png": "exec-3396fd3d-34a3-4b78-bbb4-53a685e76a2a.png",
+    "feeding-v3.png": "exec-d7edd81f-e6cb-4584-aa18-8b5f6338edf8.png",
+    "refusal-v3.png": "exec-48d00673-9bd6-4d49-9199-5a5c98968c24.png",
+    "gaze-raw-v2.png": "exec-56077cc2-329d-4a21-b54f-29c801328871.png"
+  }
+}
