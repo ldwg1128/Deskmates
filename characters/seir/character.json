@@ -1179,55 +1179,43 @@
       }
     },
     "kick": {
+      "file": "animations/kick-v2.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
       "frame_count": 4,
-      "fps": 6,
-      "loop": "once",
-      "anchor": [
-        192,
-        376
+      "image_size": [
+        1536,
+        384
       ],
       "cell": [
         384,
         384
       ],
-      "file": "animations/kick-b964b74184fe.png",
-      "rects": [
-        [
-          0,
-          0,
-          384,
-          384
-        ],
-        [
-          384,
-          0,
-          384,
-          384
-        ],
-        [
-          768,
-          0,
-          384,
-          384
-        ],
-        [
-          1152,
-          0,
-          384,
-          384
-        ]
+      "body_height": 300,
+      "anchor": [
+        192,
+        376
       ],
-      "image_size": [
-        1536,
-        384
-      ],
+      "fps": 6,
+      "loop": "once",
       "crop": "none",
+      "clean_alpha": true,
+      "impact_frame": 2,
       "review": {
         "status": "approved",
-        "image_sha256": "b964b74184fe5ce5cc93e04bff5ac5576750e92c30ecdc5cf45d18cae3da0256",
+        "image_sha256": "74f8a025f1cc54298b603c90cef8ca71aca90b55664705e9df668cd08f220834",
         "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
-        "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
-      }
+        "note": "Reviewed against canonical and idle; one anatomical scale and fixed support shoe. Raw atlas retained in artwork/ball; packing coordinates in ball-packing-layout-v1.json."
+      },
+      "contact_reach": 0.31
     },
     "secret_snack": {
       "frame_count": 4,
@@ -1278,6 +1266,43 @@
         "image_sha256": "0764b859eb7cd652a9875e1f728c17870ce3b9c4ec6a6aba90a87b92fef1f4ae",
         "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
         "note": "Reviewed Seir canonical identity, source sheet, fixed anatomical action scale and feet/contact placement. New generated art, not legacy replacements; see docs/seir-character.md and game previews."
+      }
+    },
+    "head_bump": {
+      "file": "animations/head_bump-v1.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1536,
+        384
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "body_height": 300,
+      "anchor": [
+        192,
+        376
+      ],
+      "fps": 4,
+      "loop": "once",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "18d397d90546cfd00427c183a6875327e8d49cbe57faf9bce839d31003b26dda",
+        "canonical_sha256": "5373b183138b572cfb11417916ffcc123a455d4925d4a8d21591e7f7276b545a",
+        "note": "Reviewed against canonical and idle; one anatomical scale and fixed support shoe. Raw atlas retained in artwork/ball; packing coordinates in ball-packing-layout-v1.json."
       }
     }
   },

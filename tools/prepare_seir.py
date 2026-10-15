@@ -97,6 +97,9 @@ def main():
     work=PACK/'sources/packed-v1'; work.mkdir(exist_ok=True)
     provenance={}
     for key,frames in actions.items():
+        # Keep the separately reviewed ball transition when repacking old atlases.
+        if key=='kick' and c.data['animations'].get(key,{}).get('file')=='animations/kick-v2.png':
+            continue
         scale=scales[key]; sheet=Image.new('RGBA',(CELL[0]*len(frames),CELL[1])); placements=[]
         for i,f in enumerate(frames):
             original=f['image']; x0,y0,_,_=f['box']; local=feet(original)

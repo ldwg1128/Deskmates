@@ -135,12 +135,21 @@ def run(characters=('zenith','liberta'), output=Path('artifacts/interactions')):
             QTest.mouseMove(ball,QPoint(38,18))
             QTest.mouseRelease(ball,Qt.MouseButton.LeftButton,pos=QPoint(18,18))
             assert not ball.dragging and ball.pos()!=position
-            feet=ctrl.feet(); ball.move(round(feet.x()+pet.body_height*.4-18),round(feet.y()-36))
+            pet.screen_area=ball.area()
+            idle=pet.frames['idle'][0]; ground=QRegion(idle.mask()).boundingRect().bottom()+1
+            pet.anchor_y=pet.y=pet.screen_area.bottom()-2+idle.height()-ground
+            pet.position_window(); pet.update_frame()
+            feet=ctrl.feet(); ball.motion.release(feet.x()+ctrl._ball_reach(),pet.screen_area.bottom()+1-ball.inset)
+            ball.motion.grounded=True; ball.place()
             ball.age=2; pet.advance(.1,far)
             assert ctrl.kind=='kick'
             snapshots.append((f'{character}: kick',pet.pixmap.copy()))
-            pet.advance(.31,far); assert ball.flying
-            pet.advance(1,far); assert not ball.isVisible() and ctrl.kind is None
+            pet.advance(ctrl.kick_impact_time()+.01,far); assert ball.flying
+            pet.advance(1,far)
+            for _ in range(30):
+                if ctrl.kind is None: break
+                pet.advance(.1,far)
+            assert not ball.isVisible() and ctrl.kind is None
             # Rare snack is unavailable when fed/disabled/paused; count once only.
             pet.appetites[character]=Appetite(0,0,pet.digest_seconds)
             ctrl.rare_enabled=True; ctrl.next_snack=0; ctrl.clock=1000; pet.near_cursor=False

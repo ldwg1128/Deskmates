@@ -1,6 +1,6 @@
 # 기존 캐릭터·애니메이션 분석
 
-행동 리소스 22개, 게임 상태/바인딩 32개. 자동 AST 검사에서 미등록 상태: [].
+행동 리소스 23개, 게임 상태/바인딩 34개. 자동 AST 검사에서 미등록 상태: [].
 
 파일명은 기존 assets/{id}-*.png를 보존하고 manifest가 연결한다. 새 팩은 characters/{id}/animations/{action}-{hash}.png를 사용한다.
 
@@ -51,6 +51,7 @@
 | cursor_grab | 4 | 5 | once | [4, 1] | none |
 | kick | 4 | 6 | once | [4, 1] | none |
 | secret_snack | 4 | 4 | once | [4, 1] | none |
+| head_bump | 4 | 4 | once | [4, 1] | none |
 
 ## 세이르 (Seir)
 원본 신체 높이 기준: 300px. 렌더러: manifest-v1.
@@ -77,8 +78,9 @@
 | sleep | 4 | 2 | loop | [[0, 0, 384, 384], [384, 0, 384, 384], [768, 0, 384, 384], [1152, 0, 384, 384]] | none |
 | wake_annoyed | 4 | 4 | once | [[0, 0, 384, 384], [384, 0, 384, 384], [768, 0, 384, 384], [1152, 0, 384, 384]] | none |
 | cursor_grab | 4 | 5 | once | [[0, 0, 384, 384], [384, 0, 384, 384], [768, 0, 384, 384], [1152, 0, 384, 384]] | none |
-| kick | 4 | 6 | once | [[0, 0, 384, 384], [384, 0, 384, 384], [768, 0, 384, 384], [1152, 0, 384, 384]] | none |
+| kick | 4 | 6 | once | [4, 1] | none |
 | secret_snack | 4 | 4 | once | [[0, 0, 384, 384], [384, 0, 384, 384], [768, 0, 384, 384], [1152, 0, 384, 384]] | none |
+| head_bump | 4 | 4 | once | [4, 1] | none |
 
 ## 제니스 (Zenith)
 원본 신체 높이 기준: 198px. 렌더러: legacy-v1.
@@ -107,3 +109,4 @@
 | cursor_grab | 4 | 5 | once | [4, 1] | none |
 | kick | 4 | 6 | once | [4, 1] | none |
 | secret_snack | 4 | 4 | once | [4, 1] | none |
+| head_bump | 4 | 4 | once | [4, 1] | none |

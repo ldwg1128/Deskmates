@@ -19,7 +19,7 @@ def main():
     qa=audit(character)
     assert not qa['errors'] and not qa['missing'] and qa['completion']==100
     assert set(qa['actions'])==set(CATALOG['actions'])
-    assert sum(x['frame_count'] for x in qa['actions'].values())==110
+    assert sum(x['frame_count'] for x in qa['actions'].values())==114
     left,right=extract_frames(character,'left'),extract_frames(character,'right')
     assert len(left)==len(right)==8
     for a,b in zip(left,right):
@@ -100,7 +100,7 @@ def main():
     painter.end(); sheet.save(str(output/'game-preview.png'))
     from verify_desktop_interactions import run
     run(('seir',),output/'desktop-play')
-    print('PASS: Seir discovered and selectable; 22 actions/110 frames, mirrored walking, 4 sizes, all game states, drag/fall/landing, both edge directions and settings restore.')
+    print('PASS: Seir discovered and selectable; 23 actions/114 frames, mirrored walking, 4 sizes, all game states, drag/fall/landing, both edge directions and settings restore.')
 
 
 if __name__=='__main__': main()

@@ -473,7 +473,8 @@
       "runtime_states": [
         "kick"
       ],
-      "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+      "timing": "0.95 seconds: idle 0-12%, four poses 12-84%, idle 84-100%; impulse on impact_frame, only within actual contact distance.",
+      "impact_frame": 2
     },
     "secret_snack": {
       "name": "Secret snack",
@@ -496,6 +497,28 @@
         "secret_snack"
       ],
       "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+    },
+    "head_bump": {
+      "name": "Ball on head",
+      "frames": 4,
+      "fps": 4,
+      "loop": "once",
+      "direction": "front",
+      "description": "flinch, hold head surprised, rub sore head, lower hands and recover; feet stay on one ground line",
+      "required": false,
+      "fallback": "wake_annoyed",
+      "cell": [
+        384,
+        384
+      ],
+      "anchor": [
+        192,
+        376
+      ],
+      "runtime_states": [
+        "head_bump"
+      ],
+      "timing": "Physical downward ball contact; finish even when roaming is paused."
     }
   },
   "bindings": {
@@ -530,6 +553,8 @@
     "secret_snack": "secret_snack",
     "interaction_jump": "jump",
     "interaction_fall": "motion",
-    "interaction_land": "motion"
+    "interaction_land": "motion",
+    "head_bump": "head_bump",
+    "ball_return": "right"
   }
 }

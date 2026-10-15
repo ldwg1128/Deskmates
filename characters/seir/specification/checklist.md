@@ -1,6 +1,6 @@
 # 세이르 (Seir): 제작 체크리스트
 
-리소스 연결: 22/22 (100.0%). 파일 유효성은 validate로 별도 검사한다.
+리소스 연결: 23/23 (100.0%). 파일 유효성은 validate로 별도 검사한다.
 
 Canonical Reference: canonical.png
 
@@ -26,8 +26,9 @@ Canonical Reference: canonical.png
 | [x] | Sleep / sleep | 선택 | 4 | [[384, 384]] | [384, 384] | 2 | loop | front | animations/sleep-290d7398ddba.png |
 | [x] | Annoyed wake / wake_annoyed | 선택 | 4 | [[384, 384]] | [384, 384] | 4 | once | front | animations/wake_annoyed-b0d714c3d767.png |
 | [x] | Catch the cursor / cursor_grab | 선택 | 4 | [[384, 384]] | [384, 384] | 5 | once | right | animations/cursor_grab-66ca33d3478f.png |
-| [x] | Kick a ball / kick | 선택 | 4 | [[384, 384]] | [384, 384] | 6 | once | right | animations/kick-b964b74184fe.png |
+| [x] | Kick a ball / kick | 선택 | 4 | [[384, 384]] | [384, 384] | 6 | once | right | animations/kick-v2.png |
 | [x] | Secret snack / secret_snack | 선택 | 4 | [[384, 384]] | [384, 384] | 4 | once | front | animations/secret_snack-0764b859eb7c.png |
+| [x] | Ball on head / head_bump | 선택 | 4 | [[384, 384]] | [384, 384] | 4 | once | front | animations/head_bump-v1.png |
 
 ## idle
 standing, breathing, blink
@@ -111,8 +112,12 @@ reach at waist height, close hands, grasp, hold
 
 ## kick
 prepare, lift knee, extend kicking foot, recover
-기준 위치: [192, 376]; 접촉점: None; fallback: jump; DesktopInteractions owns scheduling and completion; explicit user input retains priority.
+기준 위치: [192, 376]; 접촉점: None; fallback: jump; 0.95 seconds: idle 0-12%, four poses 12-84%, idle 84-100%; impulse on impact_frame, only within actual contact distance.
 
 ## secret_snack
 take cookie from pocket, check nobody sees, bite, satisfied
 기준 위치: [192, 376]; 접촉점: None; fallback: think; DesktopInteractions owns scheduling and completion; explicit user input retains priority.
+
+## head_bump
+flinch, hold head surprised, rub sore head, lower hands and recover; feet stay on one ground line
+기준 위치: [192, 376]; 접촉점: None; fallback: wake_annoyed; Physical downward ball contact; finish even when roaming is paused.

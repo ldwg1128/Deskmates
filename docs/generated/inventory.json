@@ -1,7 +1,8 @@
 {
-  "catalog_actions": 22,
+  "catalog_actions": 23,
   "states": [
     "ball_approach",
+    "ball_return",
     "bow",
     "cursor_approach",
     "cursor_grab",
@@ -13,6 +14,7 @@
     "feed_refuse",
     "flip",
     "gaze",
+    "head_bump",
     "hungry",
     "idle",
     "interaction_fall",
@@ -66,7 +68,9 @@
     "secret_snack": "secret_snack",
     "interaction_jump": "jump",
     "interaction_fall": "motion",
-    "interaction_land": "motion"
+    "interaction_land": "motion",
+    "head_bump": "head_bump",
+    "ball_return": "right"
   },
   "unmapped_states": [],
   "characters": {
@@ -1147,8 +1151,8 @@
           "required": false,
           "frame_count": 4,
           "cell": [
-            256,
-            320
+            384,
+            384
           ],
           "recommended_resolution": [
             256,
@@ -1156,8 +1160,8 @@
           ],
           "source_cells_before_alpha_crop": [
             [
-              256,
-              320
+              384,
+              384
             ]
           ],
           "direction": "right",
@@ -1165,11 +1169,11 @@
           "fps": 6,
           "loop": "once",
           "anchor": [
-            128,
-            300
+            192,
+            376
           ],
           "support_anchor": null,
-          "file": "animations/kick-v1.png",
+          "file": "animations/kick-v2.png",
           "files": null,
           "rects": null,
           "grid": [
@@ -1178,7 +1182,7 @@
           ],
           "fallback": "jump",
           "complete": true,
-          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+          "timing": "0.95 seconds: idle 0-12%, four poses 12-84%, idle 84-100%; impulse on impact_frame, only within actual contact distance."
         },
         {
           "action_id": "secret_snack",
@@ -1218,6 +1222,45 @@
           "fallback": "think",
           "complete": true,
           "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "head_bump",
+          "name": "Ball on head",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            384,
+            384
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "flinch, hold head surprised, rub sore head, lower hands and recover; feet stay on one ground line",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/head_bump-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "wake_annoyed",
+          "complete": true,
+          "timing": "Physical downward ball contact; finish even when roaming is paused."
         }
       ],
       "validation": {
@@ -2617,38 +2660,16 @@
             376
           ],
           "support_anchor": null,
-          "file": "animations/kick-b964b74184fe.png",
+          "file": "animations/kick-v2.png",
           "files": null,
-          "rects": [
-            [
-              0,
-              0,
-              384,
-              384
-            ],
-            [
-              384,
-              0,
-              384,
-              384
-            ],
-            [
-              768,
-              0,
-              384,
-              384
-            ],
-            [
-              1152,
-              0,
-              384,
-              384
-            ]
+          "rects": null,
+          "grid": [
+            4,
+            1
           ],
-          "grid": null,
           "fallback": "jump",
           "complete": true,
-          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+          "timing": "0.95 seconds: idle 0-12%, four poses 12-84%, idle 84-100%; impulse on impact_frame, only within actual contact distance."
         },
         {
           "action_id": "secret_snack",
@@ -2710,6 +2731,45 @@
           "fallback": "think",
           "complete": true,
           "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "head_bump",
+          "name": "Ball on head",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            384,
+            384
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "flinch, hold head surprised, rub sore head, lower hands and recover; feet stay on one ground line",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/head_bump-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "wake_annoyed",
+          "complete": true,
+          "timing": "Physical downward ball contact; finish even when roaming is paused."
         }
       ],
       "validation": {
@@ -3888,8 +3948,8 @@
           "required": false,
           "frame_count": 4,
           "cell": [
-            256,
-            320
+            384,
+            384
           ],
           "recommended_resolution": [
             256,
@@ -3897,8 +3957,8 @@
           ],
           "source_cells_before_alpha_crop": [
             [
-              256,
-              320
+              384,
+              384
             ]
           ],
           "direction": "right",
@@ -3906,11 +3966,11 @@
           "fps": 6,
           "loop": "once",
           "anchor": [
-            128,
-            300
+            192,
+            376
           ],
           "support_anchor": null,
-          "file": "animations/kick-v1.png",
+          "file": "animations/kick-v2.png",
           "files": null,
           "rects": null,
           "grid": [
@@ -3919,7 +3979,7 @@
           ],
           "fallback": "jump",
           "complete": true,
-          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+          "timing": "0.95 seconds: idle 0-12%, four poses 12-84%, idle 84-100%; impulse on impact_frame, only within actual contact distance."
         },
         {
           "action_id": "secret_snack",
@@ -3959,6 +4019,45 @@
           "fallback": "think",
           "complete": true,
           "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "head_bump",
+          "name": "Ball on head",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            384,
+            384
+          ],
+          "recommended_resolution": [
+            384,
+            384
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              384,
+              384
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "flinch, hold head surprised, rub sore head, lower hands and recover; feet stay on one ground line",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            192,
+            376
+          ],
+          "support_anchor": null,
+          "file": "animations/head_bump-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "wake_annoyed",
+          "complete": true,
+          "timing": "Physical downward ball contact; finish even when roaming is paused."
         }
       ],
       "validation": {

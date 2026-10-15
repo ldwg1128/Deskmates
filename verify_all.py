@@ -13,7 +13,7 @@ def main():
     root=Path(__file__).resolve().parent
     scripts=['verify_resource_regression.py','verify_pet.py','verify_edge.py',
              'verify_feeding.py','verify_appetite.py','verify_tools.py','verify_settings.py',
-             'verify_character_pipeline.py','verify_autogen.py','verify_desktop_interactions.py','verify_seir.py']
+             'verify_character_pipeline.py','verify_autogen.py','verify_desktop_interactions.py','verify_ball.py','verify_seir.py']
     if sys.platform=='win32': scripts.append('verify_rendering.py')
     report={'python':platform.python_version(),'qt':qVersion(),'platform':platform.platform(),'checks':[]}
     env={**os.environ,'PYTHONUTF8':'1'}

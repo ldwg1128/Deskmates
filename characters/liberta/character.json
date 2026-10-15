@@ -851,7 +851,7 @@
       }
     },
     "kick": {
-      "file": "animations/kick-v1.png",
+      "file": "animations/kick-v2.png",
       "grid": [
         4,
         1
@@ -864,28 +864,30 @@
       ],
       "frame_count": 4,
       "image_size": [
-        1024,
-        320
+        1536,
+        384
       ],
       "cell": [
-        256,
-        320
+        384,
+        384
       ],
-      "body_height": 266,
+      "body_height": 300,
       "anchor": [
-        128,
-        300
+        192,
+        376
       ],
       "fps": 6,
       "loop": "once",
       "crop": "none",
       "clean_alpha": true,
+      "impact_frame": 2,
       "review": {
         "status": "approved",
-        "image_sha256": "2b104ca997adda70c2d37f01ad632ef476a58d91030c5ab551595a4d5fdf897d",
+        "image_sha256": "52fbb281d204b7f43d74452c1151fcaac375f355425b01b9b8777406a4ce8abb",
         "canonical_sha256": "6102a6c15b97651aa601e51cc876182d771fb0edf571c278120155f40ff5eb98",
-        "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
-      }
+        "note": "Reviewed against canonical and idle; one anatomical scale and fixed support shoe. Raw atlas retained in artwork/ball; packing coordinates in ball-packing-layout-v1.json."
+      },
+      "contact_reach": 0.33
     },
     "secret_snack": {
       "file": "animations/secret_snack-v1.png",
@@ -922,6 +924,43 @@
         "image_sha256": "7aded0ae6c9dcd6cfd1b8697d4cecfe9cf164ee5f40a7308e801d82f551f1e18",
         "canonical_sha256": "6102a6c15b97651aa601e51cc876182d771fb0edf571c278120155f40ff5eb98",
         "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
+      }
+    },
+    "head_bump": {
+      "file": "animations/head_bump-v1.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1536,
+        384
+      ],
+      "cell": [
+        384,
+        384
+      ],
+      "body_height": 300,
+      "anchor": [
+        192,
+        376
+      ],
+      "fps": 4,
+      "loop": "once",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "c2c7392536963cc661f7c759234a16e4f69ec88ef4467733ac2bc47d3f6e0572",
+        "canonical_sha256": "6102a6c15b97651aa601e51cc876182d771fb0edf571c278120155f40ff5eb98",
+        "note": "Reviewed against canonical and idle; one anatomical scale and fixed support shoe. Raw atlas retained in artwork/ball; packing coordinates in ball-packing-layout-v1.json."
       }
     }
   },
