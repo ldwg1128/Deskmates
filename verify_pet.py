@@ -91,7 +91,13 @@ def run_character(character_id):
             assert pet.screen_area.left() <= pet.pos().x()
             assert pet.pos().x() + pet.width() <= pet.screen_area.right() + 1
         assert max(positions) - min(positions) > 100
-        assert {"left", "right", "gaze", "jump", "wave"} <= visited, visited
+        assert {"left", "right", "gaze"} <= visited, visited
+        # A long horizontal walk yields fewer random rest gestures. Verify
+        # each one directly instead of relying on its selection in 120 s.
+        for gesture in ("wave", "jump"):
+            pet.enter_state(gesture)
+            pet.advance(1 / 30, QPoint(-500, 400))
+            assert pet.frame_key[0] == gesture
         head_y = round(pet.y - pet.frames["idle"][0].height() * 0.57)
         near_right = QPoint(round(pet.x + 50), head_y)
         pet.start_walk()

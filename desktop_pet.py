@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
+from ctypes import wintypes
 import json
 import logging
 import math
@@ -172,6 +174,8 @@ class DesktopPet(QWidget):
         self.state = "idle"
         self.state_time = 0.0
         self.state_duration = 1.5
+        self.jump_cycles = 1
+        self.jump_cycle_duration = 0.0
         self.gaze_elapsed = 0.0
         self.next_gaze = self.rng.uniform(5, 10)
         self.near_cursor = False
@@ -543,6 +547,10 @@ class DesktopPet(QWidget):
         if duration is None:
             _, count, interval = self.clip(state)
             duration = count * interval
+        self.jump_cycles = self.rng.choice((2, 3)) if state == "jump" else 1
+        self.jump_cycle_duration = duration if state == "jump" else 0.0
+        if state == "jump":
+            duration *= self.jump_cycles
         self.state_duration = duration
         self.frame_key = None
         self.update_frame()
@@ -559,8 +567,9 @@ class DesktopPet(QWidget):
         left, right, top, bottom = self.bounds()
         choices = [self.rng.uniform(left, right) for _ in range(5)]
         tx = max(choices, key=lambda candidate: abs(candidate - self.x))
-        ty = (clamp(self.y, top, bottom) if self.walk_originals
-              else self.rng.uniform(top, bottom))
+        # A left/right walking pose belongs on one horizontal floor. The
+        # previous random Y target made some characters drift diagonally.
+        ty = clamp(self.y, top, bottom)
         self.target = (tx, ty)
         self.enter_state("right" if tx >= self.x else "left", 15)
 
@@ -914,7 +923,9 @@ class DesktopPet(QWidget):
                 count = len(self.frames[state])
                 index = int(self.walk_distance / (self.body_height * 0.4) * count) % count
             else:
-                index = playback_index(self.character, state, self.state_time, count)
+                elapsed = (self.state_time % self.jump_cycle_duration
+                           if state == "jump" and self.jump_cycle_duration else self.state_time)
+                index = playback_index(self.character, state, elapsed, count)
         key = (state, index)
         if key != self.frame_key:
             self.frame_key = key
@@ -956,7 +967,9 @@ class DesktopPet(QWidget):
                 index = int(self.walk_distance/(self.body_height*0.4)*len(self.frames[state])) % len(self.frames[state])
             else:
                 _, count, interval = self.clip(state)
-                index = playback_index(self.character, state, self.state_time, count)
+                elapsed = (self.state_time % self.jump_cycle_duration
+                           if state == "jump" and self.jump_cycle_duration else self.state_time)
+                index = playback_index(self.character, state, elapsed, count)
             sprite = self.frames[state][index]
             foot_x = sprite.width()/2
             ground = QRegion(self.frames["idle"][0].mask()).boundingRect().bottom()+1
@@ -1209,6 +1222,27 @@ class DesktopPet(QWidget):
             logging.exception("Could not launch Windows tool %s", tool_id)
             self.tray.showMessage(APP_NAME, f"{label}를 실행할 수 없습니다. Windows에 설치되어 있는지 확인해 주세요.",
                                   QSystemTrayIcon.MessageIcon.Warning, 4000)
+        finally:
+            # A newly opened app (especially a Store app) may appear after
+            # this menu closes. Reassert the pet's topmost place without
+            # taking keyboard focus from the launched tool.
+            for delay in (0, 300, 1000, 2500):
+                QTimer.singleShot(delay, self.restore_on_top)
+
+    def restore_on_top(self):
+        if not self.isVisible() or self.menu_open or QApplication.activeModalWidget() is not None:
+            return
+        if sys.platform != "win32":
+            self.raise_()
+            return
+        user = ctypes.WinDLL("user32", use_last_error=True)
+        user.SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, ctypes.c_int,
+                                     ctypes.c_int, ctypes.c_int, ctypes.c_int, wintypes.UINT]
+        user.SetWindowPos.restype = wintypes.BOOL
+        # HWND_TOPMOST; preserve the tool window's foreground/focus and size.
+        if not user.SetWindowPos(int(self.winId()), wintypes.HWND(-1), 0, 0, 0, 0,
+                                 0x0001 | 0x0002 | 0x0010 | 0x0200):
+            logging.warning("Could not restore pet above opened tool: %s", ctypes.get_last_error())
 
     def open_behavior_settings(self):
         self.interactions.activity()
