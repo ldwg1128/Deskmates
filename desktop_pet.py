@@ -14,7 +14,7 @@ from dataclasses import dataclass
 
 from edge_path import EdgeRoute
 
-from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QSignalBlocker, QStandardPaths, Qt, QTimer
+from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QSize, QSignalBlocker, QStandardPaths, Qt, QTimer
 from PySide6.QtGui import QActionGroup, QCursor, QIcon, QImage, QPainter, QPixmap, QRegion, QTransform
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QDialogButtonBox,
                               QDoubleSpinBox, QFormLayout, QLabel, QMenu, QPushButton,
@@ -81,6 +81,7 @@ SPEED_PRESETS = ((28, "느긋하게"), (46, "보통"), (75, "활발하게"))
 WINDOWS_TOOLS = {"notepad": ("메모장", "notepad.exe"),
                  "paint": ("그림판", "mspaint.exe"),
                  "calculator": ("계산기", "calc.exe")}
+FEED_STATES = ("feed_drop", "feed_eat", "feed_happy")
 
 
 def resource_path(name: str) -> Path:
@@ -94,6 +95,54 @@ def clamp(value: float, low: float, high: float) -> float:
 def gaze_index(dx: float, dy: float) -> int:
     """The supplied look row is clockwise: up, right, down, left."""
     return round(math.atan2(dx, -dy) / (2 * math.pi) * 16) % 16
+
+
+def load_feeding_art(name: str) -> QPixmap:
+    """Discard invisible generation residue before sprite bounds/hit testing."""
+    image = QImage(str(resource_path(name))).convertToFormat(QImage.Format.Format_RGBA8888)
+    if image.isNull():
+        raise ValueError(f"빵 주기 이미지를 불러올 수 없습니다: {name}")
+    pixels = memoryview(image.bits())
+    for offset in range(3, image.sizeInBytes(), 4):
+        if pixels[offset] < 32:
+            pixels[offset] = 0
+    return QPixmap.fromImage(image)
+
+
+def standing_feet(sprite: QPixmap) -> QPointF:
+    """Locate the midpoint of both shoes and the floor of a standing pose."""
+    image = sprite.toImage().convertToFormat(QImage.Format.Format_RGBA8888)
+    pixels = memoryview(image.constBits())
+    stride = image.bytesPerLine()
+    for bottom in range(image.height(), 0, -1):
+        if any(pixels[(bottom-1)*stride+x*4+3] >= 128 for x in range(image.width())):
+            break
+    else:
+        raise ValueError("서 있는 캐릭터의 발 위치를 찾을 수 없습니다.")
+    top = next(y for y in range(bottom)
+               if any(pixels[y*stride+x*4+3] >= 128 for x in range(image.width())))
+    shoe_band = max(2, round((bottom-top)*0.08))
+    xs = [x for y in range(max(0, bottom-shoe_band), bottom) for x in range(image.width())
+          if pixels[y*stride+x*4+3] >= 128]
+    return QPointF((min(xs)+max(xs)+1)/2, bottom)
+
+
+class FallingBread(QWidget):
+    """A tiny visual-only window; falling food never takes desktop clicks."""
+
+    def __init__(self, pet, sprite):
+        super().__init__(pet, Qt.WindowType.Tool | Qt.WindowType.FramelessWindowHint
+                         | Qt.WindowType.WindowStaysOnTopHint
+                         | Qt.WindowType.WindowDoesNotAcceptFocus
+                         | Qt.WindowType.WindowTransparentForInput)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        self.sprite = sprite
+        self.setFixedSize(sprite.size())
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.drawPixmap(0, 0, self.sprite)
 
 
 class DesktopPet(QWidget):
@@ -113,6 +162,11 @@ class DesktopPet(QWidget):
         self.stationary = bool(self.settings.get("stationary", False))
         self.click_through = bool(self.settings.get("click_through", False))
         self.show_windows_tools = bool(self.settings.get("show_windows_tools", False))
+        self.feeding_enabled = bool(self.settings.get("feeding_enabled", True))
+        self.feed_hover = 0.0
+        self.feed_cooldown = 0.0
+        self.feed_start = QPointF()
+        self.feed_end = QPointF()
         self.roam_mode = self.settings.get("roam_mode", "free")
         if self.roam_mode not in ("free", "edge"):
             self.roam_mode = "free"
@@ -181,6 +235,32 @@ class DesktopPet(QWidget):
         self.set_size(self.body_height, save=False)
         self.anchor_x = self.x
         self.anchor_y = self.y - self.height()/2 if self.roam_mode == "edge" else self.y
+
+        bread = load_feeding_art("assets/bread.png")
+        bread = bread.copy(QRegion(bread.mask()).boundingRect())
+        bread = bread.scaled(30, 30, Qt.AspectRatioMode.KeepAspectRatio,
+                             Qt.TransformationMode.SmoothTransformation)
+        self.bread_button = QToolButton(self)
+        self.bread_button.setWindowFlags(Qt.WindowType.Tool | Qt.WindowType.FramelessWindowHint
+                                        | Qt.WindowType.WindowStaysOnTopHint
+                                        | Qt.WindowType.WindowDoesNotAcceptFocus)
+        self.bread_button.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        self.bread_button.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.bread_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.bread_button.setFixedSize(44, 44)
+        self.bread_button.setIcon(QIcon(bread))
+        self.bread_button.setIconSize(QSize(30, 30))
+        self.bread_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.bread_button.setToolTip("빵 주기")
+        self.bread_button.setAccessibleName("빵 주기")
+        self.bread_button.setStyleSheet(
+            "QToolButton { background: #fff3d5; border: 2px solid #c79652; border-radius: 16px; }"
+            "QToolButton:hover { background: #ffe1a0; border-color: #99662c; }"
+            "QToolButton:pressed { background: #f5c975; }")
+        self.bread_button.clicked.connect(self.start_feeding)
+        self.bread_button.hide()
+        self.falling_bread = FallingBread(self, bread)
+        self.falling_bread.hide()
 
         icon = QIcon(self.originals["idle"][0])
         self.setWindowIcon(icon)
@@ -277,6 +357,19 @@ class DesktopPet(QWidget):
         columns, rows = 2, 2
         cell_w, cell_h = corner_sheet.width() // 2, corner_sheet.height() // 2
         self.corner_originals = [crop_motion(index) for index in range(4)]
+        feed_sheet = load_feeding_art(f"assets/{self.character_id}-feeding.png")
+        if feed_sheet.isNull() or feed_sheet.width() % 2 or feed_sheet.height() % 2:
+            raise ValueError("빵 먹기 이미지를 불러올 수 없습니다.")
+        cw, ch = feed_sheet.width() // 2, feed_sheet.height() // 2
+        cells = [feed_sheet.copy(i % 2 * cw, i // 2 * ch, cw, ch) for i in range(4)]
+        # Keep one scale; generated cells have different horizontal offsets,
+        # so their shoes are aligned to the idle pose after scaling below.
+        content = QRect()
+        for cell in cells:
+            content = content.united(QRegion(cell.mask()).boundingRect())
+        if content.isEmpty():
+            raise ValueError("빵 먹기 이미지가 비어 있습니다.")
+        self.feed_originals = [cell.copy(content) for cell in cells]
 
     def update_character_identity(self):
         icon = QIcon(self.originals["idle"][0])
@@ -287,6 +380,7 @@ class DesktopPet(QWidget):
     def set_character(self, character_id: str):
         if character_id not in CHARACTERS or character_id == self.character_id:
             return
+        self.cancel_feeding()
         # Reset transient movement so no old sprite or target survives a switch.
         self.character_id = character_id
         self.character = CHARACTERS[character_id]
@@ -325,6 +419,7 @@ class DesktopPet(QWidget):
                 "stationary": self.stationary,
                 "click_through": self.click_through,
                 "show_windows_tools": self.show_windows_tools,
+                "feeding_enabled": self.feeding_enabled,
                 "roam_mode": self.roam_mode, "edge_direction": self.edge_direction,
                 "edge_phase": self.edge_phase,
                 "anchor": [round(self.anchor_x), round(self.anchor_y)]}
@@ -337,6 +432,7 @@ class DesktopPet(QWidget):
             logging.exception("Could not save settings")
 
     def set_size(self, height: int, *, save: bool = True):
+        self.cancel_feeding()
         self.body_height = int(clamp(height, 64, 400))
         # Specify HEIGHT ONLY with scaledToHeight. Qt chooses the width from
         # the original aspect ratio; no stretch or per-frame resizing occurs.
@@ -370,14 +466,30 @@ class DesktopPet(QWidget):
         self.corner_frames = [p.scaledToHeight(
             max(1, round(p.height() * self.body_height / self.corner_originals[3].height())),
             Qt.TransformationMode.SmoothTransformation) for p in self.corner_originals]
+        idle = self.frames["idle"][0]
+        idle_feet = standing_feet(idle)
+
+        def align_feeding_pose(sprite):
+            offset = idle_feet - standing_feet(sprite)
+            frame = QPixmap(idle.size())
+            frame.fill(Qt.GlobalColor.transparent)
+            painter = QPainter(frame)
+            painter.drawPixmap(round(offset.x()), round(offset.y()), sprite)
+            painter.end()
+            return frame
+
+        self.feed_frames = [align_feeding_pose(original.scaledToHeight(
+            self.body_height, Qt.TransformationMode.SmoothTransformation))
+            for original in self.feed_originals]
+        self.feed_look_frame = align_feeding_pose(self.frames["gaze"][0])
         # A square canvas holds the rotated sprite without clipping limbs.
         largest_diagonal = max(math.hypot(p.width(), p.height()) for p in
-                               self.motion_frames + [p for frames in self.frames.values() for p in frames])
+                               self.motion_frames + self.feed_frames + [p for frames in self.frames.values() for p in frames])
         side = math.ceil(largest_diagonal) + 16
         if self.roam_mode == "edge":
             # Rotation is around the feet, so the canvas needs a full body
             # radius on each side of that pivot rather than a center pivot.
-            sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames
+            sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames + self.feed_frames
             side = math.ceil(2 * max(math.hypot(p.width(), p.height()) for p in sprites)) + 16
         self.setFixedSize(side, side)
         self.frame_key = None
@@ -414,6 +526,7 @@ class DesktopPet(QWidget):
         self.move(round(self.x - self.width() / 2), round(self.y - self.height()))
 
     def refresh_screens(self, *_):
+        self.cancel_feeding()
         screen = QApplication.screenAt(QPoint(round(self.anchor_x), round(self.anchor_y)))
         if screen is None:
             screen = QApplication.primaryScreen()
@@ -433,7 +546,7 @@ class DesktopPet(QWidget):
 
     def rebuild_edge_route(self):
         area = self.screen_area
-        sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames
+        sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames + self.feed_frames
         radius = max(self.body_height * 0.45, max(p.width() for p in sprites) / 2 + 12)
         self.edge_route = EdgeRoute(area.left(), area.top(), area.width(), area.height(), radius)
         self.edge_progress = self.edge_phase * self.edge_route.length
@@ -477,6 +590,7 @@ class DesktopPet(QWidget):
             raise ValueError("Invalid roaming mode or direction")
         if mode == self.roam_mode and direction == self.edge_direction:
             return
+        self.cancel_feeding()
         old_mode = self.roam_mode
         old_x = self.x
         old_y = self.y - self.height()/2 if old_mode == "edge" else self.y
@@ -525,6 +639,12 @@ class DesktopPet(QWidget):
                 and self.edge_route.at(self.edge_progress, self.edge_sign).corner)
 
     def enter_state(self, state: str, duration: float | None = None):
+        if state != "gaze" and hasattr(self, "bread_button"):
+            self.bread_button.hide()
+            self.feed_hover = 0.0
+        if self.state in FEED_STATES and state not in FEED_STATES:
+            self.hide_food()
+            self.feed_cooldown = 3.0
         self.state = state
         self.state_time = 0
         if state in ("left", "right"):
@@ -591,8 +711,119 @@ class DesktopPet(QWidget):
             distance += 16
         return math.hypot(dx, dy) <= distance
 
+    def hide_food(self):
+        self.feed_hover = 0.0
+        if hasattr(self, "bread_button"):
+            self.bread_button.hide()
+        if hasattr(self, "falling_bread"):
+            self.falling_bread.hide()
+
+    def cancel_feeding(self):
+        self.hide_food()
+        if self.state in FEED_STATES:
+            self.enter_state("idle", 0.8)
+
+    def feeding_point(self, height):
+        """World point above the feet, following a wall/ceiling orientation."""
+        if self.roam_mode == "edge":
+            angle = math.radians(self.edge_angle)
+            return QPointF(self.x + math.sin(angle)*height,
+                           self.y - self.height()/2 - math.cos(angle)*height)
+        idle = self.frames["idle"][0]
+        ground = QRegion(idle.mask()).boundingRect().bottom()+1
+        return QPointF(self.x, self.y - idle.height() + ground - height)
+
+    def update_bread_button(self, dt):
+        if (not self.feeding_enabled or self.click_through or self.menu_open
+                or self.feed_cooldown > 0 or not self.isVisible()):
+            self.bread_button.hide()
+            self.feed_hover = 0.0
+            return
+        self.feed_hover += dt
+        if self.feed_hover < 0.7:
+            return
+        point = self.feeding_point(self.body_height + 36)
+        area = self.screen_area
+        # This separate 44px window is the only extra clickable area.
+        self.bread_button.move(round(clamp(point.x()-22, area.left(), area.right()-43)),
+                               round(clamp(point.y()-22, area.top(), area.bottom()-43)))
+        self.bread_button.show()
+
+    def start_feeding(self):
+        if (not self.feeding_enabled or self.click_through or self.menu_open or self.dragging
+                or self.state in FEED_STATES + ("flip", "land") or self.edge_jumping()
+                or self.feed_cooldown > 0 or not self.bread_button.isVisible()):
+            return
+        self.feed_start = QPointF(self.bread_button.geometry().center())
+        self.feed_end = self.feeding_point(self.body_height * 0.58)
+        self.bread_button.hide()
+        self.near_cursor = False
+        self.target = None
+        self.edge_rest_pending = False
+        self.enter_state("feed_drop", 0.65)
+
+    def advance_feeding(self, dt):
+        # Feeding is an explicit interaction and also works while auto-roaming
+        # is paused. No edge progress/direction or saved walk anchor is changed.
+        self.state_time += dt
+        if self.state_time >= self.state_duration:
+            if self.state == "feed_drop":
+                self.falling_bread.hide()
+                self.enter_state("feed_eat", 1.6)
+            elif self.state == "feed_eat":
+                self.enter_state("feed_happy", 0.85)
+            else:
+                self.near_cursor = False
+                self.gaze_elapsed = 0.0
+                self.next_gaze = self.rng.uniform(6, 12)
+                self.enter_state("idle", 0.8)
+                if self.roam_mode == "edge" and not self.paused and not self.stationary:
+                    self.start_walk()
+                return
+        self.update_frame()
+
+    def render_feeding(self):
+        ground = QRegion(self.frames["idle"][0].mask()).boundingRect().bottom()+1
+        if self.state == "feed_drop":
+            progress = clamp(self.state_time/self.state_duration, 0, 1)
+            point = self.feed_start + (self.feed_end-self.feed_start) * progress**2
+            self.falling_bread.move(round(point.x()-self.falling_bread.width()/2),
+                                    round(point.y()-self.falling_bread.height()/2))
+            if progress < 0.85:
+                self.falling_bread.show()
+                sprite = self.feed_look_frame
+            else:
+                self.falling_bread.hide()
+                sprite = self.feed_frames[0]
+        else:
+            self.falling_bread.hide()
+            index = 1 + (int(self.state_time/0.22) % 2) if self.state == "feed_eat" else 3
+            sprite = self.feed_frames[index]
+        self.pixmap = QPixmap(self.size())
+        self.pixmap.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(self.pixmap)
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        if self.roam_mode == "edge":
+            painter.translate(self.width()/2, self.height()/2)
+            painter.rotate(self.edge_angle)
+            origin = QPointF(-sprite.width()/2, -ground)
+        else:
+            idle = self.frames["idle"][0]
+            # Match normal idle rendering's integer placement as well as its
+            # shoe anchor; a half-pixel translation can otherwise shift edges.
+            origin = QPointF(round((self.width()-sprite.width())/2), self.height()-idle.height())
+        painter.drawPixmap(origin, sprite)
+        painter.end()
+        self.frame_key = None
+        self.update()
+
     def advance(self, dt: float, cursor: QPoint | None = None):
+        self.feed_cooldown = max(0.0, self.feed_cooldown - dt)
         if self.menu_open:
+            self.hide_food()
+            return
+        if self.state in FEED_STATES:
+            self.advance_feeding(dt)
             return
         if self.dragging:
             self.drag_time += dt
@@ -648,7 +879,10 @@ class DesktopPet(QWidget):
                 self.enter_state("gaze", float("inf"))
             self.near_cursor = True
             self.update_frame(cursor)
+            self.update_bread_button(dt)
             return
+        self.feed_hover = 0.0
+        self.bread_button.hide()
         if self.near_cursor:
             self.near_cursor = False
             self.gaze_elapsed = 0
@@ -691,6 +925,9 @@ class DesktopPet(QWidget):
         self.advance(dt)
 
     def update_frame(self, cursor: QPoint | None = None):
+        if self.state in FEED_STATES:
+            self.render_feeding()
+            return
         if self.dragging or self.state in ("flip", "land"):
             self.render_motion()
             return
@@ -721,9 +958,6 @@ class DesktopPet(QWidget):
             painter.drawPixmap(round((self.width() - sprite.width()) / 2),
                                self.height() - sprite.height(), sprite)
             painter.end()
-            # Hit-test only the character: transparent margins never block
-            # clicks on windows/icons underneath the pet.
-            self.setMask(QRegion(self.pixmap.mask()))
             self.update()
 
     def render_edge(self, cursor=None):
@@ -771,7 +1005,6 @@ class DesktopPet(QWidget):
         painter.rotate(self.edge_angle)
         painter.drawPixmap(QPointF(-foot_x, -ground), sprite)
         painter.end()
-        self.setMask(QRegion(self.pixmap.mask()))
         self.update()
 
     @staticmethod
@@ -817,10 +1050,10 @@ class DesktopPet(QWidget):
             painter.drawPixmap(QPointF(center_x - sprite.width() / 2,
                                       self.height() - sprite.height() - 4), sprite)
         painter.end()
-        self.setMask(QRegion(self.pixmap.mask()))
         self.update()
 
     def begin_drag(self, cursor: QPoint):
+        self.cancel_feeding()
         self.near_cursor = False
         self.dragging = True
         self.drag_time = 0
@@ -891,6 +1124,11 @@ class DesktopPet(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
+        # Replace transparent pixels as well as visible ones. A changing
+        # native window mask clips the backing-store clear, leaving old poses
+        # behind during rotation. Windows layered windows already pass input
+        # through zero-alpha pixels, so no per-frame setMask is needed.
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Source)
         painter.drawPixmap(0, 0, self.pixmap)
 
     def mousePressEvent(self, event):
@@ -921,11 +1159,12 @@ class DesktopPet(QWidget):
         self.target = None
         if was_dragging:
             self.finish_drag()
-        elif not self.edge_jumping():
+        elif not self.edge_jumping() and self.state not in FEED_STATES:
             self.enter_state(self.rng.choice(["wave", "jump"]))
         event.accept()
 
     def contextMenuEvent(self, event):
+        self.hide_food()
         menu = QMenu(self)
         self.populate_menu(menu)
         self.menu_open = True
@@ -986,6 +1225,7 @@ class DesktopPet(QWidget):
                                   QSystemTrayIcon.MessageIcon.Warning, 4000)
 
     def open_behavior_settings(self):
+        self.hide_food()
         was_open = self.menu_open
         self.menu_open = True
         dialog = BehaviorSettingsDialog(self)
@@ -997,6 +1237,7 @@ class DesktopPet(QWidget):
             dialog.deleteLater()
 
     def refresh_tray_menu(self):
+        self.hide_food()
         self.tray_menu.clear()
         self.populate_menu(self.tray_menu)
         self.menu_open = True
@@ -1041,6 +1282,7 @@ class DesktopPet(QWidget):
         self.save_settings()
 
     def apply_click_through(self):
+        self.cancel_feeding()
         # WindowTransparentForInput is handled by the native window system.
         was_visible = self.isVisible()
         self.setWindowFlag(Qt.WindowType.WindowTransparentForInput, self.click_through)
@@ -1048,6 +1290,7 @@ class DesktopPet(QWidget):
             self.show()
 
     def recenter(self):
+        self.cancel_feeding()
         if self.roam_mode == "edge":
             self.attach_to_edge(self.x, self.y-self.height()/2)
             self.save_settings()
@@ -1060,6 +1303,7 @@ class DesktopPet(QWidget):
         self.save_settings()
 
     def reset_position(self):
+        self.cancel_feeding()
         screen = QApplication.screenAt(QCursor.pos()) or QApplication.primaryScreen()
         self.screen_area = screen.availableGeometry()
         if self.roam_mode == "edge":
@@ -1073,6 +1317,7 @@ class DesktopPet(QWidget):
         self.show()
 
     def quit_pet(self):
+        self.hide_food()
         self.save_settings()
         self.timer.stop()
         self.tray.hide()
@@ -1081,6 +1326,10 @@ class DesktopPet(QWidget):
     def closeEvent(self, event):
         self.quit_pet()
         event.accept()
+
+    def hideEvent(self, event):
+        self.cancel_feeding()
+        super().hideEvent(event)
 
 
 class BehaviorSettingsDialog(QDialog):
@@ -1141,7 +1390,11 @@ class BehaviorSettingsDialog(QDialog):
         self.show_windows_tools = QCheckBox("윈도우 기본 도구 표시")
         self.show_windows_tools.setChecked(pet.show_windows_tools)
         self.show_windows_tools.setToolTip("우클릭 메뉴 상단에 메모장·그림판·계산기를 표시합니다.")
-        for control in (self.stationary, self.paused, self.click_through, self.show_windows_tools):
+        self.feeding_enabled = QCheckBox("빵 주기 버튼 표시")
+        self.feeding_enabled.setChecked(pet.feeding_enabled)
+        self.feeding_enabled.setToolTip("가까운 커서를 약 0.7초 바라보면 빵 버튼이 나타납니다. 클릭하면 받아먹습니다.")
+        for control in (self.stationary, self.paused, self.click_through,
+                        self.show_windows_tools, self.feeding_enabled):
             layout.addWidget(control)
         hint = QLabel("마우스 통과 중에는 작업 표시줄의 DeskMates 아이콘을\n우클릭하여 캐릭터와 설정을 바꿀 수 있습니다.")
         hint.setWordWrap(True)
@@ -1239,6 +1492,7 @@ class BehaviorSettingsDialog(QDialog):
                 pet.enter_state("idle", 0.7)
         pet.click_through = self.click_through.isChecked()
         pet.show_windows_tools = self.show_windows_tools.isChecked()
+        pet.feeding_enabled = self.feeding_enabled.isChecked()
         pet.set_roaming(self.roam_mode.currentData(), self.edge_direction.currentData(), save=False)
         pet.apply_click_through()
         pet.save_settings()

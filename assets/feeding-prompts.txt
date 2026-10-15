@@ -1,0 +1,10 @@
+Tool: built-in image_gen (transparent_background=true).
+Character references: artifacts/liberta-feed-reference.png and artifacts/zenith-feed-reference.png,
+extracted from the existing idle frames. References are temporary; final assets are in assets/.
+Final assets: liberta-feeding.png, zenith-feeding.png (four poses, 2x2); bread.png.
+
+Both character sheets:
+Use case: identity-preserve. Asset type: desktop companion eating animation spritesheet. Reference image is the character identity/style reference. Create a transparent 1024x1024 PNG with an exact 2x2 uniform grid, four full-body standing sprites, one centered in each 512x512 cell. Same feet baseline, head/body proportions, scale and camera in every cell; body fills about 85 percent cell height with padding. Match reference face, hair, accessories, clothing colors, drawing and shading precisely. Reading order: 1 arms raised to catch a small golden bread roll at chest, 2 holding roll with both hands at mouth and taking bite, 3 chewing eyes gently closed with smaller bitten bread, 4 empty hands near chest smiling satisfied, no bread. Keep legs standing straight and same height, no jumps, no props beyond bread. True transparent background, no text, labels, panels, shadows or grid lines.
+
+Bread:
+Use case: stylized-concept. Asset type: desktop pet bread icon and falling food sprite. A single small golden brown oval soft bread roll, two pale diagonal scores on crust, soft anime game sprite shading, clear dark warm outline, three-quarter view. Centered isolated bread only, no plate, no character, no particles, no text, no shadow. True transparent background, generous padding. Designed to remain recognizable at 28px.
