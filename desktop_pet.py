@@ -13,9 +13,10 @@ import time
 from dataclasses import dataclass
 
 from edge_path import EdgeRoute
+from appetite import Appetite, BREAD_LIMIT
 
 from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QSize, QSignalBlocker, QStandardPaths, Qt, QTimer
-from PySide6.QtGui import QActionGroup, QCursor, QIcon, QImage, QPainter, QPixmap, QRegion, QTransform
+from PySide6.QtGui import QActionGroup, QColor, QCursor, QIcon, QImage, QPainter, QPen, QPixmap, QRegion, QTransform
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QDialogButtonBox,
                               QDoubleSpinBox, QFormLayout, QLabel, QMenu, QPushButton,
                               QSpinBox, QSystemTrayIcon, QToolButton, QVBoxLayout, QWidget)
@@ -81,7 +82,10 @@ SPEED_PRESETS = ((28, "느긋하게"), (46, "보통"), (75, "활발하게"))
 WINDOWS_TOOLS = {"notepad": ("메모장", "notepad.exe"),
                  "paint": ("그림판", "mspaint.exe"),
                  "calculator": ("계산기", "calc.exe")}
-FEED_STATES = ("feed_drop", "feed_eat", "feed_happy")
+FEED_STATES = ("feed_drop", "feed_eat", "feed_happy", "feed_refuse")
+ANIMATION_CLIPS = {**CLIPS, "hungry": (0, 4, 0.45)}
+FULL_MESSAGES = ("너무 배불러…\n이제 못 먹겠어!", "내 배는 빵 보관함이 아니야…!",
+                 "한 입도 못 먹겠어!\n조금만 쉬자…")
 
 
 def resource_path(name: str) -> Path:
@@ -127,6 +131,20 @@ def standing_feet(sprite: QPixmap) -> QPointF:
     return QPointF((min(xs)+max(xs)+1)/2, bottom)
 
 
+def load_pose_sheet(name: str) -> list[QPixmap]:
+    sheet = load_feeding_art(name)
+    if sheet.width() < 2 or sheet.height() < 2:
+        raise ValueError(f"동작 시트는 2×2 격자여야 합니다: {name}")
+    cw, ch = sheet.width()//2, sheet.height()//2
+    cells = [sheet.copy(i % 2*cw, i//2*ch, cw, ch) for i in range(4)]
+    content = QRect()
+    for cell in cells:
+        content = content.united(QRegion(cell.mask()).boundingRect())
+    if content.isEmpty():
+        raise ValueError(f"동작 이미지가 비어 있습니다: {name}")
+    return [cell.copy(content) for cell in cells]
+
+
 class FallingBread(QWidget):
     """A tiny visual-only window; falling food never takes desktop clicks."""
 
@@ -145,6 +163,20 @@ class FallingBread(QWidget):
         painter.drawPixmap(0, 0, self.sprite)
 
 
+class SpeechBubble(QLabel):
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Source)
+        painter.fillRect(self.rect(), Qt.GlobalColor.transparent)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOver)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setPen(QPen(QColor("#c79652"), 2))
+        painter.setBrush(QColor("#fff3d5"))
+        painter.drawRoundedRect(self.rect().adjusted(1, 1, -1, -1), 14, 14)
+        painter.end()
+        super().paintEvent(event)
+
+
 class DesktopPet(QWidget):
     def __init__(self, settings_path: Path, *, start_timer: bool = True):
         super().__init__()
@@ -155,6 +187,15 @@ class DesktopPet(QWidget):
             self.character_id = DEFAULT_CHARACTER
         self.character = CHARACTERS[self.character_id]
         self.rng = random.Random()
+        saved_appetites = self.settings.get("appetites", {})
+        if not isinstance(saved_appetites, dict):
+            saved_appetites = {}
+        now = time.time()
+        self.appetites = {key: Appetite.restore(saved_appetites.get(key), now) for key in CHARACTERS}
+        self.meal_pending = False
+        self.feed_refusing = False
+        self.refusal_count = 0
+        self.next_hunger = time.monotonic()+self.rng.uniform(12, 20)
         self.body_height = int(clamp(self.settings.get("height", 160), 64, 400))
         self.radius = int(clamp(self.settings.get("radius", 220), 50, 800))
         self.speed = float(clamp(self.settings.get("speed", 46), 20, 100))
@@ -261,6 +302,21 @@ class DesktopPet(QWidget):
         self.bread_button.hide()
         self.falling_bread = FallingBread(self, bread)
         self.falling_bread.hide()
+        self.speech = SpeechBubble(self, Qt.WindowType.Tool | Qt.WindowType.FramelessWindowHint
+                             | Qt.WindowType.WindowStaysOnTopHint
+                             | Qt.WindowType.WindowDoesNotAcceptFocus
+                             | Qt.WindowType.WindowTransparentForInput)
+        self.speech.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        self.speech.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.speech.setWordWrap(True)
+        self.speech.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.speech.setFixedWidth(240)
+        self.speech.setContentsMargins(12, 10, 12, 10)
+        self.speech.setStyleSheet("QLabel { color: #594332; font-size: 14px; }")
+        self.speech.hide()
+        self.speech_timer = QTimer(self)
+        self.speech_timer.setSingleShot(True)
+        self.speech_timer.timeout.connect(self.speech.hide)
 
         icon = QIcon(self.originals["idle"][0])
         self.setWindowIcon(icon)
@@ -357,19 +413,11 @@ class DesktopPet(QWidget):
         columns, rows = 2, 2
         cell_w, cell_h = corner_sheet.width() // 2, corner_sheet.height() // 2
         self.corner_originals = [crop_motion(index) for index in range(4)]
-        feed_sheet = load_feeding_art(f"assets/{self.character_id}-feeding.png")
-        if feed_sheet.isNull() or feed_sheet.width() % 2 or feed_sheet.height() % 2:
-            raise ValueError("빵 먹기 이미지를 불러올 수 없습니다.")
-        cw, ch = feed_sheet.width() // 2, feed_sheet.height() // 2
-        cells = [feed_sheet.copy(i % 2 * cw, i // 2 * ch, cw, ch) for i in range(4)]
         # Keep one scale; generated cells have different horizontal offsets,
         # so their shoes are aligned to the idle pose after scaling below.
-        content = QRect()
-        for cell in cells:
-            content = content.united(QRegion(cell.mask()).boundingRect())
-        if content.isEmpty():
-            raise ValueError("빵 먹기 이미지가 비어 있습니다.")
-        self.feed_originals = [cell.copy(content) for cell in cells]
+        self.feed_originals = load_pose_sheet(f"assets/{self.character_id}-feeding.png")
+        self.hunger_originals = load_pose_sheet(f"assets/{self.character_id}-hungry.png")
+        self.refusal_originals = load_pose_sheet(f"assets/{self.character_id}-refusal.png")
 
     def update_character_identity(self):
         icon = QIcon(self.originals["idle"][0])
@@ -414,12 +462,15 @@ class DesktopPet(QWidget):
             return {}
 
     def save_settings(self):
+        for appetite in self.appetites.values():
+            appetite.digest(time.time())
         data = {"character": self.character_id, "height": self.body_height, "radius": self.radius,
                 "speed": self.speed, "paused": self.paused,
                 "stationary": self.stationary,
                 "click_through": self.click_through,
                 "show_windows_tools": self.show_windows_tools,
                 "feeding_enabled": self.feeding_enabled,
+                "appetites": {key: value.as_dict() for key, value in self.appetites.items()},
                 "roam_mode": self.roam_mode, "edge_direction": self.edge_direction,
                 "edge_phase": self.edge_phase,
                 "anchor": [round(self.anchor_x), round(self.anchor_y)]}
@@ -469,7 +520,7 @@ class DesktopPet(QWidget):
         idle = self.frames["idle"][0]
         idle_feet = standing_feet(idle)
 
-        def align_feeding_pose(sprite):
+        def align_standing_pose(sprite):
             offset = idle_feet - standing_feet(sprite)
             frame = QPixmap(idle.size())
             frame.fill(Qt.GlobalColor.transparent)
@@ -478,18 +529,24 @@ class DesktopPet(QWidget):
             painter.end()
             return frame
 
-        self.feed_frames = [align_feeding_pose(original.scaledToHeight(
+        self.feed_frames = [align_standing_pose(original.scaledToHeight(
             self.body_height, Qt.TransformationMode.SmoothTransformation))
             for original in self.feed_originals]
-        self.feed_look_frame = align_feeding_pose(self.frames["gaze"][0])
+        self.feed_look_frame = align_standing_pose(self.frames["gaze"][0])
+        self.frames["hungry"] = [align_standing_pose(original.scaledToHeight(
+            self.body_height, Qt.TransformationMode.SmoothTransformation))
+            for original in self.hunger_originals]
+        self.refusal_frames = [align_standing_pose(original.scaledToHeight(
+            self.body_height, Qt.TransformationMode.SmoothTransformation))
+            for original in self.refusal_originals]
         # A square canvas holds the rotated sprite without clipping limbs.
         largest_diagonal = max(math.hypot(p.width(), p.height()) for p in
-                               self.motion_frames + self.feed_frames + [p for frames in self.frames.values() for p in frames])
+                               self.motion_frames + self.feed_frames + self.refusal_frames + [p for frames in self.frames.values() for p in frames])
         side = math.ceil(largest_diagonal) + 16
         if self.roam_mode == "edge":
             # Rotation is around the feet, so the canvas needs a full body
             # radius on each side of that pivot rather than a center pivot.
-            sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames + self.feed_frames
+            sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames + self.feed_frames + self.refusal_frames
             side = math.ceil(2 * max(math.hypot(p.width(), p.height()) for p in sprites)) + 16
         self.setFixedSize(side, side)
         self.frame_key = None
@@ -524,6 +581,8 @@ class DesktopPet(QWidget):
 
     def position_window(self):
         self.move(round(self.x - self.width() / 2), round(self.y - self.height()))
+        if hasattr(self, "speech") and self.speech.isVisible():
+            self.position_speech()
 
     def refresh_screens(self, *_):
         self.cancel_feeding()
@@ -546,7 +605,7 @@ class DesktopPet(QWidget):
 
     def rebuild_edge_route(self):
         area = self.screen_area
-        sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames + self.feed_frames
+        sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames + self.feed_frames + self.refusal_frames
         radius = max(self.body_height * 0.45, max(p.width() for p in sprites) / 2 + 12)
         self.edge_route = EdgeRoute(area.left(), area.top(), area.width(), area.height(), radius)
         self.edge_progress = self.edge_phase * self.edge_route.length
@@ -643,14 +702,15 @@ class DesktopPet(QWidget):
             self.bread_button.hide()
             self.feed_hover = 0.0
         if self.state in FEED_STATES and state not in FEED_STATES:
-            self.hide_food()
+            self.hide_food(keep_speech=True)
             self.feed_cooldown = 3.0
+            self.meal_pending = self.feed_refusing = False
         self.state = state
         self.state_time = 0
         if state in ("left", "right"):
             self.walk_distance = 0.0
         if duration is None:
-            _, count, interval = CLIPS.get(state, (0, 1, 0.1))
+            _, count, interval = ANIMATION_CLIPS.get(state, (0, 1, 0.1))
             duration = count * interval
         self.state_duration = duration
         self.frame_key = None
@@ -675,6 +735,14 @@ class DesktopPet(QWidget):
 
     def choose_action(self):
         self.target = None
+        if (self.feeding_enabled and self.appetite.stacks == 0
+                and time.monotonic() >= self.next_hunger):
+            if self.roam_mode == "edge" and self.state in ("left", "right"):
+                self.edge_rest_pending = True
+            self.next_hunger = time.monotonic()+self.rng.uniform(25, 40)
+            self.enter_state("hungry")
+            self.say("꼬르륵…\n빵 먹고 싶어.", 1800)
+            return
         if self.roam_mode == "edge" and not self.stationary:
             if self.state in ("left", "right"):
                 self.edge_rest_pending = True
@@ -711,12 +779,42 @@ class DesktopPet(QWidget):
             distance += 16
         return math.hypot(dx, dy) <= distance
 
-    def hide_food(self):
+    @property
+    def appetite(self):
+        appetite = self.appetites[self.character_id]
+        appetite.digest(time.time())
+        return appetite
+
+    def position_speech(self):
+        body = QRegion(self.pixmap.mask()).boundingRect().translated(self.pos())
+        width, height = self.speech.width(), self.speech.height()
+        candidates = (QRect(body.center().x()-width//2, body.top()-height-10, width, height),
+                      QRect(body.center().x()-width//2, body.bottom()+10, width, height),
+                      QRect(body.right()+10, body.center().y()-height//2, width, height),
+                      QRect(body.left()-width-10, body.center().y()-height//2, width, height))
+        area = self.screen_area
+        rect = next((rect for rect in candidates if area.contains(rect)), candidates[0])
+        self.speech.move(round(clamp(rect.x(), area.left(), area.right()+1-width)),
+                         round(clamp(rect.y(), area.top(), area.bottom()+1-height)))
+
+    def say(self, message, milliseconds=3500):
+        if not self.isVisible():
+            return
+        self.speech.setText(message)
+        self.speech.adjustSize()
+        self.position_speech()
+        self.speech.show()
+        self.speech_timer.start(milliseconds)
+
+    def hide_food(self, *, keep_speech=False):
         self.feed_hover = 0.0
         if hasattr(self, "bread_button"):
             self.bread_button.hide()
         if hasattr(self, "falling_bread"):
             self.falling_bread.hide()
+        if not keep_speech and hasattr(self, "speech"):
+            self.speech.hide()
+            self.speech_timer.stop()
 
     def cancel_feeding(self):
         self.hide_food()
@@ -735,7 +833,7 @@ class DesktopPet(QWidget):
 
     def update_bread_button(self, dt):
         if (not self.feeding_enabled or self.click_through or self.menu_open
-                or self.feed_cooldown > 0 or not self.isVisible()):
+                or self.feed_cooldown > 0 or self.speech.isVisible() or not self.isVisible()):
             self.bread_button.hide()
             self.feed_hover = 0.0
             return
@@ -748,6 +846,7 @@ class DesktopPet(QWidget):
         self.bread_button.move(round(clamp(point.x()-22, area.left(), area.right()-43)),
                                round(clamp(point.y()-22, area.top(), area.bottom()-43)))
         self.bread_button.show()
+        self.bread_button.setToolTip(f"빵 주기 · {self.appetite.label} ({self.appetite.stacks}/{BREAD_LIMIT})")
 
     def start_feeding(self):
         if (not self.feeding_enabled or self.click_through or self.menu_open or self.dragging
@@ -760,6 +859,8 @@ class DesktopPet(QWidget):
         self.near_cursor = False
         self.target = None
         self.edge_rest_pending = False
+        self.feed_refusing = self.appetite.stacks >= BREAD_LIMIT
+        self.meal_pending = not self.feed_refusing
         self.enter_state("feed_drop", 0.65)
 
     def advance_feeding(self, dt):
@@ -769,9 +870,20 @@ class DesktopPet(QWidget):
         if self.state_time >= self.state_duration:
             if self.state == "feed_drop":
                 self.falling_bread.hide()
-                self.enter_state("feed_eat", 1.6)
+                if self.feed_refusing:
+                    self.enter_state("feed_refuse", 1.65)
+                    self.say(FULL_MESSAGES[self.refusal_count % len(FULL_MESSAGES)])
+                    self.refusal_count += 1
+                else:
+                    self.enter_state("feed_eat", 1.6)
             elif self.state == "feed_eat":
                 self.enter_state("feed_happy", 0.85)
+                if self.meal_pending:
+                    self.meal_pending = False
+                    self.appetite.eat(time.time())
+                    self.save_settings()
+                    if self.appetite.stacks >= BREAD_LIMIT:
+                        self.say(FULL_MESSAGES[0])
             else:
                 self.near_cursor = False
                 self.gaze_elapsed = 0.0
@@ -794,7 +906,11 @@ class DesktopPet(QWidget):
                 sprite = self.feed_look_frame
             else:
                 self.falling_bread.hide()
-                sprite = self.feed_frames[0]
+                sprite = self.refusal_frames[0] if self.feed_refusing else self.feed_frames[0]
+        elif self.state == "feed_refuse":
+            self.falling_bread.hide()
+            index = 3 if self.state_time > 1.3 else 1+int(self.state_time/0.22) % 2
+            sprite = self.refusal_frames[index]
         else:
             self.falling_bread.hide()
             index = 1 + (int(self.state_time/0.22) % 2) if self.state == "feed_eat" else 3
@@ -818,6 +934,8 @@ class DesktopPet(QWidget):
         self.update()
 
     def advance(self, dt: float, cursor: QPoint | None = None):
+        if any([appetite.digest(time.time()) for appetite in self.appetites.values()]):
+            self.save_settings()
         self.feed_cooldown = max(0.0, self.feed_cooldown - dt)
         if self.menu_open:
             self.hide_food()
@@ -923,6 +1041,8 @@ class DesktopPet(QWidget):
         dt = min(now - self.last_tick, 0.1)
         self.last_tick = now
         self.advance(dt)
+        if self.speech.isVisible():
+            self.position_speech()
 
     def update_frame(self, cursor: QPoint | None = None):
         if self.state in FEED_STATES:
@@ -940,7 +1060,7 @@ class DesktopPet(QWidget):
             head_y = self.y - self.frames["idle"][0].height() * 0.57
             index = gaze_index(cursor.x() - self.x, cursor.y() - head_y)
         else:
-            _, count, interval = CLIPS[state]
+            _, count, interval = ANIMATION_CLIPS[state]
             if state in ("left", "right") and self.walk_originals:
                 # A cycle covers a fixed stride at the current body size, so
                 # slower travel also slows the legs instead of sliding the feet.
@@ -988,7 +1108,7 @@ class DesktopPet(QWidget):
             elif state in ("left", "right"):
                 index = int(self.walk_distance/(self.body_height*0.4)*len(self.frames[state])) % len(self.frames[state])
             else:
-                _, count, interval = CLIPS[state]
+                _, count, interval = ANIMATION_CLIPS[state]
                 index = int(self.state_time/interval) % count
             sprite = self.frames[state][index]
             foot_x = sprite.width()/2
@@ -1183,6 +1303,8 @@ class DesktopPet(QWidget):
             menu.addSeparator()
         title = menu.addAction(f"{APP_NAME} · {self.character.name}")
         title.setEnabled(False)
+        status = menu.addAction(f"{self.appetite.label} · 빵 {self.appetite.stacks}/{BREAD_LIMIT}")
+        status.setEnabled(False)
         menu.addSeparator()
         characters = menu.addMenu("캐릭터 전환")
         character_group = QActionGroup(characters)
@@ -1396,6 +1518,10 @@ class BehaviorSettingsDialog(QDialog):
         for control in (self.stationary, self.paused, self.click_through,
                         self.show_windows_tools, self.feeding_enabled):
             layout.addWidget(control)
+        feeding_hint = QLabel("빵 0개: 배고픔 · 1~2개: 보통 · 3~4개: 배부름\n"
+                              "5개면 받아들고 거절합니다. 스택은 1분마다 1개씩 줄어듭니다.")
+        feeding_hint.setWordWrap(True)
+        layout.addWidget(feeding_hint)
         hint = QLabel("마우스 통과 중에는 작업 표시줄의 DeskMates 아이콘을\n우클릭하여 캐릭터와 설정을 바꿀 수 있습니다.")
         hint.setWordWrap(True)
         layout.addWidget(hint)

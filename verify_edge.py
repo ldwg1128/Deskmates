@@ -23,6 +23,7 @@ def run():
     with tempfile.TemporaryDirectory() as temporary:
         settings = Path(temporary) / "settings.json"
         pet = DesktopPet(settings, start_timer=False)
+        pet.next_hunger = float("inf")
         for character in ("zenith", "liberta"):
             pet.set_character(character)
             pet.set_size(160, save=False)

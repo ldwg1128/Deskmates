@@ -54,11 +54,11 @@ def run():
                             app.processEvents()
                             assert_current_frame(pet)
                             count += 1
-                    for gesture in ("idle", "wave", "bow", "jump", "feed_eat", "feed_happy"):
+                    for gesture in ("idle", "wave", "bow", "jump", "hungry", "feed_eat", "feed_happy", "feed_refuse"):
                         pet.enter_state(gesture)
                         app.processEvents()
                         assert_current_frame(pet)
-                        if gesture == "feed_eat":
+                        if gesture in ("feed_eat", "feed_refuse"):
                             pet.state_time = 0.23
                             pet.update_frame()
                             app.processEvents()

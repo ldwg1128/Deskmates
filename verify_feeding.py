@@ -34,7 +34,10 @@ def check_alignment(pet):
                 centers, floors = [], []
                 for state, elapsed in (("feed_drop", 0.1), ("feed_drop", 0.6),
                                        ("feed_eat", 0.0), ("feed_eat", 0.23),
-                                       ("feed_happy", 0.0), ("idle", 0.0)):
+                                       ("feed_happy", 0.0), ("feed_refuse", 0.0),
+                                       ("feed_refuse", 0.24), ("feed_refuse", 1.4),
+                                       ("hungry", 0.0), ("hungry", 0.45),
+                                       ("hungry", 0.9), ("hungry", 1.35), ("idle", 0.0)):
                     pet.enter_state(state, 10)
                     pet.state_time = elapsed
                     if state == "feed_drop":
@@ -68,11 +71,16 @@ def run():
     with tempfile.TemporaryDirectory() as folder:
         settings = Path(folder)/"settings.json"
         pet = DesktopPet(settings, start_timer=False)
+        pet.next_hunger = float("inf")
         pet.show()
         app.processEvents()
         assert pet.feeding_enabled
 
         def offer():
+            # These scenarios isolate feeding mechanics; stack limits and
+            # timed digestion are exercised separately in verify_appetite.py.
+            pet.appetites[pet.character_id].stacks = 0
+            pet.hide_food()
             pet.feed_cooldown = 0
             pet.enter_state("idle", 10)
             pet.near_cursor = False

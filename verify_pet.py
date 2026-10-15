@@ -17,6 +17,7 @@ def run_character(character_id):
         settings = Path(temporary) / "settings.json"
         settings.write_text(json.dumps({"character": character_id}), encoding="utf-8")
         pet = DesktopPet(settings, start_timer=False)
+        pet.next_hunger = float("inf")
         pet.rng.seed(42)
         assert [gaze_index(*direction) for direction in [(0, -10), (10, 0), (0, 10), (-10, 0)]] == [0, 4, 8, 12]
         for height in [64, 80, 120, 160, 200, 240, 320, 400]:
