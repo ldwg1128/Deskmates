@@ -334,6 +334,168 @@
         "feed_refuse"
       ],
       "timing": "2.8s: shake frames1/2 every.22s until1.3s; offer frame3 for remaining1.5s."
+    },
+    "window_sit": {
+      "name": "Sit on a window ledge",
+      "frames": 4,
+      "fps": 5,
+      "loop": "loop",
+      "direction": "front",
+      "description": "feet dangling, left leg swing, right leg swing, settle",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        300
+      ],
+      "runtime_states": [
+        "window_sit"
+      ],
+      "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority.",
+      "support_anchor": [
+        128,
+        250
+      ]
+    },
+    "ledge_struggle": {
+      "name": "Hold window corner",
+      "frames": 4,
+      "fps": 8,
+      "loop": "loop",
+      "direction": "left",
+      "description": "left-facing side profile, hands fixed to vertical window edge at face height, body outside to the right; strained grip, bent legs kick backward, slip and tighten grip, flail; mirror for the left edge",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        300
+      ],
+      "runtime_states": [
+        "ledge_struggle"
+      ],
+      "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority.",
+      "support_anchor": [
+        32,
+        120
+      ]
+    },
+    "sleep": {
+      "name": "Sleep",
+      "frames": 4,
+      "fps": 2,
+      "loop": "loop",
+      "direction": "front",
+      "description": "curl up asleep, breathe in, breathe out, rest",
+      "required": false,
+      "fallback": "idle",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        300
+      ],
+      "runtime_states": [
+        "sleep"
+      ],
+      "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+    },
+    "wake_annoyed": {
+      "name": "Annoyed wake",
+      "frames": 4,
+      "fps": 4,
+      "loop": "once",
+      "direction": "front",
+      "description": "rub eye, yawn, frown, wake",
+      "required": false,
+      "fallback": "shy",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        300
+      ],
+      "runtime_states": [
+        "wake_annoyed"
+      ],
+      "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+    },
+    "cursor_grab": {
+      "name": "Catch the cursor",
+      "frames": 4,
+      "fps": 5,
+      "loop": "once",
+      "direction": "right",
+      "description": "reach at waist height, close hands, grasp, hold",
+      "required": false,
+      "fallback": "wave",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        300
+      ],
+      "runtime_states": [
+        "cursor_grab"
+      ],
+      "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+    },
+    "kick": {
+      "name": "Kick a ball",
+      "frames": 4,
+      "fps": 6,
+      "loop": "once",
+      "direction": "right",
+      "description": "prepare, lift knee, extend kicking foot, recover",
+      "required": false,
+      "fallback": "jump",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        300
+      ],
+      "runtime_states": [
+        "kick"
+      ],
+      "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+    },
+    "secret_snack": {
+      "name": "Secret snack",
+      "frames": 4,
+      "fps": 4,
+      "loop": "once",
+      "direction": "front",
+      "description": "take cookie from pocket, check nobody sees, bite, satisfied",
+      "required": false,
+      "fallback": "think",
+      "cell": [
+        256,
+        320
+      ],
+      "anchor": [
+        128,
+        300
+      ],
+      "runtime_states": [
+        "secret_snack"
+      ],
+      "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
     }
   },
   "bindings": {
@@ -355,6 +517,19 @@
     "feed_drop": "feeding",
     "feed_eat": "feeding",
     "feed_happy": "feeding",
-    "feed_refuse": "refusal"
+    "feed_refuse": "refusal",
+    "window_sit": "window_sit",
+    "ledge_struggle": "ledge_struggle",
+    "sleep_walk": "right",
+    "sleep": "sleep",
+    "wake_annoyed": "wake_annoyed",
+    "cursor_approach": "right",
+    "cursor_grab": "cursor_grab",
+    "ball_approach": "right",
+    "kick": "kick",
+    "secret_snack": "secret_snack",
+    "interaction_jump": "jump",
+    "interaction_fall": "motion",
+    "interaction_land": "motion"
   }
 }

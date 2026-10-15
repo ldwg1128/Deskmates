@@ -1,6 +1,6 @@
 # 행동·전환 분석과 보존 범위
 
-원본 기준 커밋: `d892590`. 자동 생성한 파일·좌표·FPS·해시 목록은 [inventory.md](generated/inventory.md)와 [inventory.json](generated/inventory.json)을 참조한다. 카탈로그에는 현재 15개 행동 리소스와 19개 게임 상태/바인딩이 있다. 먹기와 물리 동작은 여러 상태가 한 이미지 리소스를 공유한다. 이미지 누락으로 실행 불가능한 기존 행동은 없다.
+원본 기준 커밋: `d892590`. 자동 생성한 파일·좌표·FPS·해시 목록은 [inventory.md](generated/inventory.md)와 [inventory.json](generated/inventory.json)을 참조한다. 원본은15개 행동 리소스와19개 상태/바인딩이며, 창·수면·놀이 추가 후 현재는 **22개 리소스와32개 상태/바인딩**이다. 추가 동작은 [데스크톱 상호작용 안내](desktop-interactions.md)를 참조한다. 먹기와 물리 동작은 여러 상태가 한 이미지 리소스를 공유한다. 이미지 누락으로 실행 불가능한 기존 행동은 없다.
 
 ## 기존 이미지 사용
 

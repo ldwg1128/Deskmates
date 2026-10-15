@@ -112,6 +112,8 @@ python character_tool.py register characters/my_pet
 
 ## 실제 게임에서 사용
 
+창에 앉기·세로면 매달리기·잠들기·깨기·커서 잡기·공 차기·몰래 간식도 공통 목록에 포함된다. 창에 닿는 동작에는 `support_anchor`를 사용한다. 가이드의 녹색 접촉점을 모든 프레임에서 유지하고 창 오른쪽 매달림은 왼쪽을 바라보는 옆모습으로 제작한다. 왼쪽 매달림은 게임에서 반전한다. 명세와 가져오기 파일에도 접촉점을 보관하며 자세한 예시는 [추가 행동 안내](desktop-interactions.md)에 있다.
+
 소스 실행은 `characters/{id}/character.json`을 발견한다. EXE는 내장 캐릭터와 EXE 옆 `characters/{id}`를 함께 읽는다. `DESKMATES_CHARACTER_PATH` 환경변수로 다른 제작 폴더를 추가할 수도 있다(여러 경로는 Windows 세미콜론으로 구분). 앱을 다시 실행하면 우클릭 캐릭터 목록에 나타난다. 기존 설정 ID와 앱 저장 경로는 유지하며 제거한 외부 캐릭터의 포만감 데이터도 보존한다.
 
 ```powershell

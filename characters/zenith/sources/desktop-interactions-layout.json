@@ -1,0 +1,430 @@
+{
+  "generated_atlas_size": [
+    948,
+    1659
+  ],
+  "raw_sha256": "fa93cd6c2ca56d4a09f9cea4d67e92cc75832c97e40ab63e30bc98e2ce520642",
+  "extraction": "connected character components >=5000 opaque pixels; nearby alpha>=32 edges within3px; no per-frame scale fitting",
+  "frames": [
+    {
+      "action": "window_sit",
+      "frame": 0,
+      "source_component": 1,
+      "source_bbox": [
+        49,
+        4,
+        192,
+        245
+      ],
+      "offset": [
+        10,
+        55
+      ]
+    },
+    {
+      "action": "window_sit",
+      "frame": 1,
+      "source_component": 4,
+      "source_bbox": [
+        287,
+        6,
+        426,
+        245
+      ],
+      "offset": [
+        -227,
+        55
+      ]
+    },
+    {
+      "action": "window_sit",
+      "frame": 2,
+      "source_component": 2,
+      "source_bbox": [
+        524,
+        4,
+        667,
+        249
+      ],
+      "offset": [
+        -464,
+        55
+      ]
+    },
+    {
+      "action": "window_sit",
+      "frame": 3,
+      "source_component": 3,
+      "source_bbox": [
+        764,
+        5,
+        905,
+        246
+      ],
+      "offset": [
+        -701,
+        55
+      ]
+    },
+    {
+      "action": "ledge_struggle",
+      "frame": 0,
+      "source_component": 5,
+      "source_bbox": [
+        41,
+        245,
+        182,
+        494
+      ],
+      "offset": [
+        10,
+        -194
+      ]
+    },
+    {
+      "action": "ledge_struggle",
+      "frame": 1,
+      "source_component": 6,
+      "source_bbox": [
+        279,
+        245,
+        424,
+        494
+      ],
+      "offset": [
+        -227,
+        -194
+      ]
+    },
+    {
+      "action": "ledge_struggle",
+      "frame": 2,
+      "source_component": 8,
+      "source_bbox": [
+        520,
+        249,
+        664,
+        493
+      ],
+      "offset": [
+        -464,
+        -194
+      ]
+    },
+    {
+      "action": "ledge_struggle",
+      "frame": 3,
+      "source_component": 7,
+      "source_bbox": [
+        764,
+        245,
+        905,
+        494
+      ],
+      "offset": [
+        -701,
+        -194
+      ]
+    },
+    {
+      "action": "sleep",
+      "frame": 0,
+      "source_component": 9,
+      "source_bbox": [
+        10,
+        509,
+        215,
+        653
+      ],
+      "offset": [
+        10,
+        -354
+      ]
+    },
+    {
+      "action": "sleep",
+      "frame": 1,
+      "source_component": 10,
+      "source_bbox": [
+        250,
+        509,
+        454,
+        654
+      ],
+      "offset": [
+        -227,
+        -354
+      ]
+    },
+    {
+      "action": "sleep",
+      "frame": 2,
+      "source_component": 11,
+      "source_bbox": [
+        490,
+        510,
+        692,
+        655
+      ],
+      "offset": [
+        -464,
+        -354
+      ]
+    },
+    {
+      "action": "sleep",
+      "frame": 3,
+      "source_component": 12,
+      "source_bbox": [
+        729,
+        510,
+        934,
+        654
+      ],
+      "offset": [
+        -701,
+        -354
+      ]
+    },
+    {
+      "action": "wake_annoyed",
+      "frame": 0,
+      "source_component": 14,
+      "source_bbox": [
+        39,
+        661,
+        178,
+        885
+      ],
+      "offset": [
+        10,
+        -585
+      ]
+    },
+    {
+      "action": "wake_annoyed",
+      "frame": 1,
+      "source_component": 13,
+      "source_bbox": [
+        287,
+        660,
+        434,
+        885
+      ],
+      "offset": [
+        -227,
+        -585
+      ]
+    },
+    {
+      "action": "wake_annoyed",
+      "frame": 2,
+      "source_component": 15,
+      "source_bbox": [
+        522,
+        661,
+        672,
+        884
+      ],
+      "offset": [
+        -464,
+        -585
+      ]
+    },
+    {
+      "action": "wake_annoyed",
+      "frame": 3,
+      "source_component": 16,
+      "source_bbox": [
+        763,
+        662,
+        906,
+        885
+      ],
+      "offset": [
+        -701,
+        -585
+      ]
+    },
+    {
+      "action": "cursor_grab",
+      "frame": 0,
+      "source_component": 34,
+      "source_bbox": [
+        38,
+        894,
+        205,
+        1136
+      ],
+      "offset": [
+        10,
+        -836
+      ]
+    },
+    {
+      "action": "cursor_grab",
+      "frame": 1,
+      "source_component": 35,
+      "source_bbox": [
+        277,
+        894,
+        445,
+        1137
+      ],
+      "offset": [
+        -227,
+        -836
+      ]
+    },
+    {
+      "action": "cursor_grab",
+      "frame": 2,
+      "source_component": 32,
+      "source_bbox": [
+        517,
+        893,
+        685,
+        1137
+      ],
+      "offset": [
+        -464,
+        -836
+      ]
+    },
+    {
+      "action": "cursor_grab",
+      "frame": 3,
+      "source_component": 33,
+      "source_bbox": [
+        763,
+        893,
+        905,
+        1136
+      ],
+      "offset": [
+        -701,
+        -836
+      ]
+    },
+    {
+      "action": "kick",
+      "frame": 0,
+      "source_component": 39,
+      "source_bbox": [
+        40,
+        1141,
+        177,
+        1378
+      ],
+      "offset": [
+        10,
+        -1078
+      ]
+    },
+    {
+      "action": "kick",
+      "frame": 1,
+      "source_component": 38,
+      "source_bbox": [
+        285,
+        1140,
+        423,
+        1378
+      ],
+      "offset": [
+        -227,
+        -1078
+      ]
+    },
+    {
+      "action": "kick",
+      "frame": 2,
+      "source_component": 37,
+      "source_bbox": [
+        502,
+        1139,
+        685,
+        1378
+      ],
+      "offset": [
+        -464,
+        -1078
+      ]
+    },
+    {
+      "action": "kick",
+      "frame": 3,
+      "source_component": 40,
+      "source_bbox": [
+        746,
+        1141,
+        882,
+        1378
+      ],
+      "offset": [
+        -701,
+        -1078
+      ]
+    },
+    {
+      "action": "secret_snack",
+      "frame": 0,
+      "source_component": 45,
+      "source_bbox": [
+        41,
+        1386,
+        178,
+        1648
+      ],
+      "offset": [
+        10,
+        -1349
+      ]
+    },
+    {
+      "action": "secret_snack",
+      "frame": 1,
+      "source_component": 42,
+      "source_bbox": [
+        275,
+        1382,
+        417,
+        1647
+      ],
+      "offset": [
+        -227,
+        -1349
+      ]
+    },
+    {
+      "action": "secret_snack",
+      "frame": 2,
+      "source_component": 43,
+      "source_bbox": [
+        505,
+        1383,
+        648,
+        1650
+      ],
+      "offset": [
+        -464,
+        -1349
+      ]
+    },
+    {
+      "action": "secret_snack",
+      "frame": 3,
+      "source_component": 44,
+      "source_bbox": [
+        749,
+        1383,
+        893,
+        1650
+      ],
+      "offset": [
+        -701,
+        -1349
+      ]
+    }
+  ]
+}

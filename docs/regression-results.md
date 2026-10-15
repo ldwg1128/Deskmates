@@ -8,7 +8,7 @@
 
 ## 자동 검사
 
-`python verify_all.py`의 10개 검사 모두 종료 코드0. 상세 로그는 `artifacts/resource-refactor/regression-results.json`에 저장한다.
+`python verify_all.py`의 **11개 검사 모두 종료 코드0**. 상세 로그는 `artifacts/resource-refactor/regression-results.json`에 저장한다.
 
 | 검사 | 결과 |
 |---|---|
@@ -21,6 +21,7 @@
 | verify_settings.py | 산책 라디오·선택 기능만 표시·고급·기존 사용자 수치·마우스 통과 통과 |
 | verify_character_pipeline.py | 별도 폴더의 더미 발견·실행, 3크기·양방향·모든 상태, fallback·잘못된 팩·필수 이미지·좌표·알파·파일 수, 개별 프레임·스트립, 선택적 provider, 가이드·GIF 통과 |
 | verify_autogen.py | 다중 기준 이미지 명세, 전체 행동 생성·QA·실패2번 프레임만 재생성·정상 픽셀 보존·예산 지속·재시도 제한·수동 수정/승인·등록·새 행동 추가·실제 게임 발견 통과 |
+| verify_desktop_interactions.py | 양쪽 창 세로면의 옆모습·접촉점·창 이동/닫힘/최소화·앉기/점프/낙하/복귀, 30분 수면/깨우기·제자리/테두리, 커서 잡기/이탈, 공 드래그/차기, 희귀 간식/취소, 설정 복원 및 새 포즈의64/400px 실제 창 버퍼 픽셀 일치 통과 |
 | verify_rendering.py | Windows 실제 창 버퍼1,152프레임 픽셀 일치, 잔상 없음, 알파0 클릭 통과/불투명 영역 히트 검사 통과 |
 
 자동 생성 검사에는 읽을 수 없는 이미지, 불투명 결과, 빈 프레임, 타임아웃, 비용 부족, 기준 이미지 변경과 승인 무효화, 마스크 밖을 바꾸는 모델을 포함한다. 타임아웃은 재시도와 예산을 소비하며 재실행해도 초기화되지 않는다. 행동 카탈로그에 **추가300개**를 넣어 명세·누락 목록·sync가 가변적으로 늘어나는 것도 검증했다. 최초 회귀 실행에서 먹기 상태의 기본 길이를 조회하는 호환 문제를 발견해 기존 `.1초` 기본값으로 복구하고 실제 창 검사를 다시 통과했다.
@@ -29,7 +30,7 @@
 
 `examples/characters/dummy`는 실제 등록 가능한 독립 팩이다. idle7프레임/pingpong·걷기10프레임으로 고정 프레임 규격에 의존하지 않음을 검증했다. 테스트는 핵심 게임 코드 파일의 해시를 전후 비교해 바꾸지 않았음을 확인한다.
 
-`python examples/demo_autogen.py`는 `artifacts/autogen-demo/characters/auto_dummy`를 등록한다. 최초 전체 스트립 생성 후 비어 있는 걷기2번만 재생성하고 다른 슬롯을 바꾸려는 모델의 결과를 차단했다. 15개 행동을 모두 통과해 등록했으며 결과 JSON·검토 HTML·GIF를 보존한다. 이 모델은 기하 도형으로 만든 결정론적 테스트 모델이며 실제 그림 생성 서비스가 아니다.
+`python examples/demo_autogen.py`는 `artifacts/autogen-demo/characters/auto_dummy`를 등록한다. 최초 전체 스트립 생성 후 비어 있는 걷기2번만 재생성하고 다른 슬롯을 바꾸려는 모델의 결과를 차단했다. 초기15개 행동을 모두 통과해 등록했으며 결과 JSON·검토 HTML·GIF를 보존한다. 현재 자동 테스트는 추가 행동까지 포함한22개 카탈로그로 실행한다. 이 모델은 기하 도형으로 만든 결정론적 테스트 모델이며 실제 그림 생성 서비스가 아니다.
 
 OpenAI 어댑터는 다중 참고 이미지·투명 PNG 요청·선택적 수정 마스크·비전 응답·낮은 확신의 검토 전환을 **모의 SDK**로 검증했다. SDK/API 연결이 없는 경우 명세·프롬프트만 출력한다. 실제 유료 API 호출과 실제 서비스의 이미지 품질 검증은 수행하지 않았다. 자동 통계·비전 검사는 외형 동일성을 보장하지 않으며 검토 경로를 남긴다. 비용 제한은 보수적 요청당 예약액 기준이고 서비스 청구 한도는 서비스에서 별도 설정한다.
 
@@ -38,3 +39,5 @@ OpenAI 어댑터는 다중 참고 이미지·투명 PNG 요청·선택적 수정
 실행 중인 `dist/DeskMates.exe`의 Windows 파일 잠금으로 그 파일에 덮어쓰는 빌드는 실패했다. 앱을 종료하지 않고 `build.ps1 -OutputDirectory artifacts/resource-refactor/release`로 새 **단일 EXE 빌드에 성공**했다. Pillow/NumPy/이미지 생성 SDK는 게임에 필요하지 않으므로 개발 도구와 분리했다.
 
 새 EXE에서 제니스, 외부 더미, 자동 생성 더미를 각각 별도 설정 파일로 시작해 캐릭터 발견·설정 저장·정상 종료(각 코드0)를 확인했다. 결과는 `artifacts/resource-refactor/frozen-results.json`에 남겼다. 기존 사용자 앱과 설정은 이 검사에 사용하지 않았다.
+
+창·수면·놀이 및 최종 옆모습 매달림을 포함한 최신 단일 EXE는 `artifacts/desktop-interactions/DeskMates.exe`에 별도 빌드했다. 두 기본 캐릭터의 새 이미지 로딩·기본30분 수면·추가 행동 설정 저장·정상 종료를 독립 설정으로 검사하며 결과는 `artifacts/interactions/frozen-results.json`에 저장한다. 추가 포즈 그림은 내장 이미지 생성 도구로 제작했고 생성 원본·프롬프트·좌표는 [제작 기록](desktop-interaction-prompts.md)에 보존했다. 기존 원본17개와936프레임 비교도 다시 통과했다.

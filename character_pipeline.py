@@ -99,8 +99,9 @@ def specification(character):
             'frame_count':source.get('frame_count',default['frames']),
             'cell':source.get('cell',default['cell']), 'recommended_resolution':default['cell'],
             'source_cells_before_alpha_crop':source_cell,
-            'direction':default['direction'],'frame_order':default['description'],
+            'direction':spec.get('direction',default['direction']),'frame_order':default['description'],
             'fps':spec['fps'],'loop':spec['loop'],'anchor':spec.get('anchor',default['anchor']),
+            'support_anchor':spec.get('support_anchor'),
             'file':source.get('file',f'animations/{key}.png'),
             'files':source.get('files'), 'rects':source.get('rects'), 'grid':source.get('grid'),
             'fallback':spec.get('fallback'),'complete':bool(source.get('file') or source.get('files')),
@@ -121,7 +122,7 @@ def checklist(character, output):
     for a in specs:
         lines.append(f"| {'[x]' if a['complete'] else '[ ]'} | {a['name']} / {a['action_id']} | {'필수' if a['required'] else '선택'} | {a['frame_count']} | {a['source_cells_before_alpha_crop']} | {a['cell']} | {a['fps']:.4g} | {a['loop']} | {a['direction']} | {a['file']} |")
     for a in specs:
-        lines.extend(['',f"## {a['action_id']}",a['frame_order'],f"기준 위치: {a['anchor']}; fallback: {a['fallback']}; {a['timing']}"])
+        lines.extend(['',f"## {a['action_id']}",a['frame_order'],f"기준 위치: {a['anchor']}; 접촉점: {a['support_anchor']}; fallback: {a['fallback']}; {a['timing']}"])
     (output/'checklist.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     return specs
 
@@ -146,17 +147,22 @@ def templates(character, output, *, gap=0, reference=None):
             anchor=a['anchor'] if isinstance(a['anchor'],list) else [w/2,h*.95]
             ax,ay=x+anchor[0],anchor[1]
             draw.line((ax,0,ax,h),fill=(160,180,220)); draw.line((x,ay,x+w,ay),fill=(220,140,150))
+            if a['support_anchor']:
+                sx,sy=a['support_anchor']; sx+=x
+                draw.ellipse((sx-4,sy-4,sx+4,sy+4),outline=(35,160,80),width=2)
             draw.text((x+6,6),f'{key} / {i+1:03}',fill=(30,30,40))
             Image.new('RGBA',(w,h)).save(folder/'frames'/f'{i:03}.png')
         guide.save(folder/'guide.png')
         layout={'action_id':key,'image_size':list(size),'cell':[w,h],'gap':gap,'rects':rects,
                 'frame_order':a['frame_order'],'anchor':a['anchor'],'fps':a['fps'],'loop':a['loop'],
+                'support_anchor':a['support_anchor'],
                 'game_template':'template.png','reference_only':'guide.png'}
         write_json(folder/'layout.json',layout); layouts[key]=layout
         if ref_art:
             mapping={'motion':ref_art.motion_frames,'corner':ref_art.corner_frames,
                      'feeding':ref_art.feed_frames,'refusal':ref_art.refusal_frames}
-            poses=mapping.get(key,ref_art.frames.get(key,ref_art.frames['idle']))
+            poses=mapping.get(key,ref_art.frames.get(key))
+            if poses is None: poses=extract_frames(reference,key)
             pil=[pil_pixmap(p) for p in poses]
             shared=min((w-16)/max(p.width for p in pil),(h-40)/max(p.height for p in pil))
             reference_sheet=guide.copy()
@@ -187,6 +193,7 @@ def jobs(character, output, *, gap=0, reference=None):
             f"Exactly {spec['frame_count']} frames, left to right; canvas {layout['image_size']}; "
             f"cells {layout['cell']}; gap {gap}; rectangles {layout['rects']}. "
             f"Body anchor in each cell: {layout['anchor']}. Shared anatomical scale; intentional jumping may lift feet. "
+            f"Fixed window contact point (when present): {layout['support_anchor']}; keep hands/seat attached there in every frame. "
             f"Playback {spec['fps']:.5g} FPS, {spec['loop']}. "
             "For cycles, ensure last-to-first contact/velocity continuity; do not add a duplicate terminal frame. "
             "Transparent RGBA background, no ground, shadow panel, text, numbers, grid or guide lines. "
@@ -287,6 +294,8 @@ def import_animation(character, action, source, layout_path=None, *, individual=
         'cell':[w,h],'image_size':list(sheet.size),'crop':'none','fps':layout['fps'],'loop':layout['loop'],
         'anchor':layout['anchor'],'review':{'status':'pending','image_sha256':image_hash,
                 'canonical_sha256':character.data['canonical']['sha256']}}
+    if layout.get('support_anchor') is not None:
+        character.data['animations'][action]['support_anchor']=layout['support_anchor']
     character.data['animations'][action].pop('files',None)
     character.data['animations'][action].pop('anchors',None)
     character.data['enabled']=False

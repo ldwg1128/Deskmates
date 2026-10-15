@@ -33,8 +33,14 @@ class Character:
 
 
 def action_spec(character, action):
-    return {**CATALOG['actions'].get(action, {}),
-            **character.data.get('animations', {}).get(action, {})}
+    default=CATALOG['actions'].get(action,{})
+    own=character.data.get('animations',{}).get(action,{})
+    result={**default,**own}
+    if default.get('support_anchor') and 'support_anchor' not in own:
+        cell=own.get('cell',default['cell'])
+        result['support_anchor']=[value*cell[i]/default['cell'][i]
+                                  for i,value in enumerate(default['support_anchor'])]
+    return result
 
 
 def extract_frames(character, action, *, fallback=True, visited=()):

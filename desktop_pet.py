@@ -13,6 +13,7 @@ import time
 
 from edge_path import EdgeRoute
 from appetite import Appetite, BREAD_LIMIT, DIGEST_SECONDS, DIGEST_INTERVALS, normalize_digest_seconds
+from desktop_interactions import DesktopInteractions, DEFAULT_SLEEP_SECONDS, SLEEP_PRESETS
 
 from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QSize, QSignalBlocker, QStandardPaths, Qt, QTimer
 from PySide6.QtGui import QActionGroup, QColor, QCursor, QIcon, QImage, QPainter, QPen, QPixmap, QRegion, QTransform
@@ -267,6 +268,7 @@ class DesktopPet(QWidget):
         QApplication.instance().screenRemoved.connect(self.refresh_screens)
         for screen in QApplication.screens():
             screen.availableGeometryChanged.connect(self.refresh_screens)
+        self.interactions = DesktopInteractions(self, native=start_timer)
         self.apply_click_through()
         if (self.roam_mode == "edge" and not self.paused and not self.stationary
                 and self.edge_route.at(self.edge_progress, self.edge_sign).corner):
@@ -294,6 +296,8 @@ class DesktopPet(QWidget):
     def set_character(self, character_id: str):
         if character_id not in CHARACTERS or character_id == self.character_id:
             return
+        self.interactions.cancel()
+        self.interactions.activity()
         self.cancel_feeding()
         # Reset transient movement so no old sprite or target survives a switch.
         self.character_id = character_id
@@ -337,6 +341,7 @@ class DesktopPet(QWidget):
                 "show_windows_tools": self.show_windows_tools,
                 "feeding_enabled": self.feeding_enabled,
                 "digest_seconds": self.digest_seconds,
+                **(self.interactions.settings() if hasattr(self, 'interactions') else {}),
                 "appetites": {**self.saved_appetites,
                               **{key: value.as_dict() for key, value in self.appetites.items()}},
                 "roam_mode": self.roam_mode, "edge_direction": self.edge_direction,
@@ -351,6 +356,8 @@ class DesktopPet(QWidget):
             logging.exception("Could not save settings")
 
     def set_size(self, height: int, *, save: bool = True):
+        if hasattr(self, 'interactions'):
+            self.interactions.cancel()
         self.cancel_feeding()
         self.body_height = int(clamp(height, 64, 400))
         self.art.resize(self.body_height)
@@ -366,6 +373,8 @@ class DesktopPet(QWidget):
             sprites = [p for frames in self.frames.values() for p in frames] + self.corner_frames + self.feed_frames + self.refusal_frames
             side = math.ceil(2 * max(math.hypot(p.width(), p.height()) for p in sprites)) + 16
         self.setFixedSize(side, side)
+        if hasattr(self, 'interactions'):
+            self.interactions.reload_art()
         self.frame_key = None
         if self.roam_mode == "edge":
             self.rebuild_edge_route()
@@ -466,6 +475,8 @@ class DesktopPet(QWidget):
             raise ValueError("Invalid roaming mode or direction")
         if mode == self.roam_mode and direction == self.edge_direction:
             return
+        if hasattr(self, 'interactions'):
+            self.interactions.cancel()
         self.cancel_feeding()
         old_mode = self.roam_mode
         old_x = self.x
@@ -515,6 +526,9 @@ class DesktopPet(QWidget):
                 and self.edge_route.at(self.edge_progress, self.edge_sign).corner)
 
     def enter_state(self, state: str, duration: float | None = None):
+        if (hasattr(self, 'interactions') and self.interactions.kind and
+                not self.interactions.changing_state):
+            self.interactions.cancel()
         if state != "gaze" and hasattr(self, "bread_button"):
             self.bread_button.hide()
             self.feed_hover = 0.0
@@ -552,6 +566,8 @@ class DesktopPet(QWidget):
 
     def choose_action(self):
         self.target = None
+        if hasattr(self, 'interactions') and self.interactions.maybe_snack():
+            return
         if (self.feeding_enabled and self.appetite.stacks == 0
                 and time.monotonic() >= self.next_hunger):
             if self.roam_mode == "edge" and self.state in ("left", "right"):
@@ -580,7 +596,7 @@ class DesktopPet(QWidget):
 
     def cursor_is_near(self, cursor: QPoint) -> bool:
         # Measure distance from the visible body, excluding rotation padding.
-        if self.roam_mode == "edge":
+        if self.roam_mode == "edge" or (hasattr(self, 'interactions') and self.interactions.kind):
             body = QRegion(self.pixmap.mask()).boundingRect()
         else:
             sprite = self.frames["idle"][0]
@@ -656,7 +672,7 @@ class DesktopPet(QWidget):
         return QPointF(self.x, self.y - idle.height() + ground - height)
 
     def update_bread_button(self, dt):
-        if (not self.feeding_enabled or self.click_through or self.menu_open
+        if (self.interactions.kind or not self.feeding_enabled or self.click_through or self.menu_open
                 or self.feed_cooldown > 0 or self.speech.isVisible() or not self.isVisible()):
             self.bread_button.hide()
             self.feed_hover = 0.0
@@ -673,10 +689,11 @@ class DesktopPet(QWidget):
         self.bread_button.setToolTip(f"빵 주기 · {self.appetite.label} ({self.appetite.stacks}/{BREAD_LIMIT})")
 
     def start_feeding(self):
-        if (not self.feeding_enabled or self.click_through or self.menu_open or self.dragging
+        if (self.interactions.kind or not self.feeding_enabled or self.click_through or self.menu_open or self.dragging
                 or self.state in FEED_STATES + ("flip", "land") or self.edge_jumping()
                 or self.feed_cooldown > 0 or not self.bread_button.isVisible()):
             return
+        self.interactions.activity()
         self.feed_start = QPointF(self.bread_button.geometry().center())
         self.feed_end = self.feeding_point(self.body_height * 0.58)
         self.bread_button.hide()
@@ -758,6 +775,8 @@ class DesktopPet(QWidget):
         self.update()
 
     def advance(self, dt: float, cursor: QPoint | None = None):
+        cursor = cursor if cursor is not None else QCursor.pos()
+        self.interactions.tick(dt, cursor)
         if any([appetite.digest(time.time()) for appetite in self.appetites.values()]):
             self.save_settings()
         self.feed_cooldown = max(0.0, self.feed_cooldown - dt)
@@ -801,6 +820,8 @@ class DesktopPet(QWidget):
                 self.enter_state("idle", 1.0)
                 self.gaze_elapsed = 0
             self.update_frame()
+            return
+        if self.interactions.advance(dt, cursor):
             return
         if self.press_global is not None:
             return
@@ -869,6 +890,8 @@ class DesktopPet(QWidget):
             self.position_speech()
 
     def update_frame(self, cursor: QPoint | None = None):
+        if hasattr(self, 'interactions') and self.interactions.render():
+            return
         if self.state in FEED_STATES:
             self.render_feeding()
             return
@@ -997,6 +1020,8 @@ class DesktopPet(QWidget):
         self.update()
 
     def begin_drag(self, cursor: QPoint):
+        self.interactions.cancel()
+        self.interactions.activity()
         self.cancel_feeding()
         self.near_cursor = False
         self.dragging = True
@@ -1033,6 +1058,8 @@ class DesktopPet(QWidget):
         self.update_frame()
 
     def finish_drag(self):
+        if self.interactions.try_window(self.drag_cursor or QCursor.pos()):
+            return
         if self.roam_mode == "edge":
             cursor = self.drag_cursor or QCursor.pos()
             self.dragging = False
@@ -1077,6 +1104,7 @@ class DesktopPet(QWidget):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
+            self.interactions.activity(wake=True)
             self.press_global = event.globalPosition().toPoint()
             self.press_origin = (self.x, self.y)
             self.setCursor(Qt.CursorShape.ClosedHandCursor)
@@ -1103,11 +1131,12 @@ class DesktopPet(QWidget):
         self.target = None
         if was_dragging:
             self.finish_drag()
-        elif not self.edge_jumping() and self.state not in FEED_STATES:
+        elif not self.interactions.kind and not self.edge_jumping() and self.state not in FEED_STATES:
             self.enter_state(self.rng.choice(["wave", "jump"]))
         event.accept()
 
     def contextMenuEvent(self, event):
+        self.interactions.activity(wake=True)
         self.hide_food()
         menu = QMenu(self)
         self.populate_menu(menu)
@@ -1149,6 +1178,10 @@ class DesktopPet(QWidget):
             group.addAction(action)
             action.triggered.connect(lambda checked=False, h=height: self.set_size(h))
         menu.addAction("행동 설정…", self.open_behavior_settings)
+        menu.addAction("공 치우기" if self.interactions.ball.isVisible() else "공 꺼내기",
+                       self.interactions.toggle_ball)
+        if self.interactions.kind in ('sleep', 'sleep_walk'):
+            menu.addAction("잠 깨우기", self.interactions.wake)
         menu.addSeparator()
         click_through = menu.addAction("마우스 통과")
         click_through.setCheckable(True)
@@ -1175,6 +1208,7 @@ class DesktopPet(QWidget):
                                   QSystemTrayIcon.MessageIcon.Warning, 4000)
 
     def open_behavior_settings(self):
+        self.interactions.activity()
         self.hide_food()
         was_open = self.menu_open
         self.menu_open = True
@@ -1267,6 +1301,7 @@ class DesktopPet(QWidget):
         self.show()
 
     def quit_pet(self):
+        self.interactions.ball.hide()
         self.hide_food()
         self.save_settings()
         self.timer.stop()
@@ -1278,6 +1313,9 @@ class DesktopPet(QWidget):
         event.accept()
 
     def hideEvent(self, event):
+        if hasattr(self, 'interactions'):
+            self.interactions.ball.hide()
+            self.interactions.cancel()
         self.cancel_feeding()
         super().hideEvent(event)
 
@@ -1399,6 +1437,30 @@ class BehaviorSettingsDialog(QDialog):
         self.advanced_form.addRow("걷는 속도 (20~100 px/초)", self.speed)
         advanced_layout.addLayout(self.advanced_form)
         advanced_layout.addWidget(self.show_windows_tools)
+        extra_box = QGroupBox("추가 행동")
+        extra_layout = QVBoxLayout(extra_box)
+        self.window_interactions = QCheckBox("창 위에 앉기 · 모서리에 매달리기")
+        self.window_interactions.setChecked(pet.interactions.window_enabled)
+        self.sleep_enabled = QCheckBox("오래 방치하면 구석에서 잠들기")
+        self.sleep_enabled.setChecked(pet.interactions.sleep_enabled)
+        self.sleep_delay = QComboBox()
+        for seconds in SLEEP_PRESETS:
+            self.sleep_delay.addItem(f"{seconds//60}분", seconds)
+        self.sleep_delay.setCurrentIndex(self.sleep_delay.findData(pet.interactions.sleep_seconds))
+        self.sleep_delay.setEnabled(self.sleep_enabled.isChecked())
+        self.sleep_enabled.toggled.connect(self.sleep_delay.setEnabled)
+        self.cursor_play_enabled = QCheckBox("허리 근처의 커서에 다가가 잡기")
+        self.cursor_play_enabled.setChecked(pet.interactions.cursor_enabled)
+        self.rare_actions_enabled = QCheckBox("배고플 때 드물게 몰래 간식 먹기")
+        self.rare_actions_enabled.setChecked(pet.interactions.rare_enabled)
+        for control in (self.window_interactions, self.sleep_enabled):
+            extra_layout.addWidget(control)
+        sleep_form = QFormLayout()
+        sleep_form.addRow("잠들기까지", self.sleep_delay)
+        extra_layout.addLayout(sleep_form)
+        for control in (self.cursor_play_enabled, self.rare_actions_enabled):
+            extra_layout.addWidget(control)
+        advanced_layout.addWidget(extra_box)
         layout.addWidget(self.advanced_panel)
         self.advanced_panel.hide()
         self.buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Save
@@ -1455,6 +1517,12 @@ class BehaviorSettingsDialog(QDialog):
 
     def accept(self):
         pet = self.pet
+        pet.interactions.finish()
+        pet.interactions.configure(dict(window_interactions=self.window_interactions.isChecked(),
+            sleep_enabled=self.sleep_enabled.isChecked(), sleep_seconds=self.sleep_delay.currentData(),
+            cursor_play_enabled=self.cursor_play_enabled.isChecked(),
+            rare_actions_enabled=self.rare_actions_enabled.isChecked()))
+        pet.interactions.activity()
         pause_changed = pet.paused != self.paused.isChecked()
         radius_changed = pet.radius != self.radius.value()
         height_changed = pet.body_height != self.height_input.value()

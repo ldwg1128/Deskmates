@@ -693,6 +693,274 @@
       "loop": "once",
       "anchor": "feet",
       "frame_count": 4
+    },
+    "window_sit": {
+      "file": "animations/window_sit-v1.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1024,
+        320
+      ],
+      "cell": [
+        256,
+        320
+      ],
+      "body_height": 266,
+      "anchor": [
+        128,
+        300
+      ],
+      "fps": 5,
+      "loop": "loop",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "123e7fb1c62cac7e869e418bb73fa8323027aed7dcc3c04d6484fe7a963a7afd",
+        "canonical_sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+        "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
+      },
+      "support_anchor": [
+        128,
+        250
+      ]
+    },
+    "ledge_struggle": {
+      "file": "animations/ledge-struggle-side-v2.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1024,
+        320
+      ],
+      "cell": [
+        256,
+        320
+      ],
+      "body_height": 266,
+      "anchor": [
+        128,
+        300
+      ],
+      "fps": 8,
+      "loop": "loop",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "5cba26fd7b7f7827471516c5370d8551c43cec33c9b7ef4e464e0d0b2490bd0f",
+        "canonical_sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+        "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
+      },
+      "support_anchor": [
+        32,
+        120
+      ],
+      "direction": "left"
+    },
+    "sleep": {
+      "file": "animations/sleep-v1.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1024,
+        320
+      ],
+      "cell": [
+        256,
+        320
+      ],
+      "body_height": 266,
+      "anchor": [
+        128,
+        300
+      ],
+      "fps": 2,
+      "loop": "loop",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "2b62d5d78c69075a2bc16c07ce58cbad553e94e31d83dcc9c7d73f4a1415c8ab",
+        "canonical_sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+        "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
+      }
+    },
+    "wake_annoyed": {
+      "file": "animations/wake_annoyed-v1.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1024,
+        320
+      ],
+      "cell": [
+        256,
+        320
+      ],
+      "body_height": 266,
+      "anchor": [
+        128,
+        300
+      ],
+      "fps": 4,
+      "loop": "once",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "0523b4ce45ef1cdaf298e744cd6f4ddaaec663ca3fb3228b344d646913c9c2fd",
+        "canonical_sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+        "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
+      }
+    },
+    "cursor_grab": {
+      "file": "animations/cursor_grab-v1.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1024,
+        320
+      ],
+      "cell": [
+        256,
+        320
+      ],
+      "body_height": 266,
+      "anchor": [
+        128,
+        300
+      ],
+      "fps": 5,
+      "loop": "once",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "a0083b4b228e2e977c7ef03fdaaf3dba79d0a2f56e6e70e8316fbdeeebdf36ee",
+        "canonical_sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+        "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
+      }
+    },
+    "kick": {
+      "file": "animations/kick-v1.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1024,
+        320
+      ],
+      "cell": [
+        256,
+        320
+      ],
+      "body_height": 266,
+      "anchor": [
+        128,
+        300
+      ],
+      "fps": 6,
+      "loop": "once",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "6978f893d388ba27a254619badeb5577a4b4e5c3e5744c46fba833cadd8d2df8",
+        "canonical_sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+        "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
+      }
+    },
+    "secret_snack": {
+      "file": "animations/secret_snack-v1.png",
+      "grid": [
+        4,
+        1
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_count": 4,
+      "image_size": [
+        1024,
+        320
+      ],
+      "cell": [
+        256,
+        320
+      ],
+      "body_height": 266,
+      "anchor": [
+        128,
+        300
+      ],
+      "fps": 4,
+      "loop": "once",
+      "crop": "none",
+      "clean_alpha": true,
+      "review": {
+        "status": "approved",
+        "image_sha256": "1eda9ee10fe7e0307f5acb8c77ca2d701ee03f0142c914631176d3d3dc8c8020",
+        "canonical_sha256": "f33be492ffa8ab6c0d047a23661ce3a971c4377f9a0457809e07fc25bd4785f2",
+        "note": "Builtin image generation, compared with canonical, individual sprites isolated and common anatomical scale retained."
+      }
     }
   },
   "legacy_originals": {

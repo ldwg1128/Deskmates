@@ -76,7 +76,9 @@ def validate_structure(character):
                 count=len(rects)
             if count!=spec.get('frame_count',count): raise ValueError('Declared frame count mismatch')
             if spec.get('anchors') and len(spec['anchors'])!=count: raise ValueError('Per-frame anchor count mismatch')
-            for anchor in spec.get('anchors',[]) + ([spec['anchor']] if isinstance(spec.get('anchor'),list) else []):
+            contact=spec.get('support_anchor')
+            if contact is not None and not isinstance(contact,list): raise ValueError('Invalid support anchor')
+            for anchor in spec.get('anchors',[]) + ([spec['anchor']] if isinstance(spec.get('anchor'),list) else []) + ([contact] if contact is not None else []):
                 if len(anchor)!=2 or any(not isinstance(v,(int,float)) or not math.isfinite(v) for v in anchor): raise ValueError('Invalid anchor')
         except (OSError,ValueError,KeyError,TypeError,ZeroDivisionError) as error:
             errors.append(f'{action}: {error}')

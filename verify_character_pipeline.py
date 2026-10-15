@@ -37,7 +37,10 @@ def main():
     from examples.create_dummy import create
     # Persist a real registered fixture and game previews for review.
     demo=Path('artifacts/demo-characters/dummy')
-    if not (demo/'character.json').exists(): create(demo)
+    # Rebuild generated fixtures when the catalog grows, without deleting prior previews.
+    with tempfile.TemporaryDirectory() as seed:
+        fresh=Path(seed)/'dummy'; create(fresh)
+        shutil.copytree(fresh,demo,dirs_exist_ok=True)
     c=open_character(demo)
     assert not audit(c)['errors']
     assert audit(c)['completion']==100

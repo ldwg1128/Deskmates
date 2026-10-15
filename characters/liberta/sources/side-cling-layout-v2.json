@@ -1,0 +1,80 @@
+{
+  "tool": "built-in image_gen",
+  "raw_sha256": "fc3554340c442444ceca79ea9960d451a7eef6ddc75ed4a31fd31a250f74149a",
+  "scale": 0.46,
+  "cell": [
+    256,
+    320
+  ],
+  "support_anchor": [
+    32,
+    120
+  ],
+  "frames": [
+    {
+      "source_rect": [
+        0,
+        0,
+        543,
+        724
+      ],
+      "source_hand": [
+        117,
+        240
+      ],
+      "offset": [
+        -22,
+        10
+      ]
+    },
+    {
+      "source_rect": [
+        543,
+        0,
+        543,
+        724
+      ],
+      "source_hand": [
+        660,
+        240
+      ],
+      "offset": [
+        -22,
+        10
+      ]
+    },
+    {
+      "source_rect": [
+        1086,
+        0,
+        543,
+        724
+      ],
+      "source_hand": [
+        1202,
+        240
+      ],
+      "offset": [
+        -21,
+        10
+      ]
+    },
+    {
+      "source_rect": [
+        1629,
+        0,
+        543,
+        724
+      ],
+      "source_hand": [
+        1745,
+        240
+      ],
+      "offset": [
+        -21,
+        10
+      ]
+    }
+  ],
+  "direction": "left; character outside right vertical window edge; mirror at left edge"
+}

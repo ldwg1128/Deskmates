@@ -1,7 +1,10 @@
 {
-  "catalog_actions": 15,
+  "catalog_actions": 22,
   "states": [
+    "ball_approach",
     "bow",
+    "cursor_approach",
+    "cursor_grab",
     "drag",
     "edge_corner",
     "feed_drop",
@@ -12,14 +15,24 @@
     "gaze",
     "hungry",
     "idle",
+    "interaction_fall",
+    "interaction_jump",
+    "interaction_land",
     "jump",
+    "kick",
     "land",
+    "ledge_struggle",
     "left",
     "right",
+    "secret_snack",
     "shy",
+    "sleep",
+    "sleep_walk",
     "think",
     "tilt",
-    "wave"
+    "wake_annoyed",
+    "wave",
+    "window_sit"
   ],
   "bindings": {
     "idle": "idle",
@@ -40,7 +53,20 @@
     "feed_drop": "feeding",
     "feed_eat": "feeding",
     "feed_happy": "feeding",
-    "feed_refuse": "refusal"
+    "feed_refuse": "refusal",
+    "window_sit": "window_sit",
+    "ledge_struggle": "ledge_struggle",
+    "sleep_walk": "right",
+    "sleep": "sleep",
+    "wake_annoyed": "wake_annoyed",
+    "cursor_approach": "right",
+    "cursor_grab": "cursor_grab",
+    "ball_approach": "right",
+    "kick": "kick",
+    "secret_snack": "secret_snack",
+    "interaction_jump": "jump",
+    "interaction_fall": "motion",
+    "interaction_land": "motion"
   },
   "unmapped_states": [],
   "characters": {
@@ -72,6 +98,7 @@
           "fps": 5.555555555555555,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-spritesheet.png",
           "files": null,
           "rects": [
@@ -141,6 +168,7 @@
           "fps": 9.523809523809524,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-motion.png",
           "files": null,
           "rects": null,
@@ -176,6 +204,7 @@
           "fps": 9.523809523809524,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-motion.png",
           "files": null,
           "rects": null,
@@ -211,6 +240,7 @@
           "fps": 5.555555555555555,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-spritesheet.png",
           "files": null,
           "rects": [
@@ -268,6 +298,7 @@
           "fps": 6.666666666666667,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-spritesheet.png",
           "files": null,
           "rects": [
@@ -331,6 +362,7 @@
           "fps": 5.88235294117647,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-spritesheet.png",
           "files": null,
           "rects": [
@@ -412,6 +444,7 @@
           "fps": 5.2631578947368425,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-spritesheet.png",
           "files": null,
           "rects": [
@@ -481,6 +514,7 @@
           "fps": 4.545454545454546,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-spritesheet.png",
           "files": null,
           "rects": [
@@ -550,6 +584,7 @@
           "fps": 5.2631578947368425,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-spritesheet.png",
           "files": null,
           "rects": [
@@ -619,6 +654,7 @@
           "fps": 2.2222222222222223,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-hungry.png",
           "files": null,
           "rects": null,
@@ -654,6 +690,7 @@
           "fps": 0,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-spritesheet.png",
           "files": null,
           "rects": [
@@ -783,6 +820,7 @@
           "fps": 0,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-motion.png",
           "files": null,
           "rects": null,
@@ -818,6 +856,7 @@
           "fps": 6.666666666666667,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-corner-jump.png",
           "files": null,
           "rects": null,
@@ -853,6 +892,7 @@
           "fps": 4.545454545454546,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-feeding.png",
           "files": null,
           "rects": null,
@@ -888,6 +928,7 @@
           "fps": 4.545454545454546,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/liberta-refusal.png",
           "files": null,
           "rects": null,
@@ -898,6 +939,285 @@
           "fallback": "idle",
           "complete": true,
           "timing": "2.8s: shake frames1/2 every.22s until1.3s; offer frame3 for remaining1.5s."
+        },
+        {
+          "action_id": "window_sit",
+          "name": "Sit on a window ledge",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "feet dangling, left leg swing, right leg swing, settle",
+          "fps": 5,
+          "loop": "loop",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": [
+            128,
+            260
+          ],
+          "file": "animations/window_sit-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "ledge_struggle",
+          "name": "Hold window corner",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "left",
+          "frame_order": "left-facing side profile, hands fixed to vertical window edge at face height, body outside to the right; strained grip, bent legs kick backward, slip and tighten grip, flail; mirror for the left edge",
+          "fps": 8,
+          "loop": "loop",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": [
+            32,
+            120
+          ],
+          "file": "animations/ledge-struggle-side-v2.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "sleep",
+          "name": "Sleep",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "curl up asleep, breathe in, breathe out, rest",
+          "fps": 2,
+          "loop": "loop",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/sleep-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "wake_annoyed",
+          "name": "Annoyed wake",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "rub eye, yawn, frown, wake",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/wake_annoyed-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "shy",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "cursor_grab",
+          "name": "Catch the cursor",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "reach at waist height, close hands, grasp, hold",
+          "fps": 5,
+          "loop": "once",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/cursor_grab-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "wave",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "kick",
+          "name": "Kick a ball",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "prepare, lift knee, extend kicking foot, recover",
+          "fps": 6,
+          "loop": "once",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/kick-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "jump",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "secret_snack",
+          "name": "Secret snack",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "take cookie from pocket, check nobody sees, bite, satisfied",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/secret_snack-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "think",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
         }
       ],
       "validation": {
@@ -935,6 +1255,7 @@
           "fps": 5.555555555555555,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1004,6 +1325,7 @@
           "fps": 9.523809523809524,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1085,6 +1407,7 @@
           "fps": 9.523809523809524,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1166,6 +1489,7 @@
           "fps": 5.555555555555555,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1223,6 +1547,7 @@
           "fps": 6.666666666666667,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1286,6 +1611,7 @@
           "fps": 5.88235294117647,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1367,6 +1693,7 @@
           "fps": 5.2631578947368425,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1436,6 +1763,7 @@
           "fps": 4.545454545454546,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1505,6 +1833,7 @@
           "fps": 5.2631578947368425,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1574,6 +1903,7 @@
           "fps": 2.2222222222222223,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-hungry.png",
           "files": null,
           "rects": null,
@@ -1609,6 +1939,7 @@
           "fps": 0,
           "loop": "loop",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-spritesheet-v2.png",
           "files": null,
           "rects": [
@@ -1738,6 +2069,7 @@
           "fps": 0,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-motion-v4.png",
           "files": null,
           "rects": null,
@@ -1773,6 +2105,7 @@
           "fps": 6.666666666666667,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-corner-jump.png",
           "files": null,
           "rects": null,
@@ -1808,6 +2141,7 @@
           "fps": 4.545454545454546,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-feeding.png",
           "files": null,
           "rects": null,
@@ -1843,6 +2177,7 @@
           "fps": 4.545454545454546,
           "loop": "once",
           "anchor": "feet",
+          "support_anchor": null,
           "file": "../../assets/zenith-refusal.png",
           "files": null,
           "rects": null,
@@ -1853,6 +2188,285 @@
           "fallback": "idle",
           "complete": true,
           "timing": "2.8s: shake frames1/2 every.22s until1.3s; offer frame3 for remaining1.5s."
+        },
+        {
+          "action_id": "window_sit",
+          "name": "Sit on a window ledge",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "feet dangling, left leg swing, right leg swing, settle",
+          "fps": 5,
+          "loop": "loop",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": [
+            128,
+            250
+          ],
+          "file": "animations/window_sit-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "ledge_struggle",
+          "name": "Hold window corner",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "left",
+          "frame_order": "left-facing side profile, hands fixed to vertical window edge at face height, body outside to the right; strained grip, bent legs kick backward, slip and tighten grip, flail; mirror for the left edge",
+          "fps": 8,
+          "loop": "loop",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": [
+            32,
+            120
+          ],
+          "file": "animations/ledge-struggle-side-v2.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "sleep",
+          "name": "Sleep",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "curl up asleep, breathe in, breathe out, rest",
+          "fps": 2,
+          "loop": "loop",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/sleep-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "idle",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "wake_annoyed",
+          "name": "Annoyed wake",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "rub eye, yawn, frown, wake",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/wake_annoyed-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "shy",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "cursor_grab",
+          "name": "Catch the cursor",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "reach at waist height, close hands, grasp, hold",
+          "fps": 5,
+          "loop": "once",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/cursor_grab-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "wave",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "kick",
+          "name": "Kick a ball",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "right",
+          "frame_order": "prepare, lift knee, extend kicking foot, recover",
+          "fps": 6,
+          "loop": "once",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/kick-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "jump",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
+        },
+        {
+          "action_id": "secret_snack",
+          "name": "Secret snack",
+          "required": false,
+          "frame_count": 4,
+          "cell": [
+            256,
+            320
+          ],
+          "recommended_resolution": [
+            256,
+            320
+          ],
+          "source_cells_before_alpha_crop": [
+            [
+              256,
+              320
+            ]
+          ],
+          "direction": "front",
+          "frame_order": "take cookie from pocket, check nobody sees, bite, satisfied",
+          "fps": 4,
+          "loop": "once",
+          "anchor": [
+            128,
+            300
+          ],
+          "support_anchor": null,
+          "file": "animations/secret_snack-v1.png",
+          "files": null,
+          "rects": null,
+          "grid": [
+            4,
+            1
+          ],
+          "fallback": "think",
+          "complete": true,
+          "timing": "DesktopInteractions owns scheduling and completion; explicit user input retains priority."
         }
       ],
       "validation": {

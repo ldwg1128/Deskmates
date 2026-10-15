@@ -1,6 +1,6 @@
 # 기존 캐릭터·애니메이션 분석
 
-행동 리소스 15개, 게임 상태/바인딩 19개. 자동 AST 검사에서 미등록 상태: [].
+행동 리소스 22개, 게임 상태/바인딩 32개. 자동 AST 검사에서 미등록 상태: [].
 
 파일명은 기존 assets/{id}-*.png를 보존하고 manifest가 연결한다. 새 팩은 characters/{id}/animations/{action}-{hash}.png를 사용한다.
 
@@ -44,6 +44,13 @@
 | feeding | 4 | 4.5455 | once | [2, 2] | shared_mask |
 | hungry | 4 | 2.2222 | loop | [2, 2] | shared_mask |
 | refusal | 4 | 4.5455 | once | [2, 2] | shared_mask |
+| window_sit | 4 | 5 | loop | [4, 1] | none |
+| ledge_struggle | 4 | 8 | loop | [4, 1] | none |
+| sleep | 4 | 2 | loop | [4, 1] | none |
+| wake_annoyed | 4 | 4 | once | [4, 1] | none |
+| cursor_grab | 4 | 5 | once | [4, 1] | none |
+| kick | 4 | 6 | once | [4, 1] | none |
+| secret_snack | 4 | 4 | once | [4, 1] | none |
 
 ## 제니스 (Zenith)
 원본 신체 높이 기준: 198px. 렌더러: legacy-v1.
@@ -65,3 +72,10 @@
 | feeding | 4 | 4.5455 | once | [2, 2] | shared_mask |
 | hungry | 4 | 2.2222 | loop | [2, 2] | shared_mask |
 | refusal | 4 | 4.5455 | once | [2, 2] | shared_mask |
+| window_sit | 4 | 5 | loop | [4, 1] | none |
+| ledge_struggle | 4 | 8 | loop | [4, 1] | none |
+| sleep | 4 | 2 | loop | [4, 1] | none |
+| wake_annoyed | 4 | 4 | once | [4, 1] | none |
+| cursor_grab | 4 | 5 | once | [4, 1] | none |
+| kick | 4 | 6 | once | [4, 1] | none |
+| secret_snack | 4 | 4 | once | [4, 1] | none |
