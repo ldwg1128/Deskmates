@@ -18,6 +18,8 @@ def validate_structure(character):
     profile=data.get('profile',{})
     if not isinstance(profile,dict) or profile.get('render_quality') not in (None,'clarity-v1'):
         errors.append('Unsupported render_quality profile')
+    if isinstance(profile,dict) and not isinstance(profile.get('align_walk_floor',False),bool):
+        errors.append('align_walk_floor must be a boolean')
     animations = data.get('animations', {})
     if not isinstance(animations, dict):
         return {'errors':['animations must be an object'], 'warnings':[], 'missing':[]}

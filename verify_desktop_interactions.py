@@ -80,7 +80,9 @@ def run(characters=('zenith','liberta'), output=Path('artifacts/interactions')):
             pet.set_size(160,save=False); pet.anchor_x=pet.x=800; pet.anchor_y=pet.y=950
             pet.speed=100; ctrl.sleep_enabled=True; ctrl.sleep_seconds=1800; ctrl.activity()
             pet.advance(1799,far); assert ctrl.kind is None
-            pet.advance(1,far); assert ctrl.kind=='sleep_walk'
+            # Cross the threshold slightly; accumulated fractional animation
+            # ticks may put a nominal 1800.0 a few microseconds below it.
+            pet.advance(1.01,far); assert ctrl.kind=='sleep_walk'
             for _ in range(220):
                 pet.advance(.1,far)
                 if ctrl.kind=='sleep': break

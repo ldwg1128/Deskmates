@@ -37,6 +37,7 @@ def main():
     cover = WindowSurface(13, QRectF(500, 200, 400, 500))
     assert select_ledge([cover, surface], QPointF(700, 430), 160, area) is None
     assert select_ledge([surface], QPointF(1120, 520), 160, area) == (surface, 1)
+    assert select_ledge([surface], QPointF(1120, 430), 160, area) == (surface, 0)
 
     with tempfile.TemporaryDirectory() as folder:
         pet = DesktopPet(Path(folder) / 'settings.json', start_timer=False)
@@ -63,6 +64,13 @@ def main():
                             if ctrl.kind is None: break
                         assert ctrl.kind is None and pet.roam_mode == mode
                         assert pet.edge_direction == 'counterclockwise'
+        # The dangling sprite touches the sill even with the pointer far above it.
+        pet.set_size(160, save=False)
+        ctrl.windows = Surfaces(surface)
+        pet.begin_drag(QPoint(700, 430 - round(pet.motion_frames[0].height() * .9)))
+        pet.finish_drag()
+        assert ctrl.kind == 'window_sit' and ctrl.point.y() == 430
+        ctrl.cancel()
         # The reverse case must fall at the actual release, not attach at a stale move.
         pet.set_size(160, save=False)
         pet.set_roaming('free', 'clockwise', save=False)
@@ -81,24 +89,30 @@ def main():
         pet.finish_drag()
         assert pet.state == 'flip' and not pet.dragging
 
-        # Use an actual native window's DWM bounds for a complete release -> sit check.
+        # Both captioned and frameless native windows must support a complete
+        # release -> sit transition (custom chrome such as messenger windows).
         import sys
         if sys.platform == 'win32':
-            window = QWidget()
-            window.resize(600, 300); window.move(400, 400); window.show()
-            app.processEvents()
-            native = WindowsSurfaces(exclude_process=0).get(int(window.winId()))
-            assert native is not None
-            ctrl.windows = Surfaces(native)
-            point = QPoint(round(native.rect.center().x()), round(native.rect.top() + 34))
-            pet.begin_drag(QPoint(point.x(), point.y() + 150))
-            release(pet, point)
-            assert ctrl.kind == 'window_sit'
-            assert ctrl.point.y() == native.rect.top()
-            ctrl.cancel(); window.close()
+            provider = WindowsSurfaces(exclude_process=0)
+            assert provider.get(int(provider.user.GetDesktopWindow())) is None
+            for flags in (Qt.WindowType.Window,
+                          Qt.WindowType.Window | Qt.WindowType.FramelessWindowHint,
+                          Qt.WindowType.Tool):
+                window = QWidget(None, flags)
+                window.resize(600, 300); window.move(400, 400); window.show()
+                app.processEvents()
+                native = provider.get(int(window.winId()))
+                assert native is not None
+                ctrl.windows = Surfaces(native)
+                point = QPoint(round(native.rect.center().x()), round(native.rect.top() + 34))
+                pet.begin_drag(QPoint(point.x(), point.y() + 150))
+                release(pet, point)
+                assert ctrl.kind == 'window_sit'
+                assert ctrl.point.y() == native.rect.top()
+                ctrl.cancel(); window.close()
         pet.close()
     print('PASS: 36 nearby releases across 3 characters, 3 sizes and both roam modes; jump/fall/resume.')
-    print('PASS: stale move coordinates, rejected pose rollback, occlusion, side hanging and native window attachment.')
+    print('PASS: hanging-body snap, stale moves, rollback, top-corner preference, occlusion and native frameless windows.')
 
 
 if __name__ == '__main__': main()

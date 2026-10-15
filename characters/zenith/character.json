@@ -50,7 +50,8 @@
     "hungry_sheet": "../../assets/zenith-hungry.png",
     "refusal_sheet": "../../assets/zenith-refusal.png",
     "base_cell_height": 208,
-    "render_quality": "clarity-v1"
+    "render_quality": "clarity-v1",
+    "align_walk_floor": true
   },
   "animations": {
     "idle": {

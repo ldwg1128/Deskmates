@@ -2,6 +2,14 @@
 
 검증일: 2026-10-15. Windows 11 (26200), Python 3.14.5, PySide6/Qt 6.11.2, PyInstaller 6.22.2.
 
+## 사용자 지정 창과 제니스 걷기
+
+최종 `python verify_all.py`16개 검사가 모두 종료 코드0으로 통과했다. 전체 로그는 `artifacts/resource-refactor/regression-results.json`에 저장했다. `dist/DeskMates.exe`를 별도 임시 폴더로 복사해 제니스·리베르타·세이르를 각각 실행한 결과도 모두 종료 코드0이며 오류 로그는 없었다.
+
+제목 표시줄이 없는 실제 Windows 창과 도구 창으로 앉기 전환을 검사했다. 커서와 매달린 캐릭터 몸의 아래쪽을 모두 판정에 사용하고, 창 상단 모서리에서는 앉기를 우선한다. 마우스 통과 오버레이·Windows 바탕화면은 후보에서 제외한다. 카카오톡 실제 실행 창 자체는 이 검사에 포함되지 않았다.
+
+제니스 좌우 걷기는 원본 PNG를 변경하지 않고 프레임별 신발 바닥을 서 있는 프레임의 바닥에 맞춘다. `verify_zenith_walk.py`에서 64/160/320/400px의 양방향 프레임을 비교하고 원본 그림이 수직 이동만 했는지 확인한다.
+
 ## 창 상단 앉기 판정 개선
 
 변경 후 `python verify_all.py`의15개 검사가 모두 종료 코드0으로 통과했다. 전체 결과는 `artifacts/resource-refactor/regression-results.json`에 저장했다.

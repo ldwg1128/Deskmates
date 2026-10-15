@@ -297,6 +297,20 @@ class LegacyArt:
             self.frames["right"] = right_frames
             self.frames["left"] = [frame.transformed(QTransform().scale(-1, 1))
                                    for frame in right_frames]
+        if self.character.profile.get('align_walk_floor'):
+            # A few stride frames leave the shoe above the standing floor.
+            # Preserve the original drawings and canvas while planting the sole.
+            floor=QRegion(self.frames['idle'][0].mask()).boundingRect().bottom()
+            for action in ('left','right'):
+                aligned=[]
+                for sprite in self.frames[action]:
+                    delta=floor-QRegion(sprite.mask()).boundingRect().bottom()
+                    if not delta:
+                        aligned.append(sprite); continue
+                    frame=QPixmap(sprite.size()); frame.fill(Qt.GlobalColor.transparent)
+                    painter=QPainter(frame); painter.drawPixmap(0,delta,sprite); painter.end()
+                    aligned.append(frame)
+                self.frames[action]=aligned
         self.motion_frames = [scale_sprite(p,
             round(p.height() * self.body_height / reference_height),self.character)
             for index, p in enumerate(self.motion_originals)]

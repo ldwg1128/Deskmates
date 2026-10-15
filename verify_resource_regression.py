@@ -84,7 +84,8 @@ def main():
     # state sequence and PNG hashes by verify_sprite_quality.py.
     with ExitStack() as stack:
         for character in CHARACTERS.values():
-            stack.enter_context(patch.dict(character.data.get('profile',{}),{'render_quality':None}))
+            stack.enter_context(patch.dict(character.data.get('profile',{}),
+                                           {'render_quality':None,'align_walk_floor':False}))
         actual = capture()
     if args.record:
         args.record.parent.mkdir(parents=True, exist_ok=True)

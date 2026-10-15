@@ -10,7 +10,7 @@ import ctypes
 from ctypes import wintypes
 import os
 import sys
-from PySide6.QtCore import QPointF, QRectF
+from PySide6.QtCore import QPoint, QPointF, QRectF
 from PySide6.QtGui import QGuiApplication
 
 
@@ -33,7 +33,9 @@ def select_ledge(surfaces, point, body_height, area):
         on_top=(rect.left()<=point.x()<=rect.right() and abs(point.y()-rect.top())<=tolerance
                 and rect.top()>=area.top()+body_height*.65+8)
         if not (on_side or on_top): continue
-        if not on_side: side=0
+        # The horizontal sill wins at the top corners. Lower down, the same
+        # x coordinate means a side cling.
+        if on_top: side=0
         contact=QPointF(rect.left()+2 if side<0 else rect.right()-2 if side>0 else point.x(),
                         max(rect.top()+2,min(rect.bottom()-2,point.y())) if side else rect.top()+2)
         if any(other.rect.contains(contact) for other in surfaces[:index]): continue
@@ -56,6 +58,10 @@ class WindowsSurfaces:
         self.user.GetWindowThreadProcessId.argtypes=[wintypes.HWND,ctypes.POINTER(wintypes.DWORD)]
         self.user.GetWindowThreadProcessId.restype=wintypes.DWORD
         self.user.GetWindowLongW.argtypes=[wintypes.HWND,ctypes.c_int]; self.user.GetWindowLongW.restype=wintypes.LONG
+        self.user.GetShellWindow.restype=wintypes.HWND
+        self.user.GetDesktopWindow.restype=wintypes.HWND
+        self.user.GetClassNameW.argtypes=[wintypes.HWND,wintypes.LPWSTR,ctypes.c_int]
+        self.user.GetClassNameW.restype=ctypes.c_int
         self.user.GetWindowRect.argtypes=[wintypes.HWND,ctypes.POINTER(wintypes.RECT)]; self.user.GetWindowRect.restype=wintypes.BOOL
         self.user.MonitorFromWindow.argtypes=[wintypes.HWND,wintypes.DWORD]; self.user.MonitorFromWindow.restype=wintypes.HMONITOR
         self.user.GetMonitorInfoW.argtypes=[wintypes.HMONITOR,ctypes.c_void_p]; self.user.GetMonitorInfoW.restype=wintypes.BOOL
@@ -67,8 +73,12 @@ class WindowsSurfaces:
         pid=wintypes.DWORD()
         self.user.GetWindowThreadProcessId(handle,ctypes.byref(pid))
         if pid.value==self.exclude_process: return None
-        if not self.user.GetWindowLongW(handle,-16)&0x00C00000: return None  # caption
-        if self.user.GetWindowLongW(handle,-20)&0x80: return None  # tool window
+        if handle in (self.user.GetShellWindow(),self.user.GetDesktopWindow()): return None
+        if self.user.GetWindowLongW(handle,-16)&0x40000000: return None  # child
+        if self.user.GetWindowLongW(handle,-20)&0x20: return None  # click-through overlay
+        name=ctypes.create_unicode_buffer(256)
+        self.user.GetClassNameW(handle,name,len(name))
+        if name.value in ('Progman','WorkerW','Shell_TrayWnd','Shell_SecondaryTrayWnd'): return None
         cloaked=wintypes.DWORD()
         if self.dwm.DwmGetWindowAttribute(handle,14,ctypes.byref(cloaked),ctypes.sizeof(cloaked))==0 and cloaked.value: return None
         rect=wintypes.RECT()
@@ -82,6 +92,11 @@ class WindowsSurfaces:
         screen=None
         if self.user.GetMonitorInfoW(self.user.MonitorFromWindow(handle,2),ctypes.byref(info)):
             screen=next((s for s in QGuiApplication.screens() if s.name().casefold()==info.device.casefold()),None)
+            if screen is None:
+                # Qt commonly reports a friendly monitor model name instead
+                # of the Win32 DISPLAY name. Their native origins still match.
+                screen=next((s for s in QGuiApplication.screens()
+                             if s.geometry().topLeft()==QPoint(info.monitor.left,info.monitor.top)),None)
         if screen:
             origin=screen.geometry().topLeft(); ratio=screen.devicePixelRatio()
             mapped=QRectF(origin.x()+(rect.left-info.monitor.left)/ratio,

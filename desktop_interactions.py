@@ -274,14 +274,21 @@ class DesktopInteractions:
 
     def try_window(self,cursor):
         if not self.window_enabled: return False
-        match=select_ledge(self.windows.all(),QPointF(cursor),self.pet.body_height,self.pet.screen_area)
+        surfaces=self.windows.all()
+        point=QPointF(cursor)
+        match=select_ledge(surfaces,point,self.pet.body_height,self.pet.screen_area)
+        if match is None:
+            # During dragging the character hangs below the cursor. Its lower
+            # edge can meet a sill while the cursor is still well above it.
+            point=QPointF(cursor.x(),cursor.y()+self.pet.motion_frames[0].height()*.9)
+            match=select_ledge(surfaces,point,self.pet.body_height,self.pet.screen_area)
         if match is None: return False
         previous=(self.surface,self.side,self.surface_offset,self.surface_y_offset,
                   self.direction,QPointF(self.point))
         self.surface,self.side=match
         rect=self.surface.rect
-        self.surface_offset=bounded((cursor.x()-rect.left())/rect.width(),0,1)
-        self.surface_y_offset=bounded((cursor.y()-rect.top())/rect.height(),
+        self.surface_offset=bounded((point.x()-rect.left())/rect.width(),0,1)
+        self.surface_y_offset=bounded((point.y()-rect.top())/rect.height(),
                                       min(.25,self.pet.body_height*.12/rect.height()),1)
         self.direction=-1 if self.surface_offset<.5 else 1
         self.point=self._surface_point(rect)
