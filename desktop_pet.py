@@ -12,12 +12,12 @@ import sys
 import time
 
 from edge_path import EdgeRoute
-from appetite import Appetite, BREAD_LIMIT
+from appetite import Appetite, BREAD_LIMIT, DIGEST_SECONDS, DIGEST_INTERVALS, normalize_digest_seconds
 
 from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QSize, QSignalBlocker, QStandardPaths, Qt, QTimer
 from PySide6.QtGui import QActionGroup, QColor, QCursor, QIcon, QImage, QPainter, QPen, QPixmap, QRegion, QTransform
 from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QComboBox, QDialog, QDialogButtonBox,
-                              QDoubleSpinBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel, QMenu, QPushButton,
+                              QDoubleSpinBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel, QMenu,
                               QRadioButton, QSpinBox, QSystemTrayIcon, QToolButton, QVBoxLayout, QWidget)
 
 
@@ -118,8 +118,10 @@ class DesktopPet(QWidget):
         if not isinstance(saved_appetites, dict):
             saved_appetites = {}
         self.saved_appetites = saved_appetites.copy()
+        self.digest_seconds = normalize_digest_seconds(self.settings.get("digest_seconds", DIGEST_SECONDS))
         now = time.time()
-        self.appetites = {key: Appetite.restore(saved_appetites.get(key), now) for key in CHARACTERS}
+        self.appetites = {key: Appetite.restore(saved_appetites.get(key), now, self.digest_seconds)
+                          for key in CHARACTERS}
         self.meal_pending = False
         self.feed_refusing = False
         self.refusal_count = 0
@@ -334,6 +336,7 @@ class DesktopPet(QWidget):
                 "click_through": self.click_through,
                 "show_windows_tools": self.show_windows_tools,
                 "feeding_enabled": self.feeding_enabled,
+                "digest_seconds": self.digest_seconds,
                 "appetites": {**self.saved_appetites,
                               **{key: value.as_dict() for key, value in self.appetites.items()}},
                 "roam_mode": self.roam_mode, "edge_direction": self.edge_direction,
@@ -555,7 +558,7 @@ class DesktopPet(QWidget):
                 self.edge_rest_pending = True
             self.next_hunger = time.monotonic()+self.rng.uniform(12, 20)
             self.enter_state("hungry")
-            self.say("꼬르륵…\n빵 먹고 싶어.", 1800)
+            self.say("꼬르륵…\n배고파.", 1800)
             return
         if self.roam_mode == "edge" and not self.stationary:
             if self.state in ("left", "right"):
@@ -598,6 +601,13 @@ class DesktopPet(QWidget):
         appetite = self.appetites[self.character_id]
         appetite.digest(time.time())
         return appetite
+
+    def set_digest_seconds(self, seconds):
+        seconds = normalize_digest_seconds(seconds)
+        now = time.time()
+        for appetite in self.appetites.values():
+            appetite.set_digest_seconds(seconds, now)
+        self.digest_seconds = seconds
 
     def position_speech(self):
         body = QRegion(self.pixmap.mask()).boundingRect().translated(self.pos())
@@ -1287,7 +1297,6 @@ class BehaviorSettingsDialog(QDialog):
         description = QLabel("설정은 모든 캐릭터에 공통으로 적용됩니다.")
         description.setWordWrap(True)
         layout.addWidget(description)
-        form = QFormLayout()
         self.height_input = QSpinBox()
         self.height_input.setRange(64, 400)
         self.height_input.setSuffix(" px")
@@ -1304,8 +1313,11 @@ class BehaviorSettingsDialog(QDialog):
         self.height_preset = self.make_preset_combo(HEIGHT_PRESETS, self.height_input)
         self.radius_preset = self.make_preset_combo(RADIUS_PRESETS, self.radius)
         self.speed_preset = self.make_preset_combo(SPEED_PRESETS, self.speed)
-        walking_box = QGroupBox("산책 방식")
-        walking_layout = QVBoxLayout(walking_box)
+        size_form = QFormLayout()
+        size_form.addRow("캐릭터 크기", self.height_preset)
+        layout.addLayout(size_form)
+        self.roaming_box = QGroupBox("산책 방식")
+        walking_layout = QVBoxLayout(self.roaming_box)
         radio_layout = QHBoxLayout()
         self.free_radio = QRadioButton("일반 산책")
         self.edge_radio = QRadioButton("모니터 테두리 산책")
@@ -1337,12 +1349,16 @@ class BehaviorSettingsDialog(QDialog):
         self.edge_hint.setWordWrap(True)
         edge_layout.addWidget(self.edge_hint)
         walking_layout.addWidget(self.edge_options)
-        layout.addWidget(walking_box)
-        form.addRow("캐릭터 크기", self.height_preset)
-        form.addRow("걷는 속도", self.speed_preset)
-        layout.addLayout(form)
+        layout.addWidget(self.roaming_box)
+        self.walking_box = QGroupBox("걷기 설정")
+        walking_settings_layout = QVBoxLayout(self.walking_box)
+        speed_form = QFormLayout()
+        speed_form.addRow("걷는 속도", self.speed_preset)
+        walking_settings_layout.addLayout(speed_form)
         self.stationary = QCheckBox("제자리 모드 (걷기만 멈추기)")
         self.stationary.setChecked(pet.stationary)
+        walking_settings_layout.addWidget(self.stationary)
+        layout.addWidget(self.walking_box)
         self.paused = QCheckBox("잠시 멈추기")
         self.paused.setChecked(pet.paused)
         self.show_windows_tools = QCheckBox("윈도우 기본 도구 표시")
@@ -1351,18 +1367,22 @@ class BehaviorSettingsDialog(QDialog):
         self.feeding_enabled = QCheckBox("빵 주기 버튼 표시")
         self.feeding_enabled.setChecked(pet.feeding_enabled)
         self.feeding_enabled.setToolTip("가까운 커서를 약 0.7초 바라보면 빵 버튼이 나타납니다. 클릭하면 받아먹습니다.")
-        for control in (self.stationary, self.paused, self.feeding_enabled):
-            layout.addWidget(control)
+        self.feeding_box = QGroupBox("빵 주기")
+        feeding_layout = QVBoxLayout(self.feeding_box)
+        feeding_layout.addWidget(self.feeding_enabled)
+        self.digest_interval = QComboBox()
+        for seconds in DIGEST_INTERVALS:
+            self.digest_interval.addItem(f"{seconds//60}분마다 1개", seconds)
+        self.digest_interval.setCurrentIndex(self.digest_interval.findData(pet.digest_seconds))
+        digest_form = QFormLayout()
+        digest_form.addRow("스택 감소 간격", self.digest_interval)
+        feeding_layout.addLayout(digest_form)
         feeding_hint = QLabel("빵 0개: 배고픔 · 1~2개: 보통 · 3~4개: 배부름\n"
-                              "5개면 받아들고 거절합니다. 스택은 1분마다 1개씩 줄어듭니다.")
+                              "5개면 받아들고 거절합니다.")
         feeding_hint.setWordWrap(True)
-        layout.addWidget(feeding_hint)
-        self.recenter_button = QPushButton("이 위치를 산책 중심으로")
-        self.recenter_button.clicked.connect(pet.recenter)
-        layout.addWidget(self.recenter_button)
-        self.reset_button = QPushButton("화면 아래로 데려오기")
-        self.reset_button.clicked.connect(pet.reset_position)
-        layout.addWidget(self.reset_button)
+        feeding_layout.addWidget(feeding_hint)
+        layout.addWidget(self.feeding_box)
+        layout.addWidget(self.paused)
         self.advanced_toggle = QToolButton()
         self.advanced_toggle.setText("고급")
         self.advanced_toggle.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
@@ -1396,7 +1416,6 @@ class BehaviorSettingsDialog(QDialog):
         edge = self.edge_radio.isChecked()
         self.free_options.setVisible(not edge)
         self.edge_options.setVisible(edge)
-        self.recenter_button.setVisible(not edge)
         self.advanced_form.setRowVisible(self.radius, not edge)
         self.layout().activate()
         self.adjustSize()
@@ -1456,6 +1475,7 @@ class BehaviorSettingsDialog(QDialog):
                 pet.enter_state("idle", 0.7)
         pet.show_windows_tools = self.show_windows_tools.isChecked()
         pet.feeding_enabled = self.feeding_enabled.isChecked()
+        pet.set_digest_seconds(self.digest_interval.currentData())
         pet.set_roaming("edge" if self.edge_radio.isChecked() else "free",
                         self.edge_direction.currentData(), save=False)
         pet.save_settings()

@@ -5,7 +5,7 @@ import tempfile
 
 from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
-from PySide6.QtWidgets import QApplication, QCheckBox, QDialogButtonBox, QMenu
+from PySide6.QtWidgets import QApplication, QCheckBox, QDialogButtonBox, QMenu, QPushButton
 
 from desktop_pet import BehaviorSettingsDialog, DesktopPet
 
@@ -29,7 +29,17 @@ def run():
             QTest.qWait(160)  # Let the native radio/check indicator animation settle.
             dialog.grab().save(str(output/name))
         assert dialog.free_radio.isChecked() and not dialog.edge_radio.isChecked()
-        assert dialog.radius_preset.isVisible() and dialog.recenter_button.isVisible()
+        assert dialog.radius_preset.isVisible()
+        assert dialog.height_preset.geometry().bottom() < dialog.roaming_box.y()
+        assert dialog.walking_box.isAncestorOf(dialog.speed_preset)
+        assert dialog.walking_box.isAncestorOf(dialog.stationary)
+        assert dialog.feeding_box.isAncestorOf(dialog.feeding_enabled)
+        assert dialog.feeding_box.isAncestorOf(dialog.digest_interval)
+        assert [dialog.digest_interval.itemData(i) for i in range(dialog.digest_interval.count())] == [60, 180, 300]
+        assert [dialog.digest_interval.itemText(i) for i in range(3)] == ["1분마다 1개", "3분마다 1개", "5분마다 1개"]
+        assert dialog.digest_interval.currentData() == pet.digest_seconds == 60
+        assert not {"이 위치를 산책 중심으로", "화면 아래로 데려오기"}.intersection(
+            button.text() for button in dialog.findChildren(QPushButton))
         assert not dialog.edge_direction.isVisible() and not dialog.edge_hint.isVisible()
         assert dialog.advanced_toggle.text() == "고급"
         for control in (dialog.height_input, dialog.radius, dialog.speed, dialog.show_windows_tools):
@@ -48,12 +58,12 @@ def run():
         app.processEvents()
         assert dialog.edge_radio.isChecked() and not dialog.free_radio.isChecked()
         assert dialog.edge_direction.isVisible() and dialog.edge_hint.isVisible()
-        assert not dialog.radius_preset.isVisible() and not dialog.recenter_button.isVisible()
+        assert not dialog.radius_preset.isVisible()
         assert dialog.height_preset.isVisible() and dialog.speed_preset.isVisible()
         save_preview("settings-edge.png")
 
         # Advanced is the last content control before the Save/Cancel footer.
-        assert dialog.advanced_toggle.y() > dialog.reset_button.geometry().bottom()
+        assert dialog.advanced_toggle.y() > dialog.paused.geometry().bottom()
         QTest.mouseClick(dialog.advanced_toggle, Qt.MouseButton.LeftButton)
         app.processEvents()
         assert dialog.height_input.isVisible() and dialog.speed.isVisible()
@@ -76,9 +86,11 @@ def run():
         assert dialog.radius_preset.currentData() == 333 and dialog.radius_preset.currentText() == "사용자 지정"
         assert dialog.speed_preset.currentData() == 63.5 and dialog.speed_preset.currentText() == "사용자 지정"
         dialog.show_windows_tools.setChecked(True)
+        dialog.digest_interval.setCurrentIndex(dialog.digest_interval.findData(300))
         dialog.edge_radio.click()
         dialog.reject()
         assert (pet.body_height, pet.radius, pet.speed, pet.roam_mode, pet.show_windows_tools) == (175, 180, 100, "free", False)
+        assert pet.digest_seconds == 60 and all(a.digest_seconds == 60 for a in pet.appetites.values())
 
         # Both character/tray menus put the toggle immediately above Quit and
         # allow recovery after input passes through the pet's native window.
@@ -98,10 +110,14 @@ def run():
             dialog.speed.setValue(63.5)
             dialog.advanced_toggle.click()
             dialog.show_windows_tools.setChecked(True)
+            seconds = 180 if character == "liberta" else 300
+            dialog.digest_interval.setCurrentIndex(dialog.digest_interval.findData(seconds))
             dialog.buttons.button(QDialogButtonBox.StandardButton.Save).click()
             assert pet.click_through  # Dialog must not overwrite the menu setting.
             assert (pet.roam_mode, pet.edge_direction, pet.radius, pet.speed) == ("edge", "counterclockwise", 333, 63.5)
             assert pet.show_windows_tools
+            assert pet.digest_seconds == seconds and all(a.digest_seconds == seconds for a in pet.appetites.values())
+            assert json.loads(settings.read_text(encoding="utf-8"))["digest_seconds"] == seconds
             pet.tray_menu.clear()
             pet.populate_menu(pet.tray_menu)
             assert [action.text() for action in pet.tray_menu.actions()[-2:]] == ["마우스 통과", "종료"]
@@ -112,7 +128,9 @@ def run():
         restored = DesktopPet(settings, start_timer=False)
         assert (restored.radius, restored.speed, restored.roam_mode, restored.edge_direction) == (333, 63.5, "edge", "counterclockwise")
         assert restored.show_windows_tools and not restored.click_through
+        assert restored.digest_seconds == 300 and all(a.digest_seconds == 300 for a in restored.appetites.values())
         dialog = BehaviorSettingsDialog(restored)
+        assert dialog.digest_interval.currentData() == 300
         assert dialog.edge_radio.isChecked() and dialog.free_options.isHidden()
         assert dialog.advanced_panel.isHidden() and dialog.show_windows_tools.isChecked()
         dialog.free_radio.click()
@@ -125,6 +143,7 @@ def run():
         restored.deleteLater()
     print("PASS: exclusive walk radios, only relevant controls/labels, named presets without pixel units.")
     print("PASS: bottom Advanced, numeric/custom preservation, Windows tools, Save/Cancel and restore.")
+    print("PASS: size first, walking/feeding groups, removed position buttons; 1/3/5-minute digestion Save/Cancel, shared across characters and restored.")
     print("PASS: click-through directly above Quit in both character/tray menus; recovery and dialog independence.")
     print("Saved four native dialog previews under artifacts/settings-*.png.")
 

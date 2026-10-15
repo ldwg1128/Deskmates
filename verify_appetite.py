@@ -8,7 +8,7 @@ from PySide6.QtGui import QColor, QImage, QPainter, QRegion
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication, QMenu
 
-from appetite import Appetite, BREAD_LIMIT, DIGEST_SECONDS
+from appetite import Appetite, BREAD_LIMIT, DIGEST_SECONDS, DIGEST_INTERVALS, normalize_digest_seconds
 from desktop_pet import DesktopPet, FEED_STATES
 
 
@@ -35,6 +35,22 @@ def check_model():
                 {"stacks": 5, "updated_at": 10**1000}):
         appetite = Appetite.restore(bad, 1000)
         assert 0 <= appetite.stacks <= 5 and appetite.updated_at <= 1000
+    for seconds in DIGEST_INTERVALS:
+        appetite = Appetite(5, 1000, seconds)
+        assert not appetite.eat(1000+seconds-.01)
+        assert appetite.stacks == 5 and appetite.updated_at == 1000
+        assert appetite.digest(1000+seconds) and appetite.stacks == 4
+        restored = Appetite.restore({"stacks": 5, "updated_at": 1000}, 1000+2*seconds+.5, seconds)
+        assert restored.stacks == 3 and restored.updated_at == 1000+2*seconds
+    for old, new in ((60, 180), (180, 300), (300, 60)):
+        appetite = Appetite(5, 1000, old)
+        now = 1000+old/2
+        appetite.set_digest_seconds(new, now)
+        assert appetite.stacks == 5 and appetite.digest_seconds == new
+        assert not appetite.digest(now+new/2-.01)
+        assert appetite.digest(now+new/2) and appetite.stacks == 4
+    for bad in (None, True, "180", [], {}, -1, 120, float('inf'), float('nan')):
+        assert normalize_digest_seconds(bad) == 60
 
 
 def run():
@@ -82,6 +98,7 @@ def run():
             pet.next_hunger = 0
             pet.choose_action()
             assert pet.state == "hungry" and pet.speech.isVisible()
+            assert pet.speech.text() == "꼬르륵…\n배고파."
             painter.drawText(10, row*320+20, character+" · hungry / receive / shake left / shake right / return")
             painter.drawPixmap(10, row*320+35, pet.pixmap)
             pet.next_hunger = float("inf")
@@ -196,6 +213,15 @@ def run():
         assert restored.appetites["liberta"].stacks == 3
         assert restored.appetites["zenith"].stacks == 0
         restored.deleteLater()
+        for seconds in DIGEST_INTERVALS:
+            pet.set_digest_seconds(seconds)
+            pet.appetites = {key: Appetite(5, clock[0], seconds) for key in pet.appetites}
+            pet.save_settings()
+            clock[0] += 2*seconds+1
+            restored = DesktopPet(settings, start_timer=False)
+            assert restored.digest_seconds == seconds
+            assert all(a.stacks == 3 and a.digest_seconds == seconds for a in restored.appetites.values())
+            restored.deleteLater()
         pet.say("테스트")
         pet.hide()
         assert not pet.speech.isVisible() and not pet.falling_bread.isVisible()
@@ -206,6 +232,7 @@ def run():
     print("PASS: receive/head-shake/return with varied speech, one stack per minute, refill and offline decay.")
     print("PASS: per-character persistence, hungry gestures, all wall orientations/directions at 64/400px,")
     print("      speech placement, no pointer interception, and UI cleanup.")
+    print("PASS: 1/3/5-minute digestion and offline restore, progress preserved across changes, legacy defaults and generic hunger speech.")
 
 
 if __name__ == "__main__":
