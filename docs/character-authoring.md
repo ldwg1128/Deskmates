@@ -1,6 +1,6 @@
 # 캐릭터 제작·등록과 자동 생성
 
-이 문서는 DeskMates(요청에서 부른 DeskLife)의 캐릭터 제작 도구를 설명한다. 앱 이름·저장 경로는 유지한다. 게임 실행에는 PySide6만 필요하다. 제작 도구는 Pillow, 실제 OpenAI 연결은 추가 SDK가 필요하다.
+이 문서는 DeskMates(요청에서 부른 DeskLife)의 캐릭터 제작 도구를 설명한다. 앱 이름·저장 경로는 유지한다. 게임 실행에는 PySide6와 원본 기반 표시 품질 보정을 위한 Pillow가 필요하다. 실제 OpenAI 연결은 추가 SDK가 필요하다.
 
 ```powershell
 python -m pip install -r requirements-tools.txt

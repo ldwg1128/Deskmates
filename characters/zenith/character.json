@@ -49,7 +49,8 @@
     "feeding_sheet": "../../assets/zenith-feeding.png",
     "hungry_sheet": "../../assets/zenith-hungry.png",
     "refusal_sheet": "../../assets/zenith-refusal.png",
-    "base_cell_height": 208
+    "base_cell_height": 208,
+    "render_quality": "clarity-v1"
   },
   "animations": {
     "idle": {

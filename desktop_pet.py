@@ -1130,6 +1130,9 @@ class DesktopPet(QWidget):
         self.setCursor(Qt.CursorShape.OpenHandCursor)
         self.target = None
         if was_dragging:
+            # Mouse moves can be coalesced; use the release position itself
+            # for window snapping and for the start of an ordinary fall.
+            self.move_drag(event.globalPosition().toPoint())
             self.finish_drag()
         elif not self.interactions.kind and not self.edge_jumping() and self.state not in FEED_STATES:
             self.enter_state(self.rng.choice(["wave", "jump"]))

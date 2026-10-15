@@ -37,7 +37,7 @@
 
 최종 구조 검사에는 오류·누락이 없다. 시선에 대한 마지막→첫 프레임 차이 통계 경고1건은 검토했다. 이 동작은 FPS0으로 커서 방향에 따라16개 그림 중 하나를 선택하며 시간 순서로 반복 재생하지 않으므로, 걷기처럼 루프 연결 조건을 적용하지 않는다. 걷기 루프에는 해당 경고가 없다.
 
-`tools/prepare_seir.py`가 연결 성분별 포즈를 분리하고 발·손 위치를 맞춰 등록한다. 재포장에만 Pillow·NumPy·SciPy가 필요하며 게임과 EXE에는 필요 없다. 원본 좌표, 성분 번호, 공통 배율, 이동량과 유효 경계는 `sources/packing-layout-v1.json`에 있다. 제작 체크리스트는 `specification/checklist.md`, 전체 규격은 `specification/specification.json`에 자동 출력한다. 통계 검사는 외형의 완전한 동일성을 증명하지 않으므로 기준 그림·시트·실제 렌더링도 함께 확인했다.
+`tools/prepare_seir.py`가 연결 성분별 포즈를 분리하고 발·손 위치를 맞춰 등록한다. 재포장에는 Pillow·NumPy·SciPy가 필요하다. 이후 제니스 표시 품질 개선에 Pillow를 게임에도 사용하며, NumPy·SciPy는 실행 파일에 포함하지 않는다. 원본 좌표, 성분 번호, 공통 배율, 이동량과 유효 경계는 `sources/packing-layout-v1.json`에 있다. 제작 체크리스트는 `specification/checklist.md`, 전체 규격은 `specification/specification.json`에 자동 출력한다. 통계 검사는 외형의 완전한 동일성을 증명하지 않으므로 기준 그림·시트·실제 렌더링도 함께 확인했다.
 
 ```powershell
 python tools/prepare_seir.py

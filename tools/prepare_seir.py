@@ -1,6 +1,6 @@
 """Repack reviewed image_gen atlases into the game's manifest format.
 
-Authoring-only dependencies: Pillow, NumPy, SciPy. No image generation API.
+Authoring dependencies: Pillow, NumPy, SciPy. Only Pillow is also used at runtime.
 Raw art is preserved. Components remove unrelated atlas marks and neighboring poses;
 each action uses ONE shared scale, never an independently fitted frame scale.
 """

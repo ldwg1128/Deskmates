@@ -8,6 +8,7 @@ from pathlib import Path
 import sys
 from PySide6.QtCore import QPointF, QRect, QSize, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QRegion, QTransform
+from sprite_quality import scale_sprite
 
 ROOT = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
 CATALOG = json.loads((ROOT / "animation_catalog.json").read_text(encoding="utf-8"))
@@ -171,7 +172,7 @@ class ManifestArt:
             result=[]
             for i,source in enumerate(self.raw[action]):
                 a = anchors[i] if anchors else anchor
-                sprite = source.scaledToHeight(max(1,round(source.height()*scale)), Qt.TransformationMode.SmoothTransformation)
+                sprite = scale_sprite(source,max(1,round(source.height()*scale)),self.character)
                 frame=QPixmap(target); frame.fill(Qt.GlobalColor.transparent)
                 painter=QPainter(frame)
                 painter.drawPixmap(round((idle_anchor[0]-a[0])*scale),round((idle_anchor[1]-a[1])*scale),sprite)
@@ -275,7 +276,7 @@ class LegacyArt:
         # Specify HEIGHT ONLY with scaledToHeight. Qt chooses the width from
         # the original aspect ratio; no stretch or per-frame resizing occurs.
         target_height = round(self.character.profile["base_cell_height"] * self.body_height / self.character.body_height)
-        self.frames = {name: [p.scaledToHeight(target_height, Qt.TransformationMode.SmoothTransformation)
+        self.frames = {name: [scale_sprite(p,target_height,self.character)
                               for p in frames] for name, frames in self.originals.items()}
         reference_height = self.motion_reference_height
         if self.walk_originals:
@@ -284,8 +285,7 @@ class LegacyArt:
             scale = self.body_height / reference_height
             right_frames = []
             for original in self.walk_originals:
-                sprite = original.scaledToHeight(round(original.height() * scale),
-                                                Qt.TransformationMode.SmoothTransformation)
+                sprite = scale_sprite(original,round(original.height() * scale),self.character)
                 frame = QPixmap(idle.size())
                 frame.fill(Qt.GlobalColor.transparent)
                 painter = QPainter(frame)
@@ -297,13 +297,12 @@ class LegacyArt:
             self.frames["right"] = right_frames
             self.frames["left"] = [frame.transformed(QTransform().scale(-1, 1))
                                    for frame in right_frames]
-        self.motion_frames = [p.scaledToHeight(
-            round(p.height() * self.body_height / reference_height),
-            Qt.TransformationMode.SmoothTransformation)
+        self.motion_frames = [scale_sprite(p,
+            round(p.height() * self.body_height / reference_height),self.character)
             for index, p in enumerate(self.motion_originals)]
-        self.corner_frames = [p.scaledToHeight(
+        self.corner_frames = [scale_sprite(p,
             max(1, round(p.height() * self.body_height / self.corner_originals[3].height())),
-            Qt.TransformationMode.SmoothTransformation) for p in self.corner_originals]
+            self.character) for p in self.corner_originals]
         idle = self.frames["idle"][0]
         idle_feet = standing_feet(idle)
 
@@ -316,14 +315,14 @@ class LegacyArt:
             painter.end()
             return frame
 
-        self.feed_frames = [align_standing_pose(original.scaledToHeight(
-            self.body_height, Qt.TransformationMode.SmoothTransformation))
+        self.feed_frames = [align_standing_pose(scale_sprite(original,
+            self.body_height, self.character))
             for original in self.feed_originals]
         self.feed_look_frame = align_standing_pose(self.frames["gaze"][0])
-        self.frames["hungry"] = [align_standing_pose(original.scaledToHeight(
-            self.body_height, Qt.TransformationMode.SmoothTransformation))
+        self.frames["hungry"] = [align_standing_pose(scale_sprite(original,
+            self.body_height, self.character))
             for original in self.hunger_originals]
-        self.refusal_frames = [align_standing_pose(original.scaledToHeight(
-            self.body_height, Qt.TransformationMode.SmoothTransformation))
+        self.refusal_frames = [align_standing_pose(scale_sprite(original,
+            self.body_height, self.character))
             for original in self.refusal_originals]
         return self

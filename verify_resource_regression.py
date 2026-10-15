@@ -4,12 +4,14 @@ import hashlib
 import json
 from pathlib import Path
 import tempfile
+from contextlib import ExitStack
+from unittest.mock import patch
 
 from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import QImage
 from PySide6.QtWidgets import QApplication
 
-from desktop_pet import DesktopPet
+from desktop_pet import CHARACTERS, DesktopPet
 
 
 def capture():
@@ -77,7 +79,13 @@ def main():
     args = parser.parse_args()
     if not args.record and not args.compare:
         args.compare = Path(__file__).resolve().parent / 'tests/fixtures/render-baseline.json'
-    actual = capture()
+    # Keep the original pixel baseline as an independent compatibility check.
+    # Optional display quality is separately verified against the same geometry,
+    # state sequence and PNG hashes by verify_sprite_quality.py.
+    with ExitStack() as stack:
+        for character in CHARACTERS.values():
+            stack.enter_context(patch.dict(character.data.get('profile',{}),{'render_quality':None}))
+        actual = capture()
     if args.record:
         args.record.parent.mkdir(parents=True, exist_ok=True)
         args.record.write_text(json.dumps(actual, indent=2), encoding="utf-8")
@@ -87,7 +95,7 @@ def main():
         assert expected["assets"] == actual["assets"], "Original PNG bytes changed"
         assert not differences, differences[:12]
         assert expected["frames"].keys() == actual["frames"].keys()
-    print(f"PASS: {len(actual['frames'])} deterministic frames; {len(actual['assets'])} original PNG hashes.")
+    print(f"PASS: {len(actual['frames'])} original-renderer deterministic frames; {len(actual['assets'])} original PNG hashes.")
 
 
 if __name__ == "__main__":

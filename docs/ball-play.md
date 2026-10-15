@@ -10,7 +10,7 @@
 
 발차기는0.95초다. 시작12%와 마지막16%에는 원래 대기 그림을 같은 발 기준점에 그린다. 중간72%에는 준비→무릎 들기→발 뻗기→회복4포즈를 재생하며 `impact_frame`(기본2)의 시작에 공 속도를 적용한다. `contact_reach`는 기준 신체 높이에 대한 실제 발 끝의 수평 도달 비율로, 캐릭터별 그림에서 측정한다. 발 끝과 크기에 비례한 공의 반경이 겹쳐야 찰 수 있다. 새 그림은 동작별 공통 배율과 고정 지지 발로 배치해 몸 크기·바닥 위치의 급변을 줄였다. 일반 산책·대기 이미지는 변경하지 않았다.
 
-`artwork/ball`에 imagegen 원본2장과 프레임 좌표·배율·접촉점 기록을 보존한다. 프롬프트는 `docs/ball-head-bump-prompt.txt`, `docs/ball-kick-transition-prompt.txt`에 있다. `tools/prepare_ball_reactions.py`가 세 캐릭터의 별도 버전 시트를 제작한다. Pillow·NumPy·SciPy는 이 제작 도구에만 필요하다. 기존 모든 PNG를 보존하고 JSON에서 새 시트로 연결한다. `head_bump`는 선택 행동이며 없는 캐릭터는 `wake_annoyed`로 대체한다. 캐릭터 ID에 따른 게임 로직 분기는 없다.
+`artwork/ball`에 imagegen 원본2장과 프레임 좌표·배율·접촉점 기록을 보존한다. 프롬프트는 `docs/ball-head-bump-prompt.txt`, `docs/ball-kick-transition-prompt.txt`에 있다. `tools/prepare_ball_reactions.py`가 세 캐릭터의 별도 버전 시트를 제작한다. 제작 도구에는 Pillow·NumPy·SciPy가 필요하다. 이후 제니스 표시 품질 개선에 Pillow를 게임에도 사용하며, NumPy·SciPy는 실행에 필요 없다. 기존 모든 PNG를 보존하고 JSON에서 새 시트로 연결한다. `head_bump`는 선택 행동이며 없는 캐릭터는 `wake_annoyed`로 대체한다. 캐릭터 ID에 따른 게임 로직 분기는 없다.
 
 ```powershell
 python tools/prepare_ball_reactions.py

@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QApplication, QWidget
 from character_resources import CATALOG, Character, action_spec, extract_frames
 from window_surfaces import WindowsSurfaces, select_ledge
 from ball_physics import BallMotion
+from sprite_quality import scale_sprite
 
 EXTRA_ACTIONS=('window_sit','ledge_struggle','sleep','wake_annoyed','cursor_grab','kick','secret_snack','head_bump')
 DEFAULT_SLEEP_SECONDS=1800
@@ -33,7 +34,7 @@ def extra_frames(character,height):
         source=extract_frames(character,actual,fallback=False)
         reference=spec.get('body_height',character.body_height)
         scale=height/reference
-        frames=[p.scaledToHeight(max(1,round(p.height()*scale)),Qt.TransformationMode.SmoothTransformation) for p in source]
+        frames=[scale_sprite(p,max(1,round(p.height()*scale)),character) for p in source]
         default_anchor=spec.get('anchor')
         if not isinstance(default_anchor,list):
             default_anchor=[source[0].width()/2,source[0].height()]
@@ -275,7 +276,8 @@ class DesktopInteractions:
         if not self.window_enabled: return False
         match=select_ledge(self.windows.all(),QPointF(cursor),self.pet.body_height,self.pet.screen_area)
         if match is None: return False
-        self.activity(); self.pet.dragging=False; self.pet.drag_cursor=None
+        previous=(self.surface,self.side,self.surface_offset,self.surface_y_offset,
+                  self.direction,QPointF(self.point))
         self.surface,self.side=match
         rect=self.surface.rect
         self.surface_offset=bounded((cursor.x()-rect.left())/rect.width(),0,1)
@@ -289,8 +291,12 @@ class DesktopInteractions:
             body=QRegion(frame.mask()).boundingRect().translated(
                 round(self.point.x()-anchor.x()),round(self.point.y()-anchor.y()))
             if not self.pet.screen_area.contains(body):
-                self.surface=None
+                (self.surface,self.side,self.surface_offset,self.surface_y_offset,
+                 self.direction,self.point)=previous
                 return False
+        # Commit only after every pose fits. A rejected attachment must keep
+        # the release cursor intact for falling or returning to edge walking.
+        self.activity(); self.pet.dragging=False; self.pet.drag_cursor=None
         self._enter('ledge_struggle' if self.side else 'window_sit',self.rng.uniform(2.2,3.8))
         self._position(); self.pet.update_frame()
         return True

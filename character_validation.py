@@ -15,6 +15,9 @@ def validate_structure(character):
     from character_resources import CATALOG, ROOT, action_spec
     errors, warnings, missing = [], [], []
     data = character.data
+    profile=data.get('profile',{})
+    if not isinstance(profile,dict) or profile.get('render_quality') not in (None,'clarity-v1'):
+        errors.append('Unsupported render_quality profile')
     animations = data.get('animations', {})
     if not isinstance(animations, dict):
         return {'errors':['animations must be an object'], 'warnings':[], 'missing':[]}

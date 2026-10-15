@@ -22,7 +22,9 @@ class WindowSurface:
 
 def select_ledge(surfaces, point, body_height, area):
     """Surfaces are front-to-back; don't perch on an obscured lower window."""
-    tolerance=max(18,body_height*.16)
+    # A release anywhere in this small band snaps to the actual top edge.
+    # Scale the band with the pet so large sprites are equally easy to place.
+    tolerance=max(28,body_height*.24)
     for index,surface in enumerate(surfaces):
         rect=surface.rect
         corner=max(24,body_height*.22)

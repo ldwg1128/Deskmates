@@ -1,6 +1,6 @@
 """Pack reviewed ball reaction atlases without altering original character images.
 
-Authoring only: Pillow, NumPy, SciPy; the game needs none of these packages.
+Authoring: Pillow, NumPy, SciPy. Only Pillow is also used by display resampling.
 One anatomical scale per character/action; translate the planted shoe, never
 independently fit the four poses. Raw atlases and source coordinates are retained.
 """
