@@ -125,7 +125,10 @@ def run():
                 pet.advance(1.1, far)
                 if repeat == 0:
                     painter.drawPixmap(880, row*320+35, pet.pixmap)
-                pet.advance(0.4, far)
+                offered_back = pet.pixmap.toImage()
+                pet.advance(1.0, far)
+                assert pet.state == "feed_refuse" and pet.pixmap.toImage() == offered_back
+                pet.advance(0.5, far)
                 assert pet.state == "idle" and pet.appetite.stacks == 5
                 assert pet.appetite.updated_at == digestion_start
             assert len(set(messages)) == 3
@@ -158,7 +161,7 @@ def run():
                         pet.advance(0.7, far)
                         assert pet.state == "feed_refuse"
                         assert pet.screen_area.contains(pet.speech.geometry())
-                        for elapsed in (0.24, 0.24, 1.3):
+                        for elapsed in (0.24, 0.24, 2.4):
                             pet.advance(elapsed, far)
                             assert pet.edge_progress == origin
                             body = QRegion(pet.pixmap.mask()).boundingRect().translated(pet.pos())

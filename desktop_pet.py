@@ -17,9 +17,9 @@ from appetite import Appetite, BREAD_LIMIT
 
 from PySide6.QtCore import QLockFile, QPoint, QPointF, QRect, QSize, QSignalBlocker, QStandardPaths, Qt, QTimer
 from PySide6.QtGui import QActionGroup, QColor, QCursor, QIcon, QImage, QPainter, QPen, QPixmap, QRegion, QTransform
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QDialogButtonBox,
-                              QDoubleSpinBox, QFormLayout, QLabel, QMenu, QPushButton,
-                              QSpinBox, QSystemTrayIcon, QToolButton, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QComboBox, QDialog, QDialogButtonBox,
+                              QDoubleSpinBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel, QMenu, QPushButton,
+                              QRadioButton, QSpinBox, QSystemTrayIcon, QToolButton, QVBoxLayout, QWidget)
 
 
 APP_NAME = "DeskMates"
@@ -78,7 +78,7 @@ DEFAULT_CHARACTER = "liberta"
 HEIGHT_PRESETS = ((80, "아주 작게"), (120, "작게"), (160, "기본"),
                   (200, "크게"), (240, "아주 크게"), (320, "특대"))
 RADIUS_PRESETS = ((100, "좁게"), (220, "보통"), (420, "넓게"), (700, "아주 넓게"))
-SPEED_PRESETS = ((28, "느긋하게"), (46, "보통"), (75, "활발하게"))
+SPEED_PRESETS = ((28, "느림"), (46, "보통"), (75, "빠름"))
 WINDOWS_TOOLS = {"notepad": ("메모장", "notepad.exe"),
                  "paint": ("그림판", "mspaint.exe"),
                  "calculator": ("계산기", "calc.exe")}
@@ -195,7 +195,7 @@ class DesktopPet(QWidget):
         self.meal_pending = False
         self.feed_refusing = False
         self.refusal_count = 0
-        self.next_hunger = time.monotonic()+self.rng.uniform(12, 20)
+        self.next_hunger = time.monotonic()+self.rng.uniform(6, 10)
         self.body_height = int(clamp(self.settings.get("height", 160), 64, 400))
         self.radius = int(clamp(self.settings.get("radius", 220), 50, 800))
         self.speed = float(clamp(self.settings.get("speed", 46), 20, 100))
@@ -739,7 +739,7 @@ class DesktopPet(QWidget):
                 and time.monotonic() >= self.next_hunger):
             if self.roam_mode == "edge" and self.state in ("left", "right"):
                 self.edge_rest_pending = True
-            self.next_hunger = time.monotonic()+self.rng.uniform(25, 40)
+            self.next_hunger = time.monotonic()+self.rng.uniform(12, 20)
             self.enter_state("hungry")
             self.say("꼬르륵…\n빵 먹고 싶어.", 1800)
             return
@@ -871,7 +871,7 @@ class DesktopPet(QWidget):
             if self.state == "feed_drop":
                 self.falling_bread.hide()
                 if self.feed_refusing:
-                    self.enter_state("feed_refuse", 1.65)
+                    self.enter_state("feed_refuse", 2.8)
                     self.say(FULL_MESSAGES[self.refusal_count % len(FULL_MESSAGES)])
                     self.refusal_count += 1
                 else:
@@ -909,7 +909,7 @@ class DesktopPet(QWidget):
                 sprite = self.refusal_frames[0] if self.feed_refusing else self.feed_frames[0]
         elif self.state == "feed_refuse":
             self.falling_bread.hide()
-            index = 3 if self.state_time > 1.3 else 1+int(self.state_time/0.22) % 2
+            index = 3 if self.state_time >= 1.3 else 1+int(self.state_time/0.22) % 2
             sprite = self.refusal_frames[index]
         else:
             self.falling_bread.hide()
@@ -1326,6 +1326,10 @@ class DesktopPet(QWidget):
             action.triggered.connect(lambda checked=False, h=height: self.set_size(h))
         menu.addAction("행동 설정…", self.open_behavior_settings)
         menu.addSeparator()
+        click_through = menu.addAction("마우스 통과")
+        click_through.setCheckable(True)
+        click_through.setChecked(self.click_through)
+        click_through.toggled.connect(self.set_click_through)
         menu.addAction("종료", self.quit_pet)
 
     def launch_windows_tool(self, tool_id: str):
@@ -1466,7 +1470,7 @@ class BehaviorSettingsDialog(QDialog):
         self.setWindowIcon(pet.windowIcon())
         self.setMinimumWidth(380)
         layout = QVBoxLayout(self)
-        description = QLabel("설정은 모든 캐릭터에 공통으로 적용됩니다.\n기본값을 선택하거나 고급 설정에서 직접 입력하세요.")
+        description = QLabel("설정은 모든 캐릭터에 공통으로 적용됩니다.")
         description.setWordWrap(True)
         layout.addWidget(description)
         form = QFormLayout()
@@ -1486,66 +1490,83 @@ class BehaviorSettingsDialog(QDialog):
         self.height_preset = self.make_preset_combo(HEIGHT_PRESETS, self.height_input)
         self.radius_preset = self.make_preset_combo(RADIUS_PRESETS, self.radius)
         self.speed_preset = self.make_preset_combo(SPEED_PRESETS, self.speed)
-        self.roam_mode = QComboBox()
-        self.roam_mode.addItem("일반 산책", "free")
-        self.roam_mode.addItem("모니터 테두리 산책", "edge")
-        self.roam_mode.setCurrentIndex(self.roam_mode.findData(pet.roam_mode))
+        walking_box = QGroupBox("산책 방식")
+        walking_layout = QVBoxLayout(walking_box)
+        radio_layout = QHBoxLayout()
+        self.free_radio = QRadioButton("일반 산책")
+        self.edge_radio = QRadioButton("모니터 테두리 산책")
+        self.roam_group = QButtonGroup(self)
+        self.roam_group.addButton(self.free_radio)
+        self.roam_group.addButton(self.edge_radio)
+        self.free_radio.setChecked(pet.roam_mode == "free")
+        self.edge_radio.setChecked(pet.roam_mode == "edge")
+        radio_layout.addWidget(self.free_radio)
+        radio_layout.addWidget(self.edge_radio)
+        walking_layout.addLayout(radio_layout)
+        self.free_options = QWidget()
+        free_form = QFormLayout(self.free_options)
+        free_form.setContentsMargins(0, 0, 0, 0)
+        free_form.addRow("산책 범위", self.radius_preset)
+        walking_layout.addWidget(self.free_options)
+        self.edge_options = QWidget()
+        edge_layout = QVBoxLayout(self.edge_options)
+        edge_layout.setContentsMargins(0, 0, 0, 0)
+        edge_form = QFormLayout()
         self.edge_direction = QComboBox()
         self.edge_direction.addItem("시계 방향", "clockwise")
         self.edge_direction.addItem("반시계 방향", "counterclockwise")
         self.edge_direction.setCurrentIndex(self.edge_direction.findData(pet.edge_direction))
-        form.addRow("산책 방식", self.roam_mode)
-        form.addRow("테두리를 도는 방향", self.edge_direction)
+        edge_form.addRow("도는 방향", self.edge_direction)
+        edge_layout.addLayout(edge_form)
+        self.edge_hint = QLabel("모니터의 벽·천장까지 한 방향으로 돌며 잠시 쉬었다가\n"
+                                "다시 걷습니다. 코너에서는 점프로 90도 회전합니다.")
+        self.edge_hint.setWordWrap(True)
+        edge_layout.addWidget(self.edge_hint)
+        walking_layout.addWidget(self.edge_options)
+        layout.addWidget(walking_box)
         form.addRow("캐릭터 크기", self.height_preset)
-        form.addRow("산책 범위 (중심에서 좌우)", self.radius_preset)
         form.addRow("걷는 속도", self.speed_preset)
         layout.addLayout(form)
-        edge_hint = QLabel("테두리 산책은 벽·천장까지 한 방향으로 돌며 잠시 쉬었다가\n다시 걷습니다. 코너에서는 점프로 90도 회전합니다.")
-        edge_hint.setWordWrap(True)
-        layout.addWidget(edge_hint)
         self.stationary = QCheckBox("제자리 모드 (걷기만 멈추기)")
         self.stationary.setChecked(pet.stationary)
         self.paused = QCheckBox("잠시 멈추기")
         self.paused.setChecked(pet.paused)
-        self.click_through = QCheckBox("마우스 통과")
-        self.click_through.setChecked(pet.click_through)
         self.show_windows_tools = QCheckBox("윈도우 기본 도구 표시")
         self.show_windows_tools.setChecked(pet.show_windows_tools)
         self.show_windows_tools.setToolTip("우클릭 메뉴 상단에 메모장·그림판·계산기를 표시합니다.")
         self.feeding_enabled = QCheckBox("빵 주기 버튼 표시")
         self.feeding_enabled.setChecked(pet.feeding_enabled)
         self.feeding_enabled.setToolTip("가까운 커서를 약 0.7초 바라보면 빵 버튼이 나타납니다. 클릭하면 받아먹습니다.")
-        for control in (self.stationary, self.paused, self.click_through,
-                        self.show_windows_tools, self.feeding_enabled):
+        for control in (self.stationary, self.paused, self.feeding_enabled):
             layout.addWidget(control)
         feeding_hint = QLabel("빵 0개: 배고픔 · 1~2개: 보통 · 3~4개: 배부름\n"
                               "5개면 받아들고 거절합니다. 스택은 1분마다 1개씩 줄어듭니다.")
         feeding_hint.setWordWrap(True)
         layout.addWidget(feeding_hint)
-        hint = QLabel("마우스 통과 중에는 작업 표시줄의 DeskMates 아이콘을\n우클릭하여 캐릭터와 설정을 바꿀 수 있습니다.")
-        hint.setWordWrap(True)
-        layout.addWidget(hint)
-        self.advanced_toggle = QToolButton()
-        self.advanced_toggle.setText("고급 설정 · 직접 입력")
-        self.advanced_toggle.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        self.advanced_toggle.setArrowType(Qt.ArrowType.RightArrow)
-        self.advanced_toggle.setCheckable(True)
-        self.advanced_toggle.toggled.connect(self.toggle_advanced)
-        layout.addWidget(self.advanced_toggle)
-        self.advanced_panel = QWidget()
-        advanced_form = QFormLayout(self.advanced_panel)
-        advanced_form.setContentsMargins(0, 0, 0, 0)
-        advanced_form.addRow("캐릭터 높이 (64~400 px)", self.height_input)
-        advanced_form.addRow("산책 범위 (50~800 px)", self.radius)
-        advanced_form.addRow("걷는 속도 (20~100 px/초)", self.speed)
-        layout.addWidget(self.advanced_panel)
-        self.advanced_panel.hide()
         self.recenter_button = QPushButton("이 위치를 산책 중심으로")
         self.recenter_button.clicked.connect(pet.recenter)
         layout.addWidget(self.recenter_button)
         self.reset_button = QPushButton("화면 아래로 데려오기")
         self.reset_button.clicked.connect(pet.reset_position)
         layout.addWidget(self.reset_button)
+        self.advanced_toggle = QToolButton()
+        self.advanced_toggle.setText("고급")
+        self.advanced_toggle.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.advanced_toggle.setArrowType(Qt.ArrowType.RightArrow)
+        self.advanced_toggle.setCheckable(True)
+        self.advanced_toggle.toggled.connect(self.toggle_advanced)
+        layout.addWidget(self.advanced_toggle)
+        self.advanced_panel = QWidget()
+        advanced_layout = QVBoxLayout(self.advanced_panel)
+        advanced_layout.setContentsMargins(0, 0, 0, 0)
+        self.advanced_form = QFormLayout()
+        self.advanced_form.addRow("캐릭터 높이 (64~400 px)", self.height_input)
+        self.advanced_form.addRow("산책 범위 (50~800 px)", self.radius)
+        self.advanced_form.addRow("걷는 속도 (20~100 px/초)", self.speed)
+        advanced_layout.addLayout(self.advanced_form)
+        advanced_layout.addWidget(self.show_windows_tools)
+        layout.addWidget(self.advanced_panel)
+        self.advanced_panel.hide()
         self.buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Save
                                        | QDialogButtonBox.StandardButton.Cancel)
         self.buttons.button(QDialogButtonBox.StandardButton.Save).setText("저장")
@@ -1553,15 +1574,18 @@ class BehaviorSettingsDialog(QDialog):
         self.buttons.accepted.connect(self.accept)
         self.buttons.rejected.connect(self.reject)
         layout.addWidget(self.buttons)
-        self.roam_mode.currentIndexChanged.connect(self.refresh_roaming_controls)
+        self.free_radio.toggled.connect(self.refresh_roaming_controls)
+        self.edge_radio.toggled.connect(self.refresh_roaming_controls)
         self.refresh_roaming_controls()
 
     def refresh_roaming_controls(self):
-        edge = self.roam_mode.currentData() == "edge"
-        self.edge_direction.setEnabled(edge)
-        self.radius_preset.setEnabled(not edge)
-        self.radius.setEnabled(not edge)
-        self.recenter_button.setEnabled(not edge)
+        edge = self.edge_radio.isChecked()
+        self.free_options.setVisible(not edge)
+        self.edge_options.setVisible(edge)
+        self.recenter_button.setVisible(not edge)
+        self.advanced_form.setRowVisible(self.radius, not edge)
+        self.layout().activate()
+        self.adjustSize()
 
     def make_preset_combo(self, presets, editor):
         combo = QComboBox()
@@ -1573,10 +1597,10 @@ class BehaviorSettingsDialog(QDialog):
             blocker = QSignalBlocker(combo)
             combo.clear()
             for number, label in presets:
-                combo.addItem(f"{label} · {number:g}{editor.suffix()}", number)
+                combo.addItem(label, number)
             selected = combo.findData(value)
             if selected < 0:
-                combo.addItem(f"사용자 지정 · {value:g}{editor.suffix()}", value)
+                combo.addItem("사용자 지정", value)
                 selected = combo.count() - 1
             combo.setCurrentIndex(selected)
             del blocker
@@ -1616,11 +1640,10 @@ class BehaviorSettingsDialog(QDialog):
                     (pet.stationary and pet.state in ("left", "right"))) and not pet.edge_jumping():
                 pet.target = None
                 pet.enter_state("idle", 0.7)
-        pet.click_through = self.click_through.isChecked()
         pet.show_windows_tools = self.show_windows_tools.isChecked()
         pet.feeding_enabled = self.feeding_enabled.isChecked()
-        pet.set_roaming(self.roam_mode.currentData(), self.edge_direction.currentData(), save=False)
-        pet.apply_click_through()
+        pet.set_roaming("edge" if self.edge_radio.isChecked() else "free",
+                        self.edge_direction.currentData(), save=False)
         pet.save_settings()
         super().accept()
 

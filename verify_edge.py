@@ -85,14 +85,14 @@ def run():
                         assert pet.screen_area.contains(box), (character, height, segment, fraction, box)
             pet.set_size(160, save=False)
             dialog = BehaviorSettingsDialog(pet)
-            dialog.roam_mode.setCurrentIndex(dialog.roam_mode.findData("free"))
-            assert not dialog.edge_direction.isEnabled() and dialog.radius_preset.isEnabled()
+            dialog.free_radio.click()
+            assert dialog.edge_options.isHidden() and not dialog.free_options.isHidden()
             dialog.reject()
             assert pet.roam_mode == "edge"
             dialog = BehaviorSettingsDialog(pet)
-            dialog.roam_mode.setCurrentIndex(dialog.roam_mode.findData("edge"))
+            dialog.edge_radio.click()
             dialog.edge_direction.setCurrentIndex(dialog.edge_direction.findData("clockwise"))
-            assert dialog.edge_direction.isEnabled() and not dialog.radius_preset.isEnabled()
+            assert not dialog.edge_options.isHidden() and dialog.free_options.isHidden()
             dialog.accept()
             restored = DesktopPet(settings, start_timer=False)
             assert restored.roam_mode == "edge" and restored.edge_direction == "clockwise"

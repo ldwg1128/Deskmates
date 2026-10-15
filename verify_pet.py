@@ -262,7 +262,6 @@ def run_character(character_id):
         assert dialog.advanced_panel.isHidden() and dialog.radius.value() == 180
         dialog.paused.setChecked(False)
         dialog.stationary.setChecked(True)
-        dialog.click_through.setChecked(True)
         dialog.reject()
         assert (pet.radius, pet.speed, pet.paused, pet.stationary, pet.click_through) == (420, 75, True, False, False)
         assert pet.body_height == 400
@@ -272,9 +271,8 @@ def run_character(character_id):
         dialog.speed.setValue(30)
         dialog.paused.setChecked(False)
         dialog.stationary.setChecked(True)
-        dialog.click_through.setChecked(True)
         dialog.buttons.button(QDialogButtonBox.StandardButton.Save).click()
-        assert (pet.radius, pet.speed, pet.paused, pet.stationary, pet.click_through) == (180, 30, False, True, True)
+        assert (pet.radius, pet.speed, pet.paused, pet.stationary, pet.click_through) == (180, 30, False, True, False)
         assert pet.body_height == 200
         pet.set_click_through(False)
         dialog = BehaviorSettingsDialog(pet)
